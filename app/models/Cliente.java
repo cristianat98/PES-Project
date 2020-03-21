@@ -10,6 +10,7 @@ public class Cliente extends Model {
 	String nombre;
 	String nombreusuario;
 	String password;
+	String direccion;
 	int numcompras;
 
 	public Cliente(String nombre, String nombreusuario, String password) {
@@ -18,6 +19,7 @@ public class Cliente extends Model {
 		this.nombreusuario = nombreusuario;
 		this.password = password;
 		this.numcompras =0;
+	
 	}
 
 	public String getNombre() {
