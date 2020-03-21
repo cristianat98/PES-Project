@@ -3,8 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" id="ff21a4c8-3ab0-4920-a46f-5d5b49ba397f" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/app/controllers/Application.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/controllers/Application.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/proyecto.iml" beforeDir="false" afterPath="$PROJECT_DIR$/proyecto.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/proyecto.ipr" beforeDir="false" afterPath="$PROJECT_DIR$/proyecto.ipr" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/models/Cliente.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/models/Cliente.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/proyecto.iws" beforeDir="false" afterPath="$PROJECT_DIR$/proyecto.iws" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -41,9 +41,9 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="808" y="409" key="#com.intellij.ide.util.projectWizard.JdkChooserPanel.MyDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1584794385681" />
-    <state x="656" y="344" key="com.intellij.ide.util.TipDialog" timestamp="1584794452324">
+    <state x="656" y="344" key="com.intellij.ide.util.TipDialog" timestamp="1584807775808">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="656" y="344" key="com.intellij.ide.util.TipDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1584794452324" />
+    <state x="656" y="344" key="com.intellij.ide.util.TipDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1584807775808" />
   </component>
 </project>

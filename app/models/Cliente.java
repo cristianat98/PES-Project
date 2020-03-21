@@ -10,7 +10,6 @@ public class Cliente extends Model {
 	String nombre;
 	String nombreusuario;
 	String password;
-	String direccion;
 	int numcompras;
 
 	public Cliente(String nombre, String nombreusuario, String password) {

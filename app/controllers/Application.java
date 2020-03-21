@@ -54,7 +54,7 @@ public class Application extends Controller {
 			renderText("no inventes");
 		}
 		else{
-			if (c.Password != password){
+			if (c.getPassword() != password){
 			renderText("no inventes password");
 			}
 			else{
