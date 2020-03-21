@@ -48,7 +48,7 @@ public class Application extends Controller {
 
     //para hacer el Login utilizaremos el nombre no el nombreusuario
     public static void Login(String usuario, String password){
-		Cliente c = Cliente.find ("byNombreAndPassword",usuario, password).first();
+		Cliente c = Cliente.find ("byNombreusuarioAndPassword",usuario, password).first();
 
 		if(c == null){
 			renderText("no inventes");
