@@ -7,26 +7,33 @@ import play.db.jpa.Model;
 
 @Entity
 public class Prenda extends Model {
-	String tipo;
-	String equipo;
-	String talla;
+
+	public String tipo;
+	public String equipo;
+	public String talla;
+	public int cantidadComprada;
+	public int cantidadStock;
+	public double precio;
 	
-	@ManyToOne
-	public Cliente cliente;
 	
-	public Prenda(String tipo, String equipo, String talla) {
+	
+	public Prenda(String tipo, String equipo, String talla, int cantidadComprada, int cantidadStock, double precio) {
 		super();
 		this.tipo = tipo;
 		this.equipo = equipo;
 		this.talla = talla;
+		this.cantidadComprada=cantidadComprada;
+		this.cantidadStock=cantidadStock;
+		this.precio=precio;
 	}
-
+	
 	public String getTipo() {
 		return tipo;
 	}
 
 	public void setTipo(String tipo) {
 		this.tipo = tipo;
+		this.save();
 	}
 
 	public String getEquipo() {
@@ -35,6 +42,7 @@ public class Prenda extends Model {
 
 	public void setEquipo(String equipo) {
 		this.equipo = equipo;
+		this.save();
 	}
 
 	public String getTalla() {
@@ -43,7 +51,38 @@ public class Prenda extends Model {
 
 	public void setTalla(String talla) {
 		this.talla = talla;
+		this.save();
 	}
+
+	public int getCantidadComprada() {
+		return cantidadComprada;
+	}
+
+	public void setCantidadComprada(int cantidadComprada) {
+		this.cantidadComprada = cantidadComprada;
+		this.save();
+	}
+	
+	public int getCantidadStock() {
+		return cantidadStock;
+	
+	}
+
+	public void setCantidadStock(int cantidadStock) {
+		this.cantidadStock = cantidadStock;
+		this.save();
+	}
+
+	public double getPrecio() {
+		return precio;
+	}
+
+	public void setPrecio(double precio) {
+		this.precio = precio;
+		this.save();
+	}
+
+	
 
 
 }

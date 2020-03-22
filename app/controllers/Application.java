@@ -10,56 +10,31 @@ import models.*;
 public class Application extends Controller {
 
     public static void index() {
-    	
-        renderText("Buenas tardes, esto es un una prueba de mi proyecto");
+        renderText("Bienvenidos a nuestro proyecto");
     }
-    public static void inicializarBD() {
-    	Cliente c1= new Cliente("David", "chiki","1234").save();
-    	Cliente c2=new Cliente ("Cristian","cristian","4321").save();
-    	Prenda p1= new Prenda("Camiseta","Madrid","M");
-    	Prenda p2= new Prenda("Pantalon","Barcelona","XL");
-    	
-    	p1.cliente=c1;
-    	p1.save();
-    	p2.cliente=c1;
-    	p2.save();
+    
+     //Registro cliente comprobando que no haya ninguno con "usuario" igual, los demas campos no son restrictivos//
+   public static void registrarCliente( String nombre, String apellido1, String apellido2, String direccion, String usuario, String contraseña, int cuentabancaria) {
+	   Cliente c= Cliente.find("byUsuario",usuario).first();
+	   if(c==null) {
+		   c= new Cliente(nombre,apellido1,apellido2,direccion,usuario,contraseña,cuentabancaria);
+		   renderText("Cliente registrado correctamente en nuestra BD");
+		   c.save();
+	   }
+	   else 
+		   renderText("El nombre de usuaro introducido ya esta en uso, pruebe nuevamente");
+   }
+   //Procedo a eliminar cliente pidiendo su "usuario" y su "contraseña"//
+   public static void eliminarCliente(String usuario, String contraseña) {
+	   Cliente c= Cliente.find("byUsuarioAndContraseña",usuario, contraseña).first();
+	   if(c!= null) {
+		   c.delete();
+		   renderText("Cliente con usuario: "+usuario+" y contraseña "+contraseña+"  eliminado de nuestra BD");
+	   }
+	   else 
+		   renderText("Este cliente no existe");  
+   }
+    
 
-    	renderText("Buenas tardes, la base de datos ha sido creada");
 
-    }
-    public static void añadirCliente(String nombre,String nombreusuario, String password) {
-    	Cliente c= Cliente.find("byNombreusuario",nombreusuario).first();
-    	if(c==null) {
-    		if (password == null){
-    			renderText("Te falta una password");
-			}
-
-    		else {
-				new Cliente(nombre, nombreusuario, password).save();
-				renderText("Cliente añadido a la BD");
-			}
-    	}
-
-    	else {
-    		renderText("Este cliente ya se encuentra en la BD");
-    	}
-    	
-    }
-
-    //para hacer el Login utilizaremos el nombre no el nombreusuario
-    public static void Login(String usuario, String password){
-		Cliente c = Cliente.find ("byNombreusuarioAndPassword",usuario, password).first();
-
-		if(c == null){
-			renderText("no inventes");
-		}
-		else{
-			if (c.getPassword() != password){
-			renderText("no inventes password");
-			}
-			else{
-				renderText("pasword correcta");
-			}
-		}
-	}
 }

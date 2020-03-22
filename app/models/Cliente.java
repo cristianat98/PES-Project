@@ -7,50 +7,93 @@ import play.db.jpa.Model;
 
 @Entity
 public class Cliente extends Model {
-	String nombre;
-	String nombreusuario;
-	String password;
-	int numcompras;
 
-	public Cliente(String nombre, String nombreusuario, String password) {
+
+	public String nombre;
+	public String apellido1;
+	public String apellido2;
+	public String direccion;
+	public String usuario;
+	public String contraseña;
+	public int cuentaBancaria;
+
+	public Cliente(String nombre, String apellido1, String apellido2, String direccion, String usuario, String contraseña, int cuentaBancaria) {
 		super();
 		this.nombre = nombre;
-		this.nombreusuario = nombreusuario;
-		this.password = password;
-		this.numcompras =0;
+		this.apellido1=apellido1;
+		this.apellido2=apellido2;
+		this.direccion=direccion;
+		this.usuario=usuario;
+		this.contraseña=contraseña;
+		this.cuentaBancaria=cuentaBancaria;
 	
 	}
-
+	
 	public String getNombre() {
 		return nombre;
 	}
 
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
+		this.save();
 	}
 
-	public String getNombreusuario() {
-		return nombreusuario;
+	public String getApellido1() {
+		return apellido1;
+		
 	}
 
-	public void setNombreusuario(String nombreusuario) {
-		this.nombreusuario = nombreusuario;
+	public void setApellido1(String apellido1) {
+		this.apellido1 = apellido1;
+		this.save();
 	}
 
-	public String getPassword() {
-		return password;
+	public String getApellido2() {
+		return apellido2;
 	}
 
-	public void setPassword(String password) {
-		this.password = password;
+	public void setApellido2(String apellido2) {
+		this.apellido2 = apellido2;
+		this.save();
 	}
 
-	public int getNumcompras() {
-		return numcompras;
+	public String getDireccion() {
+		return direccion;
 	}
 
-	public void setNumcompras(int numcompras) {
-		this.numcompras = numcompras;
+	public void setDireccion(String direccion) {
+		this.direccion = direccion;
+		this.save();
 	}
+
+	public String getUsuario() {
+		return usuario;
+	}
+
+	public void setUsuario(String usuario) {
+		this.usuario = usuario;
+		this.save();
+	}
+
+	public String getContraseña() {
+		return contraseña;
+	}
+
+	public void setContraseña(String contraseña) {
+		this.contraseña = contraseña;
+		this.save();
+	}
+
+	public int getCuentaBancaria() {
+		return cuentaBancaria;
+	}
+
+	public void setCuentaBancaria(int cuentaBancaria) {
+		this.cuentaBancaria = cuentaBancaria;
+		this.save();
+	}
+	
+
+
 
 }
