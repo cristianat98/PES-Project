@@ -2,6 +2,7 @@ package models;
 
 import javax.persistence.Entity;
 import play.db.jpa.Model;
+import java.util.ArrayList;
 
 
 
@@ -16,16 +17,17 @@ public class Cliente extends Model {
 	public String usuario;
 	public String contraseña;
 	public int cuentaBancaria;
+	//List <Prenda> carro;
 
-	public Cliente(String nombre, String apellido1, String apellido2, String direccion, String usuario, String contraseña, int cuentaBancaria) {
+	public Cliente(String usuario, String contraseña)  {
 		super();
-		this.nombre = nombre;
-		this.apellido1=apellido1;
-		this.apellido2=apellido2;
-		this.direccion=direccion;
+		//this.nombre = nombre;
+		//this.apellido1=apellido1;
+		//this.apellido2=apellido2;
+		//this.direccion=direccion;
 		this.usuario=usuario;
 		this.contraseña=contraseña;
-		this.cuentaBancaria=cuentaBancaria;
+		//this.cuentaBancaria=cuentaBancaria;
 	
 	}
 	

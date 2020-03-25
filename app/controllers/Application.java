@@ -17,7 +17,7 @@ public class Application extends Controller {
    public static void registrarCliente( String nombre, String apellido1, String apellido2, String direccion, String usuario, String contraseña, int cuentabancaria) {
 	   Cliente c= Cliente.find("byUsuario",usuario).first();
 	   if(c==null) {
-		   c= new Cliente(nombre,apellido1,apellido2,direccion,usuario,contraseña,cuentabancaria);
+		   c= new Cliente(usuario,contraseña);
 		   renderText("Cliente registrado correctamente en nuestra BD");
 		   c.save();
 	   }
@@ -34,7 +34,19 @@ public class Application extends Controller {
 	   else 
 		   renderText("Este cliente no existe");  
    }
-    
 
+    public static void AñadirCarrito (String tipo, String equipo, String talla, int cantidad){
+    	Prenda p = Prenda.find("ByTipoAndEquipoAndTalla", tipo, equipo, talla).first();
+    	if (p != null)
+		{
+			if (p.getCantidadStock() >= cantidad)
+				renderText("Vestimenta añadida al carrito");
+			
+			else
+				renderText("Solo podemos añadir al carro "+ p.getCantidadStock());
+		}
+    	else
+    		renderText("No tenemos esa vestimenta disponible actualmente.");
+   }
 
 }

@@ -17,14 +17,14 @@ public class Prenda extends Model {
 	
 	
 	
-	public Prenda(String tipo, String equipo, String talla, int cantidadComprada, int cantidadStock, double precio) {
+	public Prenda(String tipo, String equipo, String talla, int cantidadStock) {
 		super();
 		this.tipo = tipo;
 		this.equipo = equipo;
 		this.talla = talla;
-		this.cantidadComprada=cantidadComprada;
+		//this.cantidadComprada=cantidadComprada;
 		this.cantidadStock=cantidadStock;
-		this.precio=precio;
+		//this.precio=precio;
 	}
 	
 	public String getTipo() {
