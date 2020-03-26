@@ -25,7 +25,7 @@ public class Application extends Controller {
 	//localhost:9000/application/registrarCliente?usuario=fernand&contraseña=1111
 	//localhost:9000/application/registrarCliente?usuario=cristian&contraseña=12345
    public void registrarCliente(String usuario, String contraseña) {
-		//Hola que tal
+
     	if (usuario == null || contraseña == null)
     		renderText ("No has introducido todos los datos.");
 
