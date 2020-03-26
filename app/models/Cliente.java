@@ -1,8 +1,10 @@
 package models;
 
 import javax.persistence.Entity;
+import javax.persistence.ManyToMany;
+
 import play.db.jpa.Model;
-import java.util.ArrayList;
+import java.util.*;
 
 
 
@@ -17,10 +19,8 @@ public class Cliente extends Model {
 	public String usuario;
 	public String contraseña;
 	public int cuentaBancaria;
-	//List <Prenda> carro;
 
 	public Cliente(String usuario, String contraseña)  {
-		super();
 		//this.nombre = nombre;
 		//this.apellido1=apellido1;
 		//this.apellido2=apellido2;
@@ -28,8 +28,7 @@ public class Cliente extends Model {
 		this.usuario=usuario;
 		this.contraseña=contraseña;
 		//this.cuentaBancaria=cuentaBancaria;
-	
-	}
+		}
 	
 	public String getNombre() {
 		return nombre;

@@ -9,6 +9,8 @@ import models.*;
 
 public class Application extends Controller {
 
+	public List<Prenda> carro;
+
     public static void index() {
         renderText("Bienvenidos a nuestro proyecto");
     }
@@ -36,7 +38,7 @@ public class Application extends Controller {
    }
 
     public static void AñadirCarrito (String tipo, String equipo, String talla, int cantidad){
-    	Prenda p = Prenda.find("ByTipoAndEquipoAndTalla", tipo, equipo, talla).first();
+    	Prenda p = Prenda.find("byTipoAndEquipoAndTalla", tipo, equipo, talla).first();
     	if (p != null)
 		{
 			if (p.getCantidadStock() >= cantidad)
