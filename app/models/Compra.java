@@ -20,8 +20,7 @@ public class Compra extends Model{
 	public Date fecha;
 	
 	
-	public Compra(Cliente cliente, Prenda prenda,Date fecha) {
-		super();
+	public Compra(Cliente cliente, Prenda prenda, Date fecha) {
 		this.cliente = cliente;
 		this.prenda= prenda;
 		this.fecha = fecha;

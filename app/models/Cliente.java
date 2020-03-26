@@ -19,7 +19,7 @@ public class Cliente extends Model {
 	public String usuario;
 	public String contraseña;
 	public int cuentaBancaria;
-	public boolean logueado;
+	public int logueado;
 
 	public Cliente(String usuario, String contraseña)  {
 		//this.nombre = nombre;
@@ -28,13 +28,13 @@ public class Cliente extends Model {
 		//this.direccion=direccion;
 		this.usuario=usuario;
 		this.contraseña=contraseña;
-		this.logueado = false;
+		this.logueado = 0;
 		//this.cuentaBancaria=cuentaBancaria;
 		}
 	
-		public boolean getLogueado() { return logueado}
+		public int getLogueado() { return logueado; }
 
-		public void setLogueado(boolean logueado) {
+		public void setLogueado(int logueado) {
 		this.logueado = logueado;
 		this.save();
 		}
