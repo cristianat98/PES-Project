@@ -3,11 +3,12 @@
   <component name="ChangeListManager">
     <list default="true" id="ff21a4c8-3ab0-4920-a46f-5d5b49ba397f" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/app/controllers/Application.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/controllers/Application.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/models/Compra.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/models/Compra.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/models/Cliente.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/models/Cliente.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/models/Prenda.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/models/Prenda.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/modules/docviewer" beforeDir="false" afterPath="$PROJECT_DIR$/modules/docviewer" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/proyecto.iws" beforeDir="false" afterPath="$PROJECT_DIR$/proyecto.iws" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tmp/bytecode/DEV/controllers.Application" beforeDir="false" afterPath="$PROJECT_DIR$/tmp/bytecode/DEV/controllers.Application" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/tmp/bytecode/DEV/models.Compra" beforeDir="false" afterPath="$PROJECT_DIR$/tmp/bytecode/DEV/models.Compra" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tmp/bytecode/DEV/models.Prenda" beforeDir="false" afterPath="$PROJECT_DIR$/tmp/bytecode/DEV/models.Prenda" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tmp/classes/controllers/Application.class" beforeDir="false" afterPath="$PROJECT_DIR$/tmp/classes/controllers/Application.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/tmp/classes/models/Prenda.class" beforeDir="false" afterPath="$PROJECT_DIR$/tmp/classes/models/Prenda.class" afterDir="false" />
@@ -52,9 +53,13 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="740" y="275" key="FileChooserDialogImpl/0.0.1920.1040@0.0.1920.1040" timestamp="1584956000646" />
-    <state x="656" y="344" key="com.intellij.ide.util.TipDialog" timestamp="1585226676279">
+    <state x="656" y="344" key="com.intellij.ide.util.TipDialog" timestamp="1585227188382">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="656" y="344" key="com.intellij.ide.util.TipDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1585226676279" />
+    <state x="656" y="344" key="com.intellij.ide.util.TipDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1585227188382" />
+    <state x="623" y="225" width="672" height="678" key="search.everywhere.popup" timestamp="1585231508071">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="623" y="225" width="672" height="678" key="search.everywhere.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1585231508071" />
   </component>
 </project>
