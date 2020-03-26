@@ -44,11 +44,19 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="740" y="275" key="FileChooserDialogImpl/0.0.1920.1040@0.0.1920.1040" timestamp="1584956000646" />
+<<<<<<< HEAD
     <state x="467" y="241" key="com.intellij.ide.util.TipDialog" timestamp="1585252732591">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="467" y="241" key="com.intellij.ide.util.TipDialog/0.0.1366.728@0.0.1366.728" timestamp="1585252732591" />
     <state x="656" y="344" key="com.intellij.ide.util.TipDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1585245231382" />
+=======
+    <state x="656" y="344" key="com.intellij.ide.util.TipDialog" timestamp="1585252473326">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="467" y="241" key="com.intellij.ide.util.TipDialog/0.0.1366.728@0.0.1366.728" timestamp="1585232685999" />
+    <state x="656" y="344" key="com.intellij.ide.util.TipDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1585252473326" />
+>>>>>>> a8a882887988abbb1680f35c6f79d20de1d48e6c
     <state x="623" y="225" width="672" height="678" key="search.everywhere.popup" timestamp="1585231508071">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
