@@ -50,7 +50,7 @@ public class Application extends Controller {
    }
 	//localhost:9000/application/AddStock?tipo=camiseta&equipo=Albacete&talla=4&cantidadStock=9&precio=78.9
 	public static void AddStock(String tipo, String equipo, String talla, int cantidadStock, double precio){
-    	
+
 		if(tipo==null || equipo==null || talla==null || cantidadStock <=0 || precio<= 0)
 		{
 			renderText("Imposible añadir, parametros no adecuados");
@@ -68,9 +68,23 @@ public class Application extends Controller {
 				cantidadStock=cantidadStock+p.getCantidadStock();
 				p.setCantidadStock(cantidadStock);
 				renderText(cantidadStock);
-
 			}
 		}
+	}
+
+	//localhost:9000/application/Login?usuario=maria&contraseña=mariac
+	public static void Login(String usuario, String contraseña){
+		//Cliente c1 = new Cliente("maria","mariac");
+		//c1.save();
+    	if(usuario!=null && contraseña!=null)
+		{
+    		Cliente c = Cliente.find("byUsuarioAndContraseña",usuario,contraseña).first();
+			renderText(c.getUsuario()+" bienvenido a tu tienda online");
+		}
+		else{
+			renderText("Introduce usuario y contraseña otra vez");
+		}
+
 	}
 
 
