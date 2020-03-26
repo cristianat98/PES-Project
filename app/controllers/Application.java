@@ -52,54 +52,41 @@ public class Application extends Controller {
 	//localhost:9000/application/Login?usuario=david&contraseña=4321
 	public void Login(String usuario, String contraseña) {
 
-		Cliente c = Cliente.find("byLogueado", 1).first();
-
-		if (c != null)
-			renderText("Ya estás logueado como " + c.getUsuario());
-
-		else {
-
 			if (usuario != null && contraseña != null) {
 
-				c = Cliente.find("byUsuarioAndContraseña", usuario, contraseña).first();
+				Cliente c = Cliente.find("byUsuarioAndContraseña", usuario, contraseña).first();
 
 				if (c == null)
 					renderText("Los datos introducidos no son correctos");
 
 				else{
-					c.setLogueado(1);
 					renderText("Te has logueado como " + c.getUsuario());
 				}
 			}
+			else
+				renderText("No has introducido todos los datos");
 
-		}
 	}
 
-	//Cerramos sesión en caso de estar logueado
-	//localhost:9000/application/cerrarSesion
-	public void cerrarSesion(){
 
-		Cliente c = Cliente.find("byLogueado", 1).first();
-		if (c == null)
-			renderText("No estás logueado con ninguna cuenta.");
+	//Procedo a eliminar cliente con sus datos
+	//localhost:9000/application/eliminarCliente?usuario=cristian
+	//localhost:9000/application/eliminarCliente?contraseña=1234
+	//localhost:9000/application/eliminarCliente?usuario=cristian&contraseña=1234
+	//localhost:9000/application/eliminarCliente?usuario=cristian&contraseña=1234
+   public void eliminarCliente(String usuario, String contraseña) {
 
-		else {
-			c.setLogueado(0);
-			renderText("Has cerrado sesión");
+		if (usuario == null && contraseña == null)
+			renderText("No has introducido todos los datos.");
+		else{
+			Cliente c = Cliente.find("byUsuarioAndContraseña", usuario, contraseña).first();
+			if(c!= null) {
+				c.delete();
+				renderText("Cliente con usuario: " + c.getUsuario() + " y contraseña "+ c.getContraseña() + "  eliminado de nuestra BD");
+			}
+			else
+				renderText("Los datos introducidos no son correctos.");
 		}
-	}
-
-	//Procedo a eliminar cliente solo si ha iniciado sesión
-	//localhost:9000/application/eliminarCliente
-   public void eliminarCliente() {
-
-		Cliente c = Cliente.find("byLogueado", 1).first();
-	   if(c!= null) {
-		   c.delete();
-		   renderText("Cliente con usuario: " + c.getUsuario() + " y contraseña "+ c.getContraseña() + "  eliminado de nuestra BD");
-	   }
-	   else 
-		   renderText("Debes loguearte con una cuenta.");
    }
 
 	//Función que añade Stock a la tienda
@@ -132,36 +119,36 @@ public class Application extends Controller {
 
 	//Función que permite comprar ropa de la tienda
 	//localhost:9000/application/comprar?tipo=camiseta
-	//localhost:9000/application/comprar?tipo=camiseta&equipo=Albacete&talla=L&cantidad=1
-	//localhost:9000/application/comprar?tipo=camiseta&equipo=Albacete&talla=M&cantidad=1
-	//localhost:9000/application/comprar?tipo=camiseta&equipo=Albacete&talla=M&cantidad=50
-	public static void comprar (String tipo, String equipo, String talla, int cantidad){
+	//localhost:9000/application/comprar?tipo=camiseta&equipo=Albacete&talla=L&cantidad=1&usuario=cristian&contraseña=123
+	//localhost:9000/application/comprar?tipo=camiseta&equipo=Albacete&talla=L&cantidad=1&usuario=cristian&contraseña=1234
+	//localhost:9000/application/comprar?tipo=camiseta&equipo=Albacete&talla=M&cantidad=1&usuario=cristian&contraseña=1234
+	//localhost:9000/application/comprar?tipo=camiseta&equipo=Albacete&talla=M&cantidad=50&usuario=cristian&contraseña=1234
+	public static void comprar (String tipo, String equipo, String talla, int cantidad, String usuario, String contraseña){
 
-		Cliente c = Cliente.find("byLogueado", 1).first();
-		if (c==null)
-			renderText("Debes loguearte con una cuenta");
-
-		else{
-			if (tipo == null || equipo == null || talla == null || cantidad < 1)
+		if (tipo == null || equipo == null || talla == null || cantidad < 1 || usuario == null || contraseña == null)
 				renderText("No has introducido todos los datos.");
 
+			else {
+			Cliente c = Cliente.find("byUsuarioAndContraseña", usuario, contraseña).first();
+
+			if (c == null)
+				renderText("Ese usuario no existe");
 			else {
 				Prenda p = Prenda.find("byTipoAndEquipoAndTalla", tipo, equipo, talla).first();
 				if (p != null) {
 					if (p.getCantidadStock() >= cantidad) {
 						Date fecha = new Date();
 						p.setCantidadStock(p.getCantidadStock() - cantidad);
-						p.setCantidadComprada(p.getCantidadComprada()+cantidad);
-						Compra Compra = new Compra (c, p, fecha);
+						p.setCantidadComprada(p.getCantidadComprada() + cantidad);
+						Compra Compra = new Compra(c, p, fecha);
 						Compra.save();
 						renderText("Has comprado " + cantidad + " " + tipo + " del " + equipo);
-					}
-
-					else
+					} else
 						renderText("No tenemos tanto stock en la tienda. Vuelve a realizar el pedido con el número disponible.");
 				} else
 					renderText("No tenemos esa vestimenta disponible actualmente.");
 			}
+
 		}
 
 	}

@@ -19,27 +19,18 @@ public class Cliente extends Model {
 	public String usuario;
 	public String contraseña;
 	public int cuentaBancaria;
-	public int logueado;
 
-	public Cliente(String usuario, String contraseña)  {
+	public Cliente(String usuario, String contraseña) {
 		//this.nombre = nombre;
 		//this.apellido1=apellido1;
 		//this.apellido2=apellido2;
 		//this.direccion=direccion;
-		this.usuario=usuario;
-		this.contraseña=contraseña;
-		this.logueado = 0;
+		this.usuario = usuario;
+		this.contraseña = contraseña;
 		//this.cuentaBancaria=cuentaBancaria;
-		}
-	
-		public int getLogueado() { return logueado; }
+	}
 
-		public void setLogueado(int logueado) {
-		this.logueado = logueado;
-		this.save();
-		}
-
-		public String getNombre() {
+	public String getNombre() {
 		return nombre;
 	}
 
