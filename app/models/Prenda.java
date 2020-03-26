@@ -26,6 +26,15 @@ public class Prenda extends Model {
 		this.cantidadStock=cantidadStock;
 		//this.precio=precio;
 	}
+
+	public Prenda(String tipo, String equipo, String talla, int cantidadStock, double precio) {
+		super();
+		this.tipo = tipo;
+		this.equipo = equipo;
+		this.talla = talla;
+		this.cantidadStock=cantidadStock;
+		this.precio=precio;
+	}
 	
 	public String getTipo() {
 		return tipo;
