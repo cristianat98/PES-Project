@@ -48,5 +48,34 @@ public class Application extends Controller {
     	else
     		renderText("No tenemos esa vestimenta disponible actualmente.");
    }
+	//localhost:9000/application/AddStock?tipo=camiseta&equipo=Albacete&talla=4&cantidadStock=9&precio=78.9
+	public static void AddStock(String tipo, String equipo, String talla, int cantidadStock, double precio){
+    	
+		if(tipo==null || equipo==null || talla==null || cantidadStock <=0 || precio<= 0)
+		{
+			renderText("Imposible añadir, parametros no adecuados");
+		}
+		else
+		{
+			Prenda p = Prenda.find("byTipoAndEquipo",tipo,equipo).first();
+			if(p==null){
+
+				p = new Prenda(tipo, equipo,talla,cantidadStock,precio);
+				p.save();
+				renderText(p.getCantidadStock());
+			}
+			else {
+				cantidadStock=cantidadStock+p.getCantidadStock();
+				p.setCantidadStock(cantidadStock);
+				renderText(cantidadStock);
+
+			}
+		}
+	}
+
+
+
+
+
 
 }
