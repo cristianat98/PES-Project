@@ -51,7 +51,7 @@ public class Application extends Controller {
 	//localhost:9000/application/Login?usuario=cristian&contraseña=1234
 	//localhost:9000/application/Login?usuario=david&contraseña=4321
 	public void Login(String usuario, String contraseña) {
-		//safdgs
+
 			if (usuario != null && contraseña != null) {
 
 				Cliente c = Cliente.find("byUsuarioAndContraseña", usuario, contraseña).first();
