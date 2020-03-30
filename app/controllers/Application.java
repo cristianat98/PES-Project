@@ -8,15 +8,45 @@ import java.util.*;
 
 import models.*;
 
+import javax.validation.Valid;
+
 public class Application extends Controller {
 
-	public List<Prenda> carro;
+	@Before
+	static void addUser() {
+		Cliente user = connected();
 
-	//Mensaje que aparece en localhost:9000
+		if(user != null) {
+			renderArgs.put("client", user);
+		}
+	}
+
+	static Cliente connected() {
+		if(renderArgs.get("client") != null) {
+			return renderArgs.get("client", Cliente.class);
+		}
+		String username = session.get("user");
+		if(username != null) {
+			return Cliente.find("byNom", username).first();
+		}
+		return null;
+	}
+
+	//public static List<Prenda> carro;
+
+	//Función que se ejecuta con el localhost:9000
 	public static void index() {
-        renderText("Bienvenidos a nuestro proyecto de PES");
+
+		if(connected() != null) {
+			renderTemplate("Application/Principal.html");
+		}
+
+		else {
+			renderTemplate("Application/Register.html");
+		}
+
     }
-    
+
     //Registro cliente comprobando que no haya ninguno con "usuario" igual, los demas campos no son restrictivos
 	//localhost:9000/application/registrarCliente?contraseña=1234
 	//localhost:9000/application/registrarCliente?usuario=cristian
@@ -24,23 +54,23 @@ public class Application extends Controller {
 	//localhost:9000/application/registrarCliente?usuario=david&contraseña=4321
 	//localhost:9000/application/registrarCliente?usuario=fernand&contraseña=1111
 	//localhost:9000/application/registrarCliente?usuario=cristian&contraseña=12345
-   public void registrarCliente(String usuario, String contraseña) {
+   public void registrarCliente(@Valid Cliente nuevocliente, String contraseña) {
 
-    	if (usuario == null || contraseña == null)
-    		renderText ("No has introducido todos los datos.");
-
-    	else{
-			Cliente c= Cliente.find("byUsuario",usuario).first();
-
-			if(c==null) {
-
-				c= new Cliente(usuario,contraseña);
-				c.save();
-				renderText("Cliente registrado correctamente en nuestra BD. Pruebe ahora a loguearse con esta misma cuenta.");
-			}
-			else
-				renderText("El nombre de usuaro introducido ya esta en uso, pruebe nuevamente con otro.");
-		}
+	   validation.required(contraseña);
+	   validation.equals(contraseña, nuevocliente.contraseña).message("Your password doesn't match");
+	   if(validation.hasErrors()) {
+		   render("@register", nuevocliente, contraseña);
+	   }
+	   if (Cliente.find("byUsuarioAndContraseña",nuevocliente.usuario,nuevocliente.contraseña).first()==null) {
+		   nuevocliente.create();
+		   session.put("user", nuevocliente.usuario);
+		   renderArgs.put("client", nuevocliente);
+		   //renderTemplate("Application/HospitalMainMenu.html");
+		   renderText("Usuari registrat " + nuevocliente.usuario);
+	   }
+	   else{
+		   renderText("Usuari ja existeix!!!");
+	   }
 
    }
 
@@ -152,7 +182,5 @@ public class Application extends Controller {
 		}
 
 	}
-
-
 
 }

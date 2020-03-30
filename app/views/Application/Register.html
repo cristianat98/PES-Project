@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Página Web PES</title>
+</head>
+<body>
+
+#{form @registrarCliente()}
+#{field 'nuevocliente.usuario'}
+<p class="${field.errorClass}">
+    <strong>Username:</strong> <input type="text" name="${field.name}" size="16" value="${client?.usuario}"> *
+    <span class="error">${field.error}</span>
+</p>
+#{/field}
+
+#{field 'nuevocliente.contraseña'}
+<p class="${field.errorClass}">
+    <strong>Password:</strong> <input type="password" name="${field.name}" size="16" value="${client?.contraseña}"> *
+    <span class="error">${field.error}</span>
+</p>
+#{/field}
+#{field 'contraseña'}
+<p class="${field.errorClass}">
+    <strong>Verify password:</strong> <input type="password" name="${field.name}" size="16" value="${contraseña}"> *
+    <span class="error">${field.error}</span>
+</p>
+#{/field}
+<p class="buttons">
+    <input type="submit" value="Register"> <a href="@{index()}">Cancel</a>
+</p>
+#{/form}
+</body>
+</html>
