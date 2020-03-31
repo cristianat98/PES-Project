@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Página Login</title>
+</head>
+
+<div id="login">
+
+<body>   																					
+
+   #{form @Login()}
+   #{field 'cliente.usuario'}
+   
+   <p class="field">  
+   		<label>Usuario:</label>
+  	    <input type="text"  size="19" name="${field.name}" />
+    </p>
+    #{/field}
+
+    #{field 'cliente.contraseña'}
+    <p class="field">
+        <label>Contraseña:</label>
+        <input type="password"  size="19" name="${field.name}"/>
+    </p>
+    #{/field}
+    
+    <p class="buttons">
+        <input type="submit" value="Login" />
+    </p>
+    
+     <span class="error">${field.error}</span>
+      
+    #{/form}
+    
+    <p>
+        <a href="@{register()}">Registrar Nuevo Cliente</a>
+    </p>
+ </div>   
+    
+    
+    
+
+
+
