@@ -32,7 +32,6 @@ public class Application extends Controller {
 		return null;
 	}
 
-
 	//public static List<Prenda> carro;
 
 	//Función que se ejecuta con el localhost:9000
@@ -52,10 +51,10 @@ public class Application extends Controller {
         renderText("Esta  conectado "+ session.get("user"));
     }
 
-	
 	public static void register() {
 	        render();
 	}
+
     //Registro cliente comprobando que no haya ninguno con "usuario" igual, los demas campos no son restrictivos
 	//localhost:9000/application/registrarCliente?contraseña=1234
 	//localhost:9000/application/registrarCliente?usuario=cristian
@@ -66,23 +65,24 @@ public class Application extends Controller {
    public void registrarCliente(@Valid Cliente nuevocliente, String contraseña) {
 
 	   validation.required(contraseña);
-	   validation.equals(contraseña, nuevocliente.contraseña).message("Your password doesn't match");
+	   validation.equals(contraseña, nuevocliente.contraseña).message("Las contraseñas no coinciden");
 	   if(validation.hasErrors()) {
 		   render("@register", nuevocliente, contraseña);
 	   }
-	   if (Cliente.find("byUsuarioAndContraseña",nuevocliente.usuario,nuevocliente.contraseña).first()==null) {
-		   nuevocliente.create();
-		   session.put("user", nuevocliente.usuario);
-		   renderArgs.put("client", nuevocliente);
-		   //renderTemplate("Application/HospitalMainMenu.html");
-		   renderText("Usuari registrat " + nuevocliente.usuario);
-	   }
-	   else{
-		   renderText("Usuari ja existeix!!!");
+	   else {
+
+		   if (Cliente.find("byUsuarioAndContraseña", nuevocliente.usuario, nuevocliente.contraseña).first() == null) {
+			   nuevocliente.create();
+			   session.put("user", nuevocliente.usuario);
+			   renderArgs.put("client", nuevocliente);
+			   //renderTemplate("Application/HospitalMainMenu.html");
+			   renderText("Usuari registrat " + nuevocliente.usuario);
+		   }
+		   else
+			   renderText("Usuari ja existeix!!!");
 	   }
 
    }
-
 
 	//Iniciamos sesión comprobando que los datos introducidos son los correctos
     //localhost:9000/application/Login?usuario=cristian
@@ -90,22 +90,17 @@ public class Application extends Controller {
 	//localhost:9000/application/Login?usuario=cris&contraseña=1234
 	//localhost:9000/application/Login?usuario=cristian&contraseña=1234
 	//localhost:9000/application/Login?usuario=david&contraseña=4321
-   
-   
 	public void Login(@Valid Cliente cliente) {
 		Cliente c = Cliente.find("byUsuarioAndContraseña", cliente.usuario, cliente.contraseña).first();
 		 if(c != null) {
 	            session.put("user",cliente.usuario);
 	            renderArgs.put("client", c);
-	           // renderTemplate("Application/HospitalMainMenu.html");
+	           renderTemplate("Application/principal.html");
 	        }else {
 	            renderTemplate("Application/loginTemplate.html");
 	        }
 	}
-
 	
-
-
 	//Procedo a eliminar cliente con sus datos
 	//localhost:9000/application/eliminarCliente?usuario=cristian
 	//localhost:9000/application/eliminarCliente?contraseña=1234
@@ -189,5 +184,4 @@ public class Application extends Controller {
 		}
 
 	}
-
 }
