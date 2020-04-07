@@ -33,7 +33,7 @@ public class Prenda extends Model {
 
 	public void setTipo(String tipo) {
 		this.tipo = tipo;
-		this.save();
+		//this.save();
 	}
 
 	public String getEquipo() {
@@ -42,7 +42,7 @@ public class Prenda extends Model {
 
 	public void setEquipo(String equipo) {
 		this.equipo = equipo;
-		this.save();
+		//this.save();
 	}
 
 	public String getTalla() {
@@ -51,7 +51,7 @@ public class Prenda extends Model {
 
 	public void setTalla(String talla) {
 		this.talla = talla;
-		this.save();
+		//this.save();
 	}
 
 	public int getCantidadComprada() {
@@ -60,7 +60,7 @@ public class Prenda extends Model {
 
 	public void setCantidadComprada(int cantidadComprada) {
 		this.cantidadComprada = cantidadComprada;
-		this.save();
+		//this.save();
 	}
 	
 	public int getCantidadStock() {
@@ -70,7 +70,7 @@ public class Prenda extends Model {
 
 	public void setCantidadStock(int cantidadStock) {
 		this.cantidadStock = cantidadStock;
-		this.save();
+		//this.save();
 	}
 
 	public double getPrecio() {
@@ -79,7 +79,7 @@ public class Prenda extends Model {
 
 	public void setPrecio(double precio) {
 		this.precio = precio;
-		this.save();
+		//this.save();
 	}
 
 	

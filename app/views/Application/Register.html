@@ -9,20 +9,20 @@
 #{form @registrarCliente()}
 #{field 'nuevocliente.usuario'}
 <p class="${field.errorClass}">
-    <strong>Username:</strong> <input type="text" name="${field.name}" size="16" value="${client?.usuario}"> *
+    <strong>Username:</strong> <input type="text" name="${field.name}" size="16"> *
     <span class="error">${field.error}</span>
 </p>
 #{/field}
 
 #{field 'nuevocliente.contraseña'}
 <p class="${field.errorClass}">
-    <strong>Password:</strong> <input type="password" name="${field.name}" size="16" value="${client?.contraseña}"> *
+    <strong>Password:</strong> <input type="password" name="${field.name}" size="16"> *
     <span class="error">${field.error}</span>
 </p>
 #{/field}
 #{field 'contraseña'}
 <p class="${field.errorClass}">
-    <strong>Verify password:</strong> <input type="password" name="${field.name}" size="16" value="${contraseña}"> *
+    <strong>Verify password:</strong> <input type="password" name="${field.name}" size="16"> *
     <span class="error">${field.error}</span>
 </p>
 #{/field}

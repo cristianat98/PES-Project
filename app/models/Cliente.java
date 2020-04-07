@@ -36,7 +36,7 @@ public class Cliente extends Model {
 
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
-		this.save();
+		//this.save();
 	}
 
 	public String getApellido1() {
@@ -46,7 +46,7 @@ public class Cliente extends Model {
 
 	public void setApellido1(String apellido1) {
 		this.apellido1 = apellido1;
-		this.save();
+		//this.save();
 	}
 
 	public String getApellido2() {
@@ -55,7 +55,7 @@ public class Cliente extends Model {
 
 	public void setApellido2(String apellido2) {
 		this.apellido2 = apellido2;
-		this.save();
+		//this.save();
 	}
 
 	public String getDireccion() {
@@ -64,7 +64,7 @@ public class Cliente extends Model {
 
 	public void setDireccion(String direccion) {
 		this.direccion = direccion;
-		this.save();
+		//this.save();
 	}
 
 	public String getUsuario() {
@@ -73,7 +73,7 @@ public class Cliente extends Model {
 
 	public void setUsuario(String usuario) {
 		this.usuario = usuario;
-		this.save();
+		//this.save();
 	}
 
 	public String getContraseña() {
@@ -82,7 +82,7 @@ public class Cliente extends Model {
 
 	public void setContraseña(String contraseña) {
 		this.contraseña = contraseña;
-		this.save();
+		//this.save();
 	}
 
 	public int getCuentaBancaria() {
@@ -91,7 +91,7 @@ public class Cliente extends Model {
 
 	public void setCuentaBancaria(int cuentaBancaria) {
 		this.cuentaBancaria = cuentaBancaria;
-		this.save();
+		//	this.save();
 	}
 	
 

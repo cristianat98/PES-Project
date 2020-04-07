@@ -62,25 +62,24 @@ public class Application extends Controller {
 	//localhost:9000/application/registrarCliente?usuario=david&contraseña=4321
 	//localhost:9000/application/registrarCliente?usuario=fernand&contraseña=1111
 	//localhost:9000/application/registrarCliente?usuario=cristian&contraseña=12345
-   public void registrarCliente(@Valid Cliente nuevocliente, String contraseña) {
+   public static void registrarCliente(@Valid Cliente nuevocliente, String contraseña) {
 
 	   validation.required(contraseña);
 	   validation.equals(contraseña, nuevocliente.contraseña).message("Las contraseñas no coinciden");
 	   if(validation.hasErrors()) {
 		   render("@register", nuevocliente, contraseña);
 	   }
-	   else {
 
-		   if (Cliente.find("byUsuarioAndContraseña", nuevocliente.usuario, nuevocliente.contraseña).first() == null) {
+
+	   if (Cliente.find("byUsuarioAndContraseña", nuevocliente.usuario, nuevocliente.contraseña).first() == null) {
 			   nuevocliente.create();
 			   session.put("user", nuevocliente.usuario);
 			   renderArgs.put("client", nuevocliente);
-			   //renderTemplate("Application/HospitalMainMenu.html");
+			   renderTemplate("Application/loginTemplate.html");
 			   renderText("Usuari registrat " + nuevocliente.usuario);
-		   }
-		   else
-			   renderText("Usuari ja existeix!!!");
 	   }
+	   else
+	   	renderText(nuevocliente.usuario + " " + nuevocliente.contraseña);
 
    }
 
@@ -90,13 +89,14 @@ public class Application extends Controller {
 	//localhost:9000/application/Login?usuario=cris&contraseña=1234
 	//localhost:9000/application/Login?usuario=cristian&contraseña=1234
 	//localhost:9000/application/Login?usuario=david&contraseña=4321
-	public void Login(@Valid Cliente cliente) {
+	public static void Login(@Valid Cliente cliente) {
 		Cliente c = Cliente.find("byUsuarioAndContraseña", cliente.usuario, cliente.contraseña).first();
 		 if(c != null) {
 	            session.put("user",cliente.usuario);
 	            renderArgs.put("client", c);
 	           renderTemplate("Application/principal.html");
-	        }else {
+	        }
+		 else {
 	            renderTemplate("Application/loginTemplate.html");
 	        }
 	}
@@ -121,7 +121,11 @@ public class Application extends Controller {
 		}
    }
 
-	//Función que añade Stock a la tienda
+   public static void Logout (){
+		session.clear();
+		renderTemplate("Application/loginTemplate.html");
+   }
+	//Función que añade Stocka la tienda
     //localhost:9000/application/AddStock?tipo=camiseta&equipo=Albacete&talla=M&cantidadStock=0&precio=78.90
     //localhost:9000/application/AddStock?tipo=camiseta&equipo=Albacete&talla=M&cantidadStock=10&precio=78.90
 	//localhost:9000/application/AddStock?tipo=camiseta&equipo=Albacete&talla=M&cantidadStock=10&precio=78.90
@@ -165,7 +169,8 @@ public class Application extends Controller {
 
 			if (c == null)
 				renderText("Ese usuario no existe");
-			else {
+			else
+				{
 				Prenda p = Prenda.find("byTipoAndEquipoAndTalla", tipo, equipo, talla).first();
 				if (p != null) {
 					if (p.getCantidadStock() >= cantidad) {
