@@ -48,7 +48,7 @@ public class Cliente extends Model {
 
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
-		//this.save();
+		
 	}
 
 	public String getApellido1() {

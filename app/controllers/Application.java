@@ -35,10 +35,11 @@ public class Application extends Controller {
 	//public static List<Prenda> carro;
 
 	//Función que se ejecuta con el localhost:9000
+	
 	public static void index() {
 
 		if(connected() != null) {
-			renderText("Ahora mismo esta conectado" +session.get("user"));
+			renderText("Ahora mismo esta conectado " +session.get("user"));
 			//renderTemplate("Application/Principal.html");
 		}
 		else {
@@ -55,13 +56,7 @@ public class Application extends Controller {
 	        render();
 	}
 
-    //Registro cliente comprobando que no haya ninguno con "usuario" igual, los demas campos no son restrictivos
-	//localhost:9000/application/registrarCliente?contraseña=1234
-	//localhost:9000/application/registrarCliente?usuario=cristian
-	//localhost:9000/application/registrarCliente?usuario=cristian&contraseña=1234
-	//localhost:9000/application/registrarCliente?usuario=david&contraseña=4321
-	//localhost:9000/application/registrarCliente?usuario=fernand&contraseña=1111
-	//localhost:9000/application/registrarCliente?usuario=cristian&contraseña=12345
+ 
    public static void registrarCliente(@Valid Cliente nuevocliente, String contraseña) {
 
 	   validation.required(contraseña);
@@ -80,26 +75,44 @@ public class Application extends Controller {
 	   }
 	   else
 	   	renderText(nuevocliente.usuario + " " + nuevocliente.contraseña);
-
    }
+   
+   
+   public static void registrarAndroid(String user, String password) {
+	   Cliente c = Cliente.find("byUsuario",user).first();
+	   if(c!=null) {
+		   renderText("OK, Cliente se puede registrar, añadido a la BD");
+		   c= new Cliente(user,password);
+		   c._save();	   
+	   }
+	   else
+		   renderText("FAIL, este nombre de usuario ya existe");
+   }
+   
+	public static void loginAndroid(String user, String password){
+		Cliente c = Cliente.find("byUsuarioAndContraseña", user, password).first();
+		if(c!=null) {
+			renderText("OK ,este cliente esta en la BD");
+		}
+		else 
+			renderText("FAIL este cliente no esta en la BD ");	
+	}
 
-	//Iniciamos sesión comprobando que los datos introducidos son los correctos
-    //localhost:9000/application/Login?usuario=cristian
-	//localhost:9000/application/Login?contraseña=1234
-	//localhost:9000/application/Login?usuario=cris&contraseña=1234
-	//localhost:9000/application/Login?usuario=cristian&contraseña=1234
-	//localhost:9000/application/Login?usuario=david&contraseña=4321
+	
 	public static void Login(@Valid Cliente cliente) {
 		Cliente c = Cliente.find("byUsuarioAndContraseña", cliente.usuario, cliente.contraseña).first();
 		 if(c != null) {
-	            session.put("user",cliente.usuario);
-	            renderArgs.put("client", c);
+	           session.put("user",cliente.usuario);
+	           renderArgs.put("client", c);
 	           renderTemplate("Application/principal.html");
 	        }
 		 else {
 	            renderTemplate("Application/loginTemplate.html");
 	        }
 	}
+	
+	
+
 	
 	//Procedo a eliminar cliente con sus datos
 	//localhost:9000/application/eliminarCliente?usuario=cristian
