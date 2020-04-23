@@ -80,7 +80,7 @@ public class Application extends Controller {
    
    public static void registrarAndroid(String user, String password) {
 	   Cliente c = Cliente.find("byUsuario",user).first();
-	   if(c!=null) {
+	   if(c==null) {
 		   renderText("OK, Cliente se puede registrar, añadido a la BD");
 		   c= new Cliente(user,password);
 		   c._save();	   
@@ -110,9 +110,6 @@ public class Application extends Controller {
 	            renderTemplate("Application/loginTemplate.html");
 	        }
 	}
-	
-	
-
 	
 	//Procedo a eliminar cliente con sus datos
 	//localhost:9000/application/eliminarCliente?usuario=cristian
