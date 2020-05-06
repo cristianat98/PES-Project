@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Página RecuperacionContraseña</title>
+</head>
+
+<body> 
+
+#{form @recuperarContra()}
+#{field 'cliente.mail'}
+<p class="${field.errorClass}">
+    <strong>Mail:</strong> <input type="text" name="${field.name}" size="16"> *
+    <span class="error">${field.error}</span>
+</p>
+
+#{/field}
+#{field 'mail'}
+<p class="${field.errorClass}">
+    <strong>Confirme mail:</strong> <input type="text" name="${field.name}" size="16"> *
+    <span class="error">${field.error}</span>
+</p>
+#{/field}
+
+<p class="buttons">
+    <input type="submit" value="Recuperar"> 
+     <a href="@{register()}">"Pagina registro</a>
+      <a href="@{index()}">Pagina Login</a>
+</p>
+
+
+	
+     																					
+#{/form}
+</body>
+</html>
+
+
+
+
