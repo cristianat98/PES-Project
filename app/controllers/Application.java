@@ -81,9 +81,9 @@ public class Application extends Controller {
    public static void registrarAndroid(String user, String password) {
 	   Cliente c = Cliente.find("byUsuario",user).first();
 	   if(c==null) {
-		   renderText("OK, Cliente se puede registrar, añadido a la BD");
 		   c= new Cliente(user,password);
-		   c._save();	   
+		   c._save();
+		   renderText("Cliente añadido a la BD");
 	   }
 	   else
 		   renderText("FAIL, este nombre de usuario ya existe");
