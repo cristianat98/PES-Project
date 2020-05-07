@@ -11,10 +11,21 @@ public class BootStrap extends Job {
         // Check if the database is empty
         if(Cliente.count() == 0) {
             //Fixtures.loadModels("initial-data.yml");
-            Cliente admin = new Cliente("admin", "1234").save();
-            admin.setAdmin(1);
-            admin.save();
+            Cliente cristian = new Cliente("cristian", "cristianat98").save();
+            Cliente david = new Cliente ("david", "chikiliktin").save();
+            Cliente fernando = new Cliente ("fernando", "fernandow").save();
+            cristian.setAdmin(1);
+            david.setAdmin(1);
+            fernando.setAdmin(1);
+            cristian.save();
+            david.save();
+            fernando.save();
         }
+    Prenda p1= new Prenda("Camiseta", "Barcelona", "M", 20, 75).save();
+    Prenda p2= new Prenda("Pantalon", "Madrid", "L",50, 22.5).save();
+    Prenda p3= new Prenda("Pantalon", "Valencia", "XL",10, 22.5).save();
+    Prenda p4= new Prenda("Camiseta", "Madrid", "M",30, 73.5).save();
+    Prenda p5= new Prenda("Pelota", "Español", "",10, 15).save();
     }
 
 }

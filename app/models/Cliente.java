@@ -13,6 +13,7 @@ public class Cliente extends Model {
 
 
 	public String nombre;
+	public String mail;
 	public String apellido1;
 	public String apellido2;
 	public String direccion;

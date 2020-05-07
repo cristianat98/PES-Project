@@ -39,8 +39,7 @@ public class Application extends Controller {
 	public static void index() {
 
 		if(connected() != null) {
-			renderText("Ahora mismo esta conectado " +session.get("user"));
-			//renderTemplate("Application/Principal.html");
+			renderTemplate("Application/Principal.html");
 		}
 		else {
 			renderTemplate("Application/loginTemplate.html");
@@ -55,16 +54,35 @@ public class Application extends Controller {
 	public static void register() {
 	        render();
 	}
+	
+	public static void recuperacionContra() {
+			render();
+	}
+	
+	
+
+	public static void Login(@Valid Cliente cliente) {
+		Cliente c = Cliente.find("byUsuarioAndContraseña", cliente.usuario, cliente.contraseña).first();
+		 if(c != null) {
+	           session.put("user",cliente.usuario);
+	           renderArgs.put("client", c);
+	           renderTemplate("Application/principal.html");
+	        }
+		 else {
+	            renderTemplate("Application/loginTemplate.html");
+	        }
+	}
 
  
-   public static void registrarCliente(@Valid Cliente nuevocliente, String contraseña) {
+	
+	
+   public static void registrarCliente(@Valid Cliente nuevocliente, String contraseña, String mail) {
 
 	   validation.required(contraseña);
 	   validation.equals(contraseña, nuevocliente.contraseña).message("Las contraseñas no coinciden");
 	   if(validation.hasErrors()) {
 		   render("@register", nuevocliente, contraseña);
 	   }
-
 
 	   if (Cliente.find("byUsuarioAndContraseña", nuevocliente.usuario, nuevocliente.contraseña).first() == null) {
 			   nuevocliente.create();
@@ -78,12 +96,29 @@ public class Application extends Controller {
    }
    
    
+   public static void recuperarContra( @Valid Cliente cliente, String mail) {
+	   validation.required(mail);
+	   validation.equals(mail, cliente.mail).message("Los emails no coinciden");
+	   if(validation.hasErrors()) {
+		   render("@recuperacionContra",cliente, mail);
+	   }
+	   else {
+		   Cliente c= Cliente.find("byMail", cliente.mail).first();
+		   if(c!=null) {
+			   renderText("La contraeña es:" +c.contraseña);
+		   }
+	   }
+ 
+   }
+
+   
    public static void registrarAndroid(String user, String password) {
 	   Cliente c = Cliente.find("byUsuario",user).first();
 	   if(c==null) {
 		   c= new Cliente(user,password);
-		   c._save();
-		   renderText("Cliente añadido a la BD");
+		   c._save();	   
+		   renderText("OK, Cliente se puede registrar, añadido a la BD");
+
 	   }
 	   else
 		   renderText("FAIL, este nombre de usuario ya existe");
@@ -99,23 +134,14 @@ public class Application extends Controller {
 	}
 
 	
-	public static void Login(@Valid Cliente cliente) {
-		Cliente c = Cliente.find("byUsuarioAndContraseña", cliente.usuario, cliente.contraseña).first();
-		 if(c != null) {
-	           session.put("user",cliente.usuario);
-	           renderArgs.put("client", c);
-	           renderTemplate("Application/principal.html");
-	        }
-		 else {
-	            renderTemplate("Application/loginTemplate.html");
-	        }
-	}
+
 	
 	//Procedo a eliminar cliente con sus datos
 	//localhost:9000/application/eliminarCliente?usuario=cristian
 	//localhost:9000/application/eliminarCliente?contraseña=1234
 	//localhost:9000/application/eliminarCliente?usuario=cristian&contraseña=1234
 	//localhost:9000/application/eliminarCliente?usuario=cristian&contraseña=1234
+	
    public void eliminarCliente(String usuario, String contraseña) {
 
 		if (usuario == null && contraseña == null)
@@ -135,6 +161,7 @@ public class Application extends Controller {
 		session.clear();
 		renderTemplate("Application/loginTemplate.html");
    }
+
 	//Función que añade Stocka la tienda
     //localhost:9000/application/AddStock?tipo=camiseta&equipo=Albacete&talla=M&cantidadStock=0&precio=78.90
     //localhost:9000/application/AddStock?tipo=camiseta&equipo=Albacete&talla=M&cantidadStock=10&precio=78.90
