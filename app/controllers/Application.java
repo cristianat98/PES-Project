@@ -91,7 +91,6 @@ public class Application extends Controller {
 			   session.put("user", nuevocliente.usuario);
 			   renderArgs.put("client", nuevocliente);
 			   renderTemplate("Application/loginTemplate.html");
-			   renderText("Usuari registrat " + nuevocliente.usuario);
 	   }
 	   else
 	   	renderText(nuevocliente.usuario + " " + nuevocliente.contraseña);
@@ -105,6 +104,7 @@ public class Application extends Controller {
 		   render("@recuperacionContra",cliente, mail);
 	   }
 	   else {
+
 		   Cliente c= Cliente.find("byMail", cliente.mail).first();
 		   if(c!=null) {
 			   renderText("La contraeña es:" +c.contraseña);
@@ -115,6 +115,7 @@ public class Application extends Controller {
    
    public static void ModificarDatos(@ Valid Cliente clienteM, String contraseña) {
 	   validation.required(contraseña);
+	   renderArgs.put("user",clienteM.usuario);
 	   validation.equals(clienteM.contraseña, contraseña).message("La contraseña es incorrecta, no puede modificar datos");
 	   if(validation.hasErrors()) {
 		   render("@ModificarUsuario",clienteM, contraseña);

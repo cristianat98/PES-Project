@@ -16,39 +16,27 @@
 </p>
 #{/field}
 
-#{field 'clienteM.contraeña'}
+#{field 'clienteM.contraseña'}
 <p class="${field.errorClass}">
     <strong>Confirme contraseña:</strong> <input type="password" name="${field.name}" size="16"> *
     <span class="error">${field.error}</span>
 </p>
 #{/field}
-
-
 <p class="buttons">
     <input type="submit" value="Comprobar contraseña"> 
    	 <a href="@{register()}">Pagina registro</a>
      <a href="@{index()}">Pagina Login</a>
 </p>
-
-
-
-
-
-
-
-
-
-
 #{field 'clienteM.usuario'}
 <p class="${field.errorClass}">
-    <strong>Usuario:</strong> <input type="text" name="${field.name}" value="${c?.usuario}" size="16"> *
+    <strong>Usuario:</strong> <input type="text" name="${field.name}" placeholder="&{client.usuario}" size="16"> *
     <span class="error">${field.error}</span>
 </p>
 #{/field}
 
 #{field 'clienteM.contraseña'}
 <p class="${field.errorClass}">
-    <strong>Nueva contraseña:</strong> <input type="text" name="${field.name}" value="${c?.contraseña}" size="16"> *
+    <strong>Nueva contraseña:</strong> <input type="text" name="${field.name}" placeholder="${client.contraseña}" size="16"> *
     <span class="error">${field.error}</span>
 </p>
 #{/field}
@@ -56,7 +44,7 @@
 
 #{field 'clienteM.mail'}
 <p class="${field.errorClass}">
-    <strong>Mail:</strong> <input type="text" name="${field.name}" value="${c?.mail}" size="16"> *
+    <strong>Mail:</strong> <input type="text" name="${field.name}" value="${client.mail}" size="16"> *
     <span class="error">${field.error}</span>
 </p>
 #{/field}
@@ -66,9 +54,6 @@
 <p class="buttons">
     <input type="submit" value="Modificar datos"> 
 </p>
-
-
-	
      																					
 #{/form}
 </body>
