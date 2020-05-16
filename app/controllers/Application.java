@@ -45,8 +45,7 @@ public class Application extends Controller {
 			renderTemplate("Application/loginTemplate.html");
 		}
     }
-	
-	
+
 	public static void getInfoSession(){
         renderText("Esta  conectado "+ session.get("user"));
     }
@@ -58,25 +57,25 @@ public class Application extends Controller {
 	public static void recuperacionContra() {
 			render();
 	}
+
 	public static void ModificarUsuario() {
 			render();
 	}
-	
 
 	public static void Login(@Valid Cliente cliente) {
 		Cliente c = Cliente.find("byUsuarioAndContraseña", cliente.usuario, cliente.contraseña).first();
 		 if(c != null) {
 	           session.put("user",cliente.usuario);
 	           renderArgs.put("client", c);
-	           renderTemplate("Application/principal.html");
+	           if (c.admin == 1)
+	           	renderTemplate("Application/principalAdmin.html");
+	           else
+	           	renderTemplate("Application/principal.html");
 	        }
 		 else {
 	            renderTemplate("Application/loginTemplate.html");
 	        }
 	}
-
- 
-	
 	
    public static void registrarCliente(@Valid Cliente nuevocliente, String contraseña, String mail) {
 
@@ -95,8 +94,7 @@ public class Application extends Controller {
 	   else
 	   	renderText(nuevocliente.usuario + " " + nuevocliente.contraseña);
    }
-   
-   
+
    public static void recuperarContra( @Valid Cliente cliente, String mail) {
 	   validation.required(mail);
 	   validation.equals(mail, cliente.mail).message("Los emails no coinciden");
@@ -131,11 +129,7 @@ public class Application extends Controller {
 		   }
 	   }
    }
-   
-   
-   
 
-   
    public static void registrarAndroid(String user, String password) {
 	   Cliente c = Cliente.find("byUsuario",user).first();
 	   if(c==null) {
