@@ -35,16 +35,18 @@ public class Application extends Controller {
 	//public static List<Prenda> carro;
 
 	//Función que se ejecuta con el localhost:9000
+	
 	public static void index() {
 
 		if(connected() != null) {
-			renderTemplate("Application/Principal.html");
+			renderTemplate("Application/principal.html");
 		}
 		else {
 			renderTemplate("Application/loginTemplate.html");
 		}
     }
-
+	
+	
 	public static void getInfoSession(){
         renderText("Esta  conectado "+ session.get("user"));
     }
@@ -56,23 +58,27 @@ public class Application extends Controller {
 	public static void recuperacionContra() {
 			render();
 	}
+	public static void ModificarUsuario() {
+			render();
+	}
+	
 
 	public static void Login(@Valid Cliente cliente) {
 		Cliente c = Cliente.find("byUsuarioAndContraseña", cliente.usuario, cliente.contraseña).first();
 		 if(c != null) {
 	           session.put("user",cliente.usuario);
 	           renderArgs.put("client", c);
-	           if (c.admin == 1)
-	           renderTemplate("Application/principalAdmin.html");
-	           else
-	           	renderTemplate("Application/principal.html");
+	           renderTemplate("Application/principal.html");
 	        }
 		 else {
 	            renderTemplate("Application/loginTemplate.html");
 	        }
 	}
 
-    public static void registrarCliente(@Valid Cliente nuevocliente, String contraseña, String mail) {
+ 
+	
+	
+   public static void registrarCliente(@Valid Cliente nuevocliente, String contraseña, String mail) {
 
 	   validation.required(contraseña);
 	   validation.equals(contraseña, nuevocliente.contraseña).message("Las contraseñas no coinciden");
@@ -90,8 +96,9 @@ public class Application extends Controller {
 	   else
 	   	renderText(nuevocliente.usuario + " " + nuevocliente.contraseña);
    }
-
-    public static void recuperarContra( @Valid Cliente cliente, String mail) {
+   
+   
+   public static void recuperarContra( @Valid Cliente cliente, String mail) {
 	   validation.required(mail);
 	   validation.equals(mail, cliente.mail).message("Los emails no coinciden");
 	   if(validation.hasErrors()) {
@@ -105,8 +112,30 @@ public class Application extends Controller {
 	   }
  
    }
+   
+   public static void ModificarDatos(@ Valid Cliente clienteM, String contraseña) {
+	   validation.required(contraseña);
+	   validation.equals(clienteM.contraseña, contraseña).message("La contraseña es incorrecta, no puede modificar datos");
+	   if(validation.hasErrors()) {
+		   render("@ModificarUsuario",clienteM, contraseña);
+	   }
+	   else {
+		   Cliente c= Cliente.find("byContraseña", clienteM.contraseña).first();
+		   if(c!=null) {
+			   c.usuario=clienteM.usuario;
+			   c.contraseña=clienteM.contraseña;
+			   c.mail=clienteM.mail;
+			   c._save();
+			   renderTemplate("Application/principal.html");
+		   }
+	   }
+   }
+   
+   
+   
 
-    public static void registrarAndroid(String user, String password) {
+   
+   public static void registrarAndroid(String user, String password) {
 	   Cliente c = Cliente.find("byUsuario",user).first();
 	   if(c==null) {
 		   c= new Cliente(user,password);
@@ -127,11 +156,34 @@ public class Application extends Controller {
 			renderText("FAIL este cliente no esta en la BD ");	
 	}
 
-	//Procedo a eliminar cliente con sus datos
-	//localhost:9000/application/eliminarCliente?usuario=cristian
-	//localhost:9000/application/eliminarCliente?contraseña=1234
-	//localhost:9000/application/eliminarCliente?usuario=cristian&contraseña=1234
-	//localhost:9000/application/eliminarCliente?usuario=cristian&contraseña=1234
+	
+
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
    public void eliminarCliente(String usuario, String contraseña) {
 
 		if (usuario == null && contraseña == null)
@@ -148,14 +200,27 @@ public class Application extends Controller {
    }
 
    public static void Logout (){
-		session.clear();
-		renderTemplate("Application/loginTemplate.html");
+	   session.clear();
+       renderArgs.put("client",null);
+       renderTemplate("Application/loginTemplate.html");
    }
 
-	//Función que añade Stocka la tienda
-    //localhost:9000/application/AddStock?tipo=camiseta&equipo=Albacete&talla=M&cantidadStock=0&precio=78.90
-    //localhost:9000/application/AddStock?tipo=camiseta&equipo=Albacete&talla=M&cantidadStock=10&precio=78.90
-	//localhost:9000/application/AddStock?tipo=camiseta&equipo=Albacete&talla=M&cantidadStock=10&precio=78.90
+
+   
+   
+   
+ 
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
 	public void AddStock(String tipo, String equipo, String talla, int cantidadStock, double precio){
 
 		if(tipo==null || equipo==null || talla==null || cantidadStock <=0 || precio<= 0)
@@ -180,12 +245,13 @@ public class Application extends Controller {
 		}
 	}
 
-	//Función que permite comprar ropa de la tienda
-	//localhost:9000/application/comprar?tipo=camiseta
-	//localhost:9000/application/comprar?tipo=camiseta&equipo=Albacete&talla=L&cantidad=1&usuario=cristian&contraseña=123
-	//localhost:9000/application/comprar?tipo=camiseta&equipo=Albacete&talla=L&cantidad=1&usuario=cristian&contraseña=1234
-	//localhost:9000/application/comprar?tipo=camiseta&equipo=Albacete&talla=M&cantidad=1&usuario=cristian&contraseña=1234
-	//localhost:9000/application/comprar?tipo=camiseta&equipo=Albacete&talla=M&cantidad=50&usuario=cristian&contraseña=1234
+
+	
+	
+	
+	
+	
+	
 	public static void comprar (String tipo, String equipo, String talla, int cantidad, String usuario, String contraseña){
 
 		if (tipo == null || equipo == null || talla == null || cantidad < 1 || usuario == null || contraseña == null)
