@@ -1,3 +1,4 @@
+import org.yaml.snakeyaml.reader.StreamReader;
 import play.*;
 import play.jobs.*;
 import play.test.*;

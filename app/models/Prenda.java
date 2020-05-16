@@ -14,6 +14,7 @@ public class Prenda extends Model {
 	public int cantidadComprada;
 	public int cantidadStock;
 	public double precio;
+
 	
 	
 	
