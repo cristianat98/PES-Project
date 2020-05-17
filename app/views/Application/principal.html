@@ -12,10 +12,31 @@
 
     .btn btn-default btn-lg{
     position: relative;
-    left: 1200px;
+    left: 1000px;
     width: 150px;
     height: 150px;
     }
+    article{
+    width: 250px;
+    height: 250px;
+    margin-left: 10px;
+    margin-top: 0px;
+    float: left;
+    }
+    .panel.panel-default{
+    width: 1200px;
+    margin-left: 50px;
+    }
+    .barra{
+    width: 500px;
+    }
+    .avatar{
+    width: 75px;
+    height: 75px;
+    border-radius: 50%;
+    margin-left: 1215px;
+    }
+
 
 </style>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
@@ -30,17 +51,18 @@
 <head>
     <meta charset="UTF-8">
     <title>Proyecto - PES</title>
-    <script type="text/javascript" src="https://gc.kis.v2.scr.kaspersky-labs.com/FD126C42-EBFA-4E12-B309-BB3FDD723AC1/main.js?attr=6exx3wJW7qKClsE3VXTDyCWMFMNMfApU_V3zpFLCSubRI63YLNbsJJlisE3rVZCbo_n13tpMqcz2-eQJNaZtDW1LM1SmOJZr8sBWYJPslpo9jcws64B56m-nMZuCmgQx0Byoh9jKQnfQZV8VkCPUMg" charset="UTF-8"></script><nav>
+    <script type="text/javascript" src="https://gc.kis.v2.scr.kaspersky-labs.com/FD126C42-EBFA-4E12-B309-BB3FDD723AC1/main.js?attr=6exx3wJW7qKClsE3VXTDyCWMFMNMfApU_V3zpFLCSubRI63YLNbsJJlisE3rVZCbo_n13tpMqcz2-eQJNaZtDW1LM1SmOJZr8sBWYJPslpo9jcws64B56m-nMZuCmgQx0Byoh9jKQnfQZV8VkCPUMg" charset="UTF-8"></script>
+    <div class="barra">
 
     <a class="jumbotron">
-        <h1>Tienda Online!</h1>
-<!--        <p><a class="btn btn-primary btn-lg" href="@{Logout()}" role="button">Cerrar sesión</a></p>
---></a>
+        <h1>Tienda Online!</h1></a>
 
         <a href="http://localhost:9000/">Inicio</a>
         <a href="http://localhost:9000/application/principal">Productos</a>
         <a href="http://localhost:9000/application/principal">Pantalones</a>
-    </nav>
+        <img class="avatar" src="/public/images/avatar.jpg">
+    </div>
+
     <div class="dropdown">
         <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
             Dropdown
@@ -108,6 +130,67 @@
             </div>
             <div class="media-body">
                 <h4 class="media-heading">Camiseta Sevilla</h4>
+
+            </div>
+            <button type="button" class="btn btn-default btn-lg">
+                <span class="glyphicon glyphicon" aria-hidden="true"></span> Añadir Carrito
+            </button>
+        </article>
+    </section>
+</div>
+<div class="panel panel-default">
+    <div class="panel-heading">Pantalones de deporte</div>
+    <section class="panel-body">
+        <article class="media">
+            <div class="media-left media-middle">
+                <a href="#">
+                    <img class="media-object" src="/public/images/pantalon-fcb.jpg" alt="...">
+                </a>
+            </div>
+            <div class="media-body">
+                <h4 class="media-heading">Pantalón corto Fútbol Club Barcelona</h4>
+            </div>
+            <button type="button" class="btn btn-default btn-lg">
+                <span class="glyphicon glyphicon" aria-hidden="true"></span> Añadir Carrito
+            </button>
+        </article>
+        <article class="media">
+            <div class="media-left media-middle">
+                <a href="#">
+                    <img class="media-object" src="/public/images/pantalon-madrid.jpg" alt="...">
+                </a>
+            </div>
+            <div class="media-body">
+                <h4 class="media-heading">Pantalón corto Real Madrid</h4>
+
+            </div>
+            <button type="button" class="btn btn-default btn-lg">
+                <span class="glyphicon glyphicon" aria-hidden="true"></span> Añadir Carrito
+            </button>
+        </article>
+        <article class="media">
+            <div class="media-left media-middle">
+                <a href="#">
+                    <img class="media-object" src="/public/images/pantalon-atletico.jpg" alt="...">
+                </a>
+            </div>
+            <div class="media-body">
+                <h4 class="media-heading">Pantalón corto Atlético de Madrid</h4>
+
+            </div>
+            <button type="button" class="btn btn-default btn-lg">
+                <span class="glyphicon glyphicon" aria-hidden="true"></span> Añadir Carrito
+            </button>
+        </article>
+
+        <article class="media">
+            <div class="media-left media-middle">
+                <a href="#">
+                    <img class="media-object" src="/public/images/pantalon-sevilla.jpg" alt="...">
+                </a>
+            </div>
+            <div class="media-body">
+                <h4 class="media-heading">Pantalón corto Sevilla</h4>
 
             </div>
             <button type="button" class="btn btn-default btn-lg">
