@@ -1,8 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
+<style>
+    img{
+        width: 100px;
+        height: 100px;
+    }
+    .dropdown{
+        position: relative;
+        left: 1700px;
+    }
+
+    .btn btn-default btn-lg{
+        position: relative;
+        left: 1200px;
+        width: 150px;
+        height: 150px;
+    }
+
+</style>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Página Administrador</title>
 </head>
 <body>
 <table width="1900" >
@@ -15,17 +42,30 @@
 <table width="1900" height="107">
     <tbody>
     <tr>
-        <th height="101" scope="col"><h1>VISTA ADMINISTRADOR</h1></th>
+        <th height="100" scope="col"><h1>VISTA ADMINISTRADOR</h1></th>
     </tr>
     </tbody>
 </table>
 <table width="1900" height="53">
     <tbody>
     <tr>
-        <th width="1578" height="47" scope="col">&nbsp;</th>
-        <th width="310" scope="col">Está conectado como: &{client.usuario}</th>
+        <th width="1600" height="47" scope="col">&nbsp;</th>
+        <th width="300" scope="col">Está conectado como: &{client.usuario}</th>
     </tr>
     </tbody>
 </table>
+<p>Esta es la vista de Administrador de la Página Web. Solos los usuarios con derechos de administrador pueden acceder a esta página.</p>
+<div class="dropdown">
+    <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+        Dropdown
+        <span class="caret"></span>
+    </button>
+    <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+        <li><a href="@{CambiarVistaNormal()}">Cambiar Vista a Normal</a></li>
+        <li><a href="#">Another action</a></li>
+        <li><a href="#">Something else here</a></li>
+        <li><a href="@{Logout()}">Cerrar Sesión</a></li>
+    </ul>
+</div>
 </body>
 </html>

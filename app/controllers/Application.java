@@ -130,6 +130,17 @@ public class Application extends Controller {
 	   }
    }
 
+   public static void CambiarVistaNormal(){
+	   renderTemplate("Application/principal.html");
+   }
+
+   public static void CambiarVistaAdmin(){
+		if (connected().admin == 1)
+			renderTemplate("Application/principalAdmin.html");
+		else
+			renderTemplate("Application/principal.html");
+   }
+
    public static void registrarAndroid(String user, String password) {
 	   Cliente c = Cliente.find("byUsuario",user).first();
 	   if(c==null) {
@@ -142,7 +153,7 @@ public class Application extends Controller {
 		   renderText("FAIL, este nombre de usuario ya existe");
    }
    
-	public static void loginAndroid(String user, String password){
+   public static void loginAndroid(String user, String password){
 		Cliente c = Cliente.find("byUsuarioAndContraseña", user, password).first();
 		if(c!=null) {
 			renderText("OK ,este cliente esta en la BD");
@@ -151,34 +162,6 @@ public class Application extends Controller {
 			renderText("FAIL este cliente no esta en la BD ");	
 	}
 
-	
-
-
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
    public void eliminarCliente(String usuario, String contraseña) {
 
 		if (usuario == null && contraseña == null)
@@ -200,23 +183,7 @@ public class Application extends Controller {
        renderTemplate("Application/loginTemplate.html");
    }
 
-
-   
-   
-   
- 
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-	public void AddStock(String tipo, String equipo, String talla, int cantidadStock, double precio){
+   public void AddStock(String tipo, String equipo, String talla, int cantidadStock, double precio){
 
 		if(tipo==null || equipo==null || talla==null || cantidadStock <=0 || precio<= 0)
 		{
@@ -240,13 +207,6 @@ public class Application extends Controller {
 		}
 	}
 
-
-	
-	
-	
-	
-	
-	
 	public static void comprar (String tipo, String equipo, String talla, int cantidad, String usuario, String contraseña){
 
 		if (tipo == null || equipo == null || talla == null || cantidad < 1 || usuario == null || contraseña == null)
