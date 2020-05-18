@@ -32,7 +32,6 @@ public class Application extends Controller {
 		return null;
 	}
 
-	//public static List<Prenda> carro;
 
 	//Función que se ejecuta con el localhost:9000
 	
@@ -111,24 +110,32 @@ public class Application extends Controller {
  
    }
    
-   public static void ModificarDatos(@ Valid Cliente clienteM, String contraseña) {
+   public static void ModificarDatos(String contraseña) {
 	   validation.required(contraseña);
-	   renderArgs.put("user",clienteM.usuario);
-	   validation.equals(clienteM.contraseña, contraseña).message("La contraseña es incorrecta, no puede modificar datos");
+	   String username = session.get("user");
+	   Cliente c=Cliente.find("byUsuario", username).first();
+	   validation.equals(c.contraseña, contraseña).message("La contraseña es incorrecta, no puede modificar datos");
 	   if(validation.hasErrors()) {
-		   render("@ModificarUsuario",clienteM, contraseña);
+		   render("@ModificarUsuario1", contraseña);
 	   }
-	   else {
-		   Cliente c= Cliente.find("byContraseña", clienteM.contraseña).first();
-		   if(c!=null) {
-			   c.usuario=clienteM.usuario;
-			   c.contraseña=clienteM.contraseña;
-			   c.mail=clienteM.mail;
-			   c._save();
-			   renderTemplate("Application/principal.html");
-		   }
+	   else 
+		   renderTemplate("Application/ModificarUsuario2.html");
+   }
+   
+   
+   public static void ModificarDatos2(Cliente clienteM,String contraseña) {
+	   String username = session.get("user");
+	   Cliente c=Cliente.find("byUsuario", username).first();
+	   if(c!=null) {
+		   c.usuario=clienteM.usuario;
+		   c.contraseña=clienteM.contraseña;
+		   c.mail=clienteM.mail;
+		   c._save();
+		   renderTemplate("Application/principal.html");
+		   //c._save();
 	   }
    }
+   
 
    public static void CambiarVistaNormal(){
 	   renderTemplate("Application/principal.html");
