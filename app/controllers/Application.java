@@ -33,10 +33,6 @@ public class Application extends Controller {
 		return null;
 	}
 
-	public static void Funciones(){
-		
-	}
-
 	public static void index() {
 
 		if(connected() != null) {
