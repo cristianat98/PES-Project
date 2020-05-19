@@ -13,7 +13,7 @@ public class BootStrap extends Job {
         if(Cliente.count() == 0) {
             //Fixtures.loadModels("initial-data.yml");
             Cliente cristian = new Cliente("cristian", "cristianat98").save();
-            Cliente david = new Cliente ("david", "chikiliktin").save();
+            Cliente david = new Cliente ("david", "davidp").save();
             Cliente fernando = new Cliente ("fernando", "fernandow").save();
             cristian.setAdmin(1);
             david.setAdmin(1);
