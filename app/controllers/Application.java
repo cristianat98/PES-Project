@@ -46,7 +46,11 @@ public class Application extends Controller {
 	public static void getInfoSession(){
         renderText("Esta  conectado "+ session.get("user"));
     }
-
+	
+	public static void loginTemplate(){
+			render();
+    }
+	
 	public static void register() {
 	        render();
 	}
