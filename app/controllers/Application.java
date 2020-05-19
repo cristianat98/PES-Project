@@ -9,6 +9,7 @@ import java.util.*;
 import models.*;
 
 import javax.validation.Valid;
+import javax.xml.transform.Result;
 
 public class Application extends Controller {
 
@@ -32,9 +33,10 @@ public class Application extends Controller {
 		return null;
 	}
 
+	public static void Funciones(){
+		
+	}
 
-	//Función que se ejecuta con el localhost:9000
-	
 	public static void index() {
 
 		if(connected() != null) {
@@ -121,8 +123,7 @@ public class Application extends Controller {
 	   else 
 		   renderTemplate("Application/ModificarUsuario2.html");
    }
-   
-   
+
    public static void ModificarDatos2(Cliente clienteM,String contraseña) {
 	   String username = session.get("user");
 	   Cliente c=Cliente.find("byUsuario", username).first();
@@ -135,7 +136,6 @@ public class Application extends Controller {
 		   //c._save();
 	   }
    }
-   
 
    public static void CambiarVistaNormal(){
 	   renderTemplate("Application/principal.html");

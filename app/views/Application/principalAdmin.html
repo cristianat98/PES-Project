@@ -7,7 +7,7 @@
     }
     .dropdown{
         position: relative;
-        left: 1700px;
+        left: 1600px;
     }
 
     .barra{
@@ -32,6 +32,7 @@
 <!-- Latest compiled and minified JavaScript -->
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 <head>
+    <script type="text/javascript" src=@{'/public/javascripts/Funciones.js'}></script>
     <meta charset="UTF-8">
     <title>Página Administrador</title>
 </head>
@@ -61,21 +62,20 @@
 <p>Esta es la vista de Administrador de la Página Web. Solos los usuarios con derechos de administrador pueden acceder a esta página.</p>
 <div class="dropdown">
     <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-        Opciones
+        Opciones Usuario
         <span class="caret"></span>
     </button>
     <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
         <li><a href="@{CambiarVistaNormal()}">Cambiar Vista a Normal</a></li>
-        <li><a href="#">Another action</a></li>
-        <li><a href="#">Something else here</a></li>
+        <li><a href="#" onclick="Probando();">Probando MostrarOcultar</a></li>
         <li><a href="@{Logout()}">Cerrar Sesión</a></li>
     </ul>
 </div>
 
-<div class="barra">
+<div class="barra" id = "prueba">
     <a class="jumbotron"></a>
-    <a href="http://localhost:9000/">Inicio</a>
-    <a href="http://localhost:9000/application/principal">Productos</a>
+    <a href="@{CambiarVistaNormal()}">Añadir Usuario</a>
+    <a href="http://localhost:9000/application/principal">Modificar Usuario</a>
     <a href="http://localhost:9000/application/principal">Pantalones</a>
 </div>
 </body>
