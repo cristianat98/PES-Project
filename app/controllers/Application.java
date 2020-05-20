@@ -128,12 +128,18 @@ public class Application extends Controller {
 	   String username = session.get("user");
 	   Cliente c=Cliente.find("byUsuario", username).first();
 	   if(c!=null) {
+		   if(clienteM.usuario!=""){
 		   c.usuario=clienteM.usuario;
+		   }
+		   if(clienteM.contraseña!=""){
 		   c.contraseña=clienteM.contraseña;
+		   }
+		   if(clienteM.mail!=""){
 		   c.mail=clienteM.mail;
+		   }
 		   c._save();
 		   renderTemplate("Application/principal.html");
-		   //c._save();
+		
 	   }
    }
 
