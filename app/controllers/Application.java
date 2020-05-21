@@ -133,7 +133,7 @@ public class Application extends Controller {
 		   c.mail=clienteM.mail;
 		   c._save();
 		   renderTemplate("Application/principal.html");
-		   //c._save();
+		
 	   }
    }
 
