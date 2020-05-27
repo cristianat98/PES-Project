@@ -96,7 +96,7 @@ public class Application extends Controller {
 	   	renderText(nuevocliente.usuario + " " + nuevocliente.contraseña);
    }
 
-   public static void recuperarContra( @Valid Cliente cliente, String mail) {
+   public static void recuperarContra(@Valid Cliente cliente, String mail) {
 	   validation.required(mail);
 	   validation.equals(mail, cliente.mail).message("Los emails no coinciden");
 	   if(validation.hasErrors()) {
@@ -240,8 +240,6 @@ public class Application extends Controller {
 				} else
 					renderText("No tenemos esa vestimenta disponible actualmente.");
 			}
-
 		}
-
 	}
 }
