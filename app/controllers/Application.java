@@ -136,7 +136,22 @@ public class Application extends Controller {
 		
 	   }
    }
-
+   
+   
+   public static void EliminarUsuario (String contraseña) {
+	   validation.required(contraseña);
+	   String username = session.get("user");
+	   Cliente c=Cliente.find("byUsuario", username).first();
+	   validation.equals(c.contraseña, contraseña).message("La contraseña es incorrecta, no puede eliminar su cuenta");
+	   if(validation.hasErrors()) {
+		   render("@EliminarUsuario1", contraseña);
+	   }
+	   else 
+		   	c._delete();
+	   		renderTemplate("Application/loginTemplate.html");
+   }
+   
+   
    public static void CambiarVistaNormal(){
 	   renderTemplate("Application/principal.html");
    }
@@ -169,6 +184,7 @@ public class Application extends Controller {
 			renderText("FAIL este cliente no esta en la BD ");	
 	}
 
+   
    public void eliminarCliente(String usuario, String contraseña) {
 
 		if (usuario == null && contraseña == null)
@@ -184,6 +200,7 @@ public class Application extends Controller {
 		}
    }
 
+   
    public static void Logout (){
 	   session.clear();
        renderArgs.put("client",null);
