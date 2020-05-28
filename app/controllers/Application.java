@@ -70,12 +70,12 @@ public class Application extends Controller {
 	           renderArgs.put("client", c);
 	           if (c.admin == 1)
 	           	renderTemplate("Application/principalAdmin.html");
+
 	           else
 	           	renderTemplate("Application/principal.html");
 	        }
-		 else {
+		 else
 	            renderTemplate("Application/loginTemplate.html");
-	        }
 	}
 	
    public static void registrarCliente(@Valid Cliente nuevocliente, String contraseña, String mail) {
@@ -83,17 +83,21 @@ public class Application extends Controller {
 	   validation.required(contraseña);
 	   validation.equals(contraseña, nuevocliente.contraseña).message("Las contraseñas no coinciden");
 	   if(validation.hasErrors()) {
-		   render("@register", nuevocliente, contraseña);
+
 	   }
 
-	   if (Cliente.find("byUsuarioAndContraseña", nuevocliente.usuario, nuevocliente.contraseña).first() == null) {
+	   Cliente c = Cliente.find("byUsuario", nuevocliente.usuario).first();
+
+	   if (c == null) {
 			   nuevocliente.create();
 			   session.put("user", nuevocliente.usuario);
 			   renderArgs.put("client", nuevocliente);
-			   renderTemplate("Application/loginTemplate.html");
+			   renderTemplate("Application/principal.html");
 	   }
-	   else
-	   	renderText(nuevocliente.usuario + " " + nuevocliente.contraseña);
+
+	   else {
+		   render("@register", nuevocliente, contraseña);
+	   }
    }
 
    public static void recuperarContra(@Valid Cliente cliente, String mail) {
@@ -136,8 +140,7 @@ public class Application extends Controller {
 		
 	   }
    }
-   
-   
+
    public static void EliminarUsuario (String contraseña) {
 	   validation.required(contraseña);
 	   String username = session.get("user");
@@ -150,8 +153,7 @@ public class Application extends Controller {
 		   	c._delete();
 	   		renderTemplate("Application/loginTemplate.html");
    }
-   
-   
+
    public static void CambiarVistaNormal(){
 	   renderTemplate("Application/principal.html");
    }
@@ -184,7 +186,6 @@ public class Application extends Controller {
 			renderText("FAIL este cliente no esta en la BD ");	
 	}
 
-   
    public void eliminarCliente(String usuario, String contraseña) {
 
 		if (usuario == null && contraseña == null)
@@ -200,7 +201,6 @@ public class Application extends Controller {
 		}
    }
 
-   
    public static void Logout (){
 	   session.clear();
        renderArgs.put("client",null);
