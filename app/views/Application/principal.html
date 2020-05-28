@@ -54,6 +54,13 @@
 
 <!-- Latest compiled and minified JavaScript -->
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<script>
+    window.onload=function() {
+        if (&{client.admin} == 0)
+            document.getElementById('admin').style.display="none";
+    }
+
+</script>
 <head>
     <meta charset="UTF-8">
     <title>Proyecto - PES</title>
@@ -79,7 +86,7 @@
         </button>
         <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
             <li><a href="@{ModificarDatos()}">Modificar datos usuario</a></li>
-            <li><a href="@{CambiarVistaAdmin()}">Cambiar Vista a Administrador</a></li>
+            <li><a id="admin" href="@{CambiarVistaAdmin()}">Cambiar Vista a Administrador</a></li>
             <li><a href="@{EliminarUsuario()}">Borrar cuenta</a></li>
             <li><a href="@{Logout()}">Cerrar Sesión</a></li>
         </ul>

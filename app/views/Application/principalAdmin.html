@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <style>
+
     img{
         width: 100px;
         height: 100px;
     }
+
     .dropdown{
         position: relative;
         left: 1600px;
@@ -37,28 +39,12 @@
     <title>Página Administrador</title>
 </head>
 <body>
-<table width="1900" >
-    <tbody>
-    <tr>
-        <th height="90" bgcolor="#17F406" scope="col">&nbsp;</th>
-    </tr>
-    </tbody>
-</table>
-<table width="1900" height="107">
-    <tbody>
-    <tr>
-        <th height="100" scope="col"><h1>VISTA ADMINISTRADOR</h1></th>
-    </tr>
-    </tbody>
-</table>
-<table width="1900" height="53">
-    <tbody>
-    <tr>
-        <th width="1600" height="47" scope="col">&nbsp;</th>
-        <th width="300" scope="col">Está conectado como: &{client.usuario}</th>
-    </tr>
-    </tbody>
-</table>
+<div style="background-color:#1aff00; width:1900px; height:90px"></div>
+
+<h1 style="text-align: center; width:1900px; height:100px"> VISTA ADMINISTRADOR</h1>
+
+<div style="text-align: right; width:1600px; height:47px"><b>Está conectado como: &{client.usuario}</b></div>
+
 <p>Esta es la vista de Administrador de la Página Web. Solos los usuarios con derechos de administrador pueden acceder a esta página.</p>
 <div class="dropdown">
     <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
