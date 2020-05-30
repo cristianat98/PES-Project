@@ -70,12 +70,12 @@ public class Application extends Controller {
 	           renderArgs.put("client", c);
 	           if (c.admin == 1)
 	           	renderTemplate("Application/principalAdmin.html");
+
 	           else
 	           	renderTemplate("Application/principal.html");
 	        }
-		 else {
+		 else
 	            renderTemplate("Application/loginTemplate.html");
-	        }
 	}
 	
    public static void registrarCliente(@Valid Cliente nuevocliente, String contraseña, String mail) {
@@ -83,20 +83,24 @@ public class Application extends Controller {
 	   validation.required(contraseña);
 	   validation.equals(contraseña, nuevocliente.contraseña).message("Las contraseñas no coinciden");
 	   if(validation.hasErrors()) {
-		   render("@register", nuevocliente, contraseña);
+
 	   }
 
-	   if (Cliente.find("byUsuarioAndContraseña", nuevocliente.usuario, nuevocliente.contraseña).first() == null) {
+	   Cliente c = Cliente.find("byUsuario", nuevocliente.usuario).first();
+
+	   if (c == null) {
 			   nuevocliente.create();
 			   session.put("user", nuevocliente.usuario);
 			   renderArgs.put("client", nuevocliente);
-			   renderTemplate("Application/loginTemplate.html");
+			   renderTemplate("Application/principal.html");
 	   }
-	   else
-	   	renderText(nuevocliente.usuario + " " + nuevocliente.contraseña);
+
+	   else {
+		   render("@register", nuevocliente, contraseña);
+	   }
    }
 
-   public static void recuperarContra( @Valid Cliente cliente, String mail) {
+   public static void recuperarContra(@Valid Cliente cliente, String mail) {
 	   validation.required(mail);
 	   validation.equals(mail, cliente.mail).message("Los emails no coinciden");
 	   if(validation.hasErrors()) {
@@ -137,6 +141,19 @@ public class Application extends Controller {
 		   renderTemplate("Application/principal.html");
 		
 	   }
+   }
+
+   public static void EliminarUsuario (String contraseña) {
+	   validation.required(contraseña);
+	   String username = session.get("user");
+	   Cliente c=Cliente.find("byUsuario", username).first();
+	   validation.equals(c.contraseña, contraseña).message("La contraseña es incorrecta, no puede eliminar su cuenta");
+	   if(validation.hasErrors()) {
+		   render("@EliminarUsuario1", contraseña);
+	   }
+	   else 
+		   	c._delete();
+	   		renderTemplate("Application/loginTemplate.html");
    }
 
    public static void CambiarVistaNormal(){
@@ -247,8 +264,6 @@ public class Application extends Controller {
 				} else
 					renderText("No tenemos esa vestimenta disponible actualmente.");
 			}
-
 		}
-
 	}
 }
