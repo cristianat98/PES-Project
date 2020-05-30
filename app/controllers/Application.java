@@ -111,7 +111,9 @@ public class Application extends Controller {
 	   }
  
    }
-   
+   public static void goAddStock(){
+	   renderTemplate("Application/principalAdminAddStock.html");
+   }
    public static void ModificarDatos(String contraseña) {
 	   validation.required(contraseña);
 	   String username = session.get("user");
@@ -192,8 +194,13 @@ public class Application extends Controller {
 
    public void AddStock(String tipo, String equipo, String talla, int cantidadStock, double precio){
 
+	   if(cantidadStock >= 0)
+	   {
+		   renderText("Imposible añadir, parametros no adecuados");
+	   }
 		if(tipo==null || equipo==null || talla==null || cantidadStock <=0 || precio<= 0)
 		{
+			renderText("este es el tipo: ", tipo);
 			renderText("Imposible añadir, parametros no adecuados");
 		}
 		else
