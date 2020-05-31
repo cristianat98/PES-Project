@@ -1,5 +1,6 @@
 package controllers;
 
+import com.mysql.fabric.xmlrpc.Client;
 import org.eclipse.jdt.internal.core.nd.field.StructDef;
 import play.*;
 import play.mvc.*;
@@ -42,10 +43,6 @@ public class Application extends Controller {
 			renderTemplate("Application/loginTemplate.html");
 		}
     }
-
-	public static void getInfoSession(){
-        renderText("Esta  conectado "+ session.get("user"));
-    }
 	
 	public static void loginTemplate(){
 			render();
@@ -68,8 +65,11 @@ public class Application extends Controller {
 		 if(c != null) {
 	           session.put("user",cliente.usuario);
 	           renderArgs.put("client", c);
-	           if (c.admin == 1)
-	           	renderTemplate("Application/principalAdmin.html");
+	           if (c.admin == 1){
+				   List<Cliente> lclientes = Cliente.findAll();
+				   renderArgs.put("listaclientes", lclientes);
+				   renderTemplate("Application/principalAdmin.html");
+			   }
 
 	           else
 	           	renderTemplate("Application/principal.html");
@@ -116,6 +116,20 @@ public class Application extends Controller {
  
    }
    
+   public static void ModificarDatosAdmin(Cliente user, String username){
+
+	   Cliente client = Cliente.find("byUsuario", username).first();
+	   if (client != null) {
+		   client.usuario = user.usuario;
+		   client.contraseña = user.contraseña;
+		   client.mail = user.mail;
+		   client.save();
+		   List<Cliente> lclientes = Cliente.findAll();
+		   renderArgs.put("listaclientes", lclientes);
+		   renderTemplate ("Application/principalAdmin.html");
+	   }
+   }
+
    public static void ModificarDatos(String contraseña) {
 	   validation.required(contraseña);
 	   String username = session.get("user");
@@ -128,7 +142,7 @@ public class Application extends Controller {
 		   renderTemplate("Application/ModificarUsuario2.html");
    }
 
-   public static void ModificarDatos2(Cliente clienteM,String contraseña) {
+   public static void ModificarDatos2(Cliente clienteM) {
 	   String username = session.get("user");
 	   Cliente c=Cliente.find("byUsuario", username).first();
 	   if(c!=null) {
@@ -137,7 +151,6 @@ public class Application extends Controller {
 		   c.mail=clienteM.mail;
 		   c._save();
 		   renderTemplate("Application/principal.html");
-		
 	   }
    }
 
@@ -159,10 +172,9 @@ public class Application extends Controller {
    }
 
    public static void CambiarVistaAdmin(){
-		if (connected().admin == 1)
-			renderTemplate("Application/principalAdmin.html");
-		else
-			renderTemplate("Application/principal.html");
+	   List<Cliente> lclientes = Cliente.findAll();
+	   renderArgs.put("listaclientes", lclientes);
+	   renderTemplate("Application/principalAdmin.html");
    }
 
    public static void registrarAndroid(String user, String password) {
@@ -231,7 +243,7 @@ public class Application extends Controller {
 		}
 	}
 
-	public static void comprar (String tipo, String equipo, String talla, int cantidad, String usuario, String contraseña){
+   public static void comprar (String tipo, String equipo, String talla, int cantidad, String usuario, String contraseña){
 
 		if (tipo == null || equipo == null || talla == null || cantidad < 1 || usuario == null || contraseña == null)
 				renderText("No has introducido todos los datos.");

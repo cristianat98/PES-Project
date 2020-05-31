@@ -9,11 +9,19 @@
 
     .dropdown{
         position: relative;
-        left: 1600px;
+        left: 0px;
     }
 
-    .barra{
-        width: 500px;
+    .barra li a{
+        background-color: #000000;
+        color:#ffffff;
+        padding:10px 15px;
+        display:block;
+        width: 370px;
+    }
+
+    .barra > li{
+        float:left;
     }
 
     .btn btn-default btn-lg{
@@ -46,6 +54,7 @@
 <div style="text-align: right; height:50px"><b>Está conectado como: &{client.usuario}</b></div>
 
 <p>Esta es la vista de Administrador de la Página Web. Solos los usuarios con derechos de administrador pueden acceder a esta página.</p>
+
 <div class="dropdown">
     <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
         Opciones Usuario
@@ -53,16 +62,116 @@
     </button>
     <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
         <li><a href="@{CambiarVistaNormal()}">Cambiar Vista a Normal</a></li>
-        <li><a href="#" onclick="Probando();">Probando MostrarOcultar</a></li>
+        <li><a href="@{EliminarUsuario()}">Borrar perfil</a></li>
+        <li><a href="@{ModificarDatos()}">Modificar datos perfil</a></li>
         <li><a href="@{Logout()}">Cerrar Sesión</a></li>
     </ul>
 </div>
+<h3 style="text-align: center; width:1900px; height:100px"> ACCIONES SOBRE OTROS USUARIOS</h3>
 
-<div class="barra" id = "prueba">
+<ul class="barra">
     <a class="jumbotron"></a>
-    <a href="@{CambiarVistaNormal()}">Añadir Usuario</a>
-    <a href="http://localhost:9000/application/principal">Modificar Usuario</a>
-    <a href="http://localhost:9000/application/principal">Pantalones</a>
+    <li><a onclick="Añadirusuario();">Añadir Usuario</a></li>
+    <li><a onclick="Modificarusuario();">Modificar Usuario</a></li>
+    <li><a >Eliminar Usuario</a></li>
+    <li><a >Añadir Stock</a></li>
+    <li><a >Quitar Stock</a></li>
+</ul>
+
+<div style="text-align: center; display: none" id ="AñadirUsuario">
+
+#{form @registrarCliente()}
+    #{field 'nuevocliente.usuario'}
+        <p class="${field.errorClass}">
+            <strong>Username:</strong> <input type="text" name="${field.name}" size="16"> *
+            <span class="error">${field.error}</span>
+        </p>
+
+    #{/field}
+
+    #{field 'nuevocliente.contraseña'}
+        <p class="${field.errorClass}">
+            <strong>Password:</strong> <input type="password" name="${field.name}" size="16"> *
+            <span class="error">${field.error}</span>
+        </p>
+
+    #{/field}
+    #{field 'contraseña'}
+        <p class="${field.errorClass}">
+            <strong>Verify password:</strong> <input type="password" name="${field.name}" size="16"> *
+            <span class="error">${field.error}</span>
+        </p>
+
+        </p>
+
+    #{/field}
+    #{field 'nuevocliente.mail'}
+        <p class="${field.errorClass}">
+            <strong>Mail:</strong> <input type="text" name="${field.name}" size="16"> *
+            <span class="error">${field.error}</span>
+        </p>
+
+    #{/field}
+    <p class="buttons">
+        <input type="submit" value="Register">
+    </p>
+
+#{/form}
+</div>
+
+<div  style="text-align: center; display: none" id = "ModificarUsuario" class="column">
+    <p>
+        <strong>Selecciona el usuario que quieres modificar:</strong>
+    </p>
+
+    <p>
+        <label for="Nombreusuarios"> Usuarios:</label>
+        <select id="Nombreusuarios" name="idusuario">
+            #{list items:listaclientes, as:'cliente'}
+                <option value="${cliente.usuario}" >${cliente.usuario}</option>
+            #{/list}
+        </select>
+    </p>
+
+    <p class="buttons">
+        <input onclick="CargarDatos()" type="submit" value="Cargar Datos" />
+    </p>
+</div>
+<div style="text-align: center; display: none" id = "DatosUsuario" class="column">
+    <div id = "titulo"><h3>Modifica los datos del usuario ${listaclientes[idusuario.].usuario}:</h3></div>
+    #{form @ModificarDatosAdmin()}
+
+        #{field 'username'}
+            <p class="${field.errorClass}">
+                <input style="display: none;" type="text" name="${field.name}" size="16">
+                <span class="error">${field.error}</span>
+            </p>
+        #{/field}
+        #{field 'user.usuario'}
+            <p class="${field.errorClass}">
+                <strong>Username:</strong> <input id = "usuario" type="text" name="${field.name}" size="16">
+                <span class="error">${field.error}</span>
+            </p>
+        #{/field}
+
+        #{field 'user.contraseña'}
+            <p class="${field.errorClass}">
+                <strong>Contraseña:</strong> <input type="text" name="${field.name}" placeholder="${listaclientes[2].contraseña}" size="16">
+                <span class="error">${field.error}</span>
+            </p>
+        #{/field}
+
+        #{field 'user.mail'}
+            <p class="${field.errorClass}">
+                <strong>Mail:</strong> <input type="text" name="${field.name}" placeholder="${listaclientes[2].mail}" size="16" >
+                <span class="error">${field.error}</span>
+            </p>
+        #{/field}
+
+        <p class="buttons">
+            <input type="submit" value="Modificar Usuario" />
+        </p>
+    #{/form}
 </div>
 </body>
 </html>
