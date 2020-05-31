@@ -32,41 +32,49 @@
 <div class="column">
     <h3>Entra les dades del facultatiu:</h3>
     #{form @AddStock()}
-    #{field 'prenda.tipo'}
+    #{field 'prendaM.tipo'}
     <p class="${field.errorClass}">
         <strong>Tipo:</strong> <input type="text" name="${field.name}" size="16" > *
         <span class="error">${field.error}</span>
     </p>
     #{/field}
 
-    #{field 'prenda.equipo'}
+    #{field 'prendaM.equipo'}
     <p class="${field.errorClass}">
         <strong>Equipo:</strong> <input type="text" name="${field.name}" size="16" > *
         <span class="error">${field.error}</span>
     </p>
     #{/field}
 
-    #{field 'prenda.talla'}
+    #{field 'prendaM.talla'}
     <p class="${field.errorClass}">
         <strong>Talla:</strong> <input type="text" name="${field.name}" size="16" > *
         <span class="error">${field.error}</span>
     </p>
     #{/field}
 
-    #{field 'prenda.cantidadStock'}
+    #{field 'prendaM.cantidadComprada'}
     <p class="${field.errorClass}">
-        <strong>Cantidad:</strong> <input type="double" name="${field.name}" size="16" > *
+        <strong>Cantidad:</strong> <input type="int" name="${field.name}" size="16" > *
         <span class="error">${field.error}</span>
     </p>
     #{/field}
 
 
-    #{field 'prenda.precio'}
+    #{field 'prendaM.precio'}
     <p class="${field.errorClass}">
         <strong>Precio:</strong> <input type="int" name="${field.name}" size="16" > *
         <span class="error">${field.error}</span>
     </p>
     #{/field}
+
+    #{field 'prendaM.imagen'}
+    <p class="${field.errorClass}">
+        <input type="file" name="${field.name}" size="16" > *
+        <span class="error">${field.error}</span>
+    </p>
+    #{/field}
+
 
 
     <p class="buttons">

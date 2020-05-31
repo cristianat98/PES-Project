@@ -3,6 +3,7 @@ package controllers;
 import org.eclipse.jdt.internal.core.nd.field.StructDef;
 import play.*;
 import play.mvc.*;
+import java.sql.Blob;
 
 import java.util.*;
 
@@ -10,7 +11,7 @@ import models.*;
 
 import javax.validation.Valid;
 import javax.xml.transform.Result;
-
+import java.io.*;
 public class Application extends Controller {
 
 	@Before
@@ -209,34 +210,34 @@ public class Application extends Controller {
        renderTemplate("Application/loginTemplate.html");
    }
 
-   public void AddStock(String tipo, String equipo, String talla, int cantidadStock, double precio){
+   public static void AddStock(Prenda prendaM){
 
-	   if(cantidadStock >= 0)
-	   {
-		   renderText("Imposible añadir, parametros no adecuados");
-	   }
-		if(tipo==null || equipo==null || talla==null || cantidadStock <=0 || precio<= 0)
-		{
-			renderText("este es el tipo: ", tipo);
-			renderText("Imposible añadir, parametros no adecuados");
-		}
-		else
-		{
-			Prenda p = Prenda.find("byTipoAndEquipoAndTalla",tipo,equipo,talla).first();
+		prendaM.equipo=prendaM.equipo.toUpperCase();
+		prendaM.tipo=prendaM.tipo.toUpperCase();
+		Prenda p = Prenda.find("byTipoAndEquipoAndTallaAndPrecio",prendaM.tipo,prendaM.equipo,prendaM.talla,prendaM.precio).first();
+
+		//Blob blob = prendaM.imagen;
+		//byte [] array = blob.getBytes(1l,(int)blob.length());
+	   //File file = File.createTempFile();
+
 
 			if(p==null){
-				p = new Prenda(tipo, equipo,talla,cantidadStock,precio);
-				p.save();
-				renderText("Se han añadido " + p.getCantidadStock() + " " + p.getTipo() + " del " + p.getEquipo());
+
+				prendaM.cantidadStock=prendaM.cantidadComprada;
+				prendaM.save();
+				renderText("Se han añadido " + prendaM.cantidadComprada + " " + prendaM.tipo + " del " + prendaM.equipo);
 			}
 
 			else {
-				cantidadStock=cantidadStock+p.getCantidadStock();
-				p.setCantidadStock(cantidadStock);
-				renderText("Actualmente tenemos " + cantidadStock + " " + p.getTipo() + " del " + p.getEquipo());
+				p.cantidadStock=prendaM.cantidadComprada+p.getCantidadStock();
+				p.setCantidadStock(p.cantidadStock);
+				p.save();
+				renderText("Actualmente tenemos " + p.getCantidadStock() + " " + p.getTipo() + " del " + p.getEquipo());
 			}
-		}
+
 	}
+
+
 
 	public static void comprar (String tipo, String equipo, String talla, int cantidad, String usuario, String contraseña){
 
