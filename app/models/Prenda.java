@@ -16,9 +16,6 @@ public class Prenda extends Model {
 	public int cantidadStock;
 	public double precio;
 	public Blob imagen;
-
-	
-	
 	
 	public Prenda(String tipo, String equipo, String talla, int cantidadStock, double precio) {
 		super();
