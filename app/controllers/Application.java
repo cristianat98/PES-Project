@@ -1,9 +1,9 @@
 package controllers;
 
-import com.mysql.fabric.xmlrpc.Client;
 import org.eclipse.jdt.internal.core.nd.field.StructDef;
 import play.*;
 import play.mvc.*;
+import java.sql.Blob;
 
 import java.util.*;
 
@@ -11,7 +11,7 @@ import models.*;
 
 import javax.validation.Valid;
 import javax.xml.transform.Result;
-
+import java.io.*;
 public class Application extends Controller {
 
 	@Before
@@ -43,6 +43,10 @@ public class Application extends Controller {
 			renderTemplate("Application/loginTemplate.html");
 		}
     }
+
+	public static void getInfoSession(){
+        renderText("Esta  conectado "+ session.get("user"));
+    }
 	
 	public static void loginTemplate(){
 			render();
@@ -65,11 +69,8 @@ public class Application extends Controller {
 		 if(c != null) {
 	           session.put("user",cliente.usuario);
 	           renderArgs.put("client", c);
-	           if (c.admin == 1){
-				   List<Cliente> lclientes = Cliente.findAll();
-				   renderArgs.put("listaclientes", lclientes);
-				   renderTemplate("Application/principalAdmin.html");
-			   }
+	           if (c.admin == 1)
+	           	renderTemplate("Application/principalAdmin.html");
 
 	           else
 	           	renderTemplate("Application/principal.html");
@@ -115,21 +116,9 @@ public class Application extends Controller {
 	   }
  
    }
-   
-   public static void ModificarDatosAdmin(Cliente user, String username){
-
-	   Cliente client = Cliente.find("byUsuario", username).first();
-	   if (client != null) {
-		   client.usuario = user.usuario;
-		   client.contraseña = user.contraseña;
-		   client.mail = user.mail;
-		   client.save();
-		   List<Cliente> lclientes = Cliente.findAll();
-		   renderArgs.put("listaclientes", lclientes);
-		   renderTemplate ("Application/principalAdmin.html");
-	   }
+   public static void goAddStock(){
+	   renderTemplate("Application/principalAdminAddStock.html");
    }
-
    public static void ModificarDatos(String contraseña) {
 	   validation.required(contraseña);
 	   String username = session.get("user");
@@ -142,7 +131,7 @@ public class Application extends Controller {
 		   renderTemplate("Application/ModificarUsuario2.html");
    }
 
-   public static void ModificarDatos2(Cliente clienteM) {
+   public static void ModificarDatos2(Cliente clienteM,String contraseña) {
 	   String username = session.get("user");
 	   Cliente c=Cliente.find("byUsuario", username).first();
 	   if(c!=null) {
@@ -151,6 +140,7 @@ public class Application extends Controller {
 		   c.mail=clienteM.mail;
 		   c._save();
 		   renderTemplate("Application/principal.html");
+		
 	   }
    }
 
@@ -172,9 +162,10 @@ public class Application extends Controller {
    }
 
    public static void CambiarVistaAdmin(){
-	   List<Cliente> lclientes = Cliente.findAll();
-	   renderArgs.put("listaclientes", lclientes);
-	   renderTemplate("Application/principalAdmin.html");
+		if (connected().admin == 1)
+			renderTemplate("Application/principalAdmin.html");
+		else
+			renderTemplate("Application/principal.html");
    }
 
    public static void registrarAndroid(String user, String password) {
@@ -219,31 +210,36 @@ public class Application extends Controller {
        renderTemplate("Application/loginTemplate.html");
    }
 
-   public void AddStock(String tipo, String equipo, String talla, int cantidadStock, double precio){
+   public static void AddStock(Prenda prendaM){
 
-		if(tipo==null || equipo==null || talla==null || cantidadStock <=0 || precio<= 0)
-		{
-			renderText("Imposible añadir, parametros no adecuados");
-		}
-		else
-		{
-			Prenda p = Prenda.find("byTipoAndEquipoAndTalla",tipo,equipo,talla).first();
+		prendaM.equipo=prendaM.equipo.toUpperCase();
+		prendaM.tipo=prendaM.tipo.toUpperCase();
+		Prenda p = Prenda.find("byTipoAndEquipoAndTallaAndPrecio",prendaM.tipo,prendaM.equipo,prendaM.talla,prendaM.precio).first();
+
+		//Blob blob = prendaM.imagen;
+		//byte [] array = blob.getBytes(1l,(int)blob.length());
+	   //File file = File.createTempFile();
+
 
 			if(p==null){
-				p = new Prenda(tipo, equipo,talla,cantidadStock,precio);
-				p.save();
-				renderText("Se han añadido " + p.getCantidadStock() + " " + p.getTipo() + " del " + p.getEquipo());
+
+				prendaM.cantidadStock=prendaM.cantidadComprada;
+				prendaM.save();
+				renderText("Se han añadido " + prendaM.cantidadComprada + " " + prendaM.tipo + " del " + prendaM.equipo);
 			}
 
 			else {
-				cantidadStock=cantidadStock+p.getCantidadStock();
-				p.setCantidadStock(cantidadStock);
-				renderText("Actualmente tenemos " + cantidadStock + " " + p.getTipo() + " del " + p.getEquipo());
+				p.cantidadStock=prendaM.cantidadComprada+p.getCantidadStock();
+				p.setCantidadStock(p.cantidadStock);
+				p.save();
+				renderText("Actualmente tenemos " + p.getCantidadStock() + " " + p.getTipo() + " del " + p.getEquipo());
 			}
-		}
+
 	}
 
-   public static void comprar (String tipo, String equipo, String talla, int cantidad, String usuario, String contraseña){
+
+
+	public static void comprar (String tipo, String equipo, String talla, int cantidad, String usuario, String contraseña){
 
 		if (tipo == null || equipo == null || talla == null || cantidad < 1 || usuario == null || contraseña == null)
 				renderText("No has introducido todos los datos.");

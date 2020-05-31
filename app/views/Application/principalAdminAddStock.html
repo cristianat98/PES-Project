@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <style>
+* {
+  box-sizing: border-box;
+}
+
+/* Create two equal columns that floats next to each other */
+.column {
+  float: left;
+  width: 50%;
+  padding: 10px;
+  height: 300px; /* Should be removed. Only for demonstration */
+}
+
+/* Clear floats after the columns */
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+</style>
+    <meta charset="UTF-8">
+    <title>Añadir Stock</title>
+</head>
+<body>
+<div class="column">
+
+</div>
+(String tipo, String equipo, String talla, int cantidadStock, double precio)
+<div class="column">
+    <h3>Entra les dades del facultatiu:</h3>
+    #{form @AddStock()}
+    #{field 'prendaM.tipo'}
+    <p class="${field.errorClass}">
+        <strong>Tipo:</strong> <input type="text" name="${field.name}" size="16" > *
+        <span class="error">${field.error}</span>
+    </p>
+    #{/field}
+
+    #{field 'prendaM.equipo'}
+    <p class="${field.errorClass}">
+        <strong>Equipo:</strong> <input type="text" name="${field.name}" size="16" > *
+        <span class="error">${field.error}</span>
+    </p>
+    #{/field}
+
+    #{field 'prendaM.talla'}
+    <p class="${field.errorClass}">
+        <strong>Talla:</strong> <input type="text" name="${field.name}" size="16" > *
+        <span class="error">${field.error}</span>
+    </p>
+    #{/field}
+
+    #{field 'prendaM.cantidadComprada'}
+    <p class="${field.errorClass}">
+        <strong>Cantidad:</strong> <input type="int" name="${field.name}" size="16" > *
+        <span class="error">${field.error}</span>
+    </p>
+    #{/field}
+
+
+    #{field 'prendaM.precio'}
+    <p class="${field.errorClass}">
+        <strong>Precio:</strong> <input type="int" name="${field.name}" size="16" > *
+        <span class="error">${field.error}</span>
+    </p>
+    #{/field}
+
+    #{field 'prendaM.imagen'}
+    <p class="${field.errorClass}">
+        <input type="file" name="${field.name}" size="16" > *
+        <span class="error">${field.error}</span>
+    </p>
+    #{/field}
+
+
+
+    <p class="buttons">
+        <input type="submit" value="Añadir Stock"/>
+    </p>
+    #{/form}
+</div>
+
+</body>
+</html>

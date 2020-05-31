@@ -2,6 +2,7 @@ package models;
 
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
+import java.sql.Blob;
 
 import play.db.jpa.Model;
 
@@ -14,6 +15,7 @@ public class Prenda extends Model {
 	public int cantidadComprada;
 	public int cantidadStock;
 	public double precio;
+	public Blob imagen;
 
 	
 	
