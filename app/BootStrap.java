@@ -22,11 +22,11 @@ public class BootStrap extends Job {
             david.save();
             fernando.save();
         }
-    Prenda p1= new Prenda("Camiseta", "Barcelona", "M", 20, 75).save();
-    Prenda p2= new Prenda("Pantalon", "Madrid", "L",50, 22.5).save();
-    Prenda p3= new Prenda("Pantalon", "Valencia", "XL",10, 22.5).save();
-    Prenda p4= new Prenda("Camiseta", "Madrid", "M",30, 73.5).save();
-    Prenda p5= new Prenda("Pelota", "Español", "",10, 15).save();
+    Prenda p1= new Prenda("Camiseta", "BARCELONA", "M", 20, 75).save();
+    Prenda p2= new Prenda("Pantalon", "MADRID", "L",50, 22.5).save();
+    Prenda p3= new Prenda("Pantalon", "VALENCIA", "XL",10, 22.5).save();
+    Prenda p4= new Prenda("Camiseta", "MADRID", "M",30, 73.5).save();
+    Prenda p5= new Prenda("Pelota", "ESPAÑOL", "",10, 15).save();
     }
 
 }
