@@ -81,10 +81,10 @@ public class Application extends Controller {
 	            renderTemplate("Application/loginTemplate.html");
 	}
 	
-   public static void registrarCliente(@Valid Cliente nuevocliente, String usuario, String contraseña) {
+   public static void registrarCliente(@Valid Cliente nuevocliente, String usuario, String contraseña, String mail) {
 		validation.required(usuario);
 	    validation.required(contraseña);
-	    validation.required(nuevocliente.mail);
+	    validation.required(mail);
 	    validation.equals(contraseña, nuevocliente.contraseña).message("Las contraseñas no coinciden");
 	    if(validation.hasErrors()) {
 		   render("@register");
@@ -94,6 +94,7 @@ public class Application extends Controller {
 
 	   if (c == null) {
 	   	   nuevocliente.usuario = usuario;
+	   	   nuevocliente.mail = mail;
 		   nuevocliente.create();
 		   session.put("user", nuevocliente);
 		   renderArgs.put("client", nuevocliente);
