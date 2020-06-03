@@ -1,8 +1,10 @@
+
 package controllers;
 
 import com.mysql.fabric.xmlrpc.Client;
 import org.eclipse.jdt.internal.core.nd.field.StructDef;
 import play.*;
+import play.data.validation.Validation;
 import play.mvc.*;
 
 import java.util.*;
@@ -11,6 +13,7 @@ import models.*;
 
 import javax.validation.Valid;
 import javax.xml.transform.Result;
+
 
 public class Application extends Controller {
 
@@ -79,7 +82,6 @@ public class Application extends Controller {
 	}
 	
    public static void registrarCliente(@Valid Cliente nuevocliente, String usuario, String contraseña) {
-
 		validation.required(usuario);
 	    validation.required(contraseña);
 	    validation.required(nuevocliente.mail);
@@ -98,7 +100,7 @@ public class Application extends Controller {
 		   renderTemplate("Application/principal.html");
 	   }
 
-	   else {
+	   else{
 		   validation.equals(usuario, "").message("El usuario ya está en uso");
 		   render("@register");
 	   }
