@@ -17,6 +17,8 @@ import javax.xml.transform.Result;
 
 public class Application extends Controller {
 
+	static int visionadmin = 0;
+
 	@Before
 	static void addUser() {
 		Cliente user = connected();
@@ -54,7 +56,7 @@ public class Application extends Controller {
 	public static void register() {
 	        render();
 	}
-	
+
 	public static void recuperacionContra() {
 			render();
 	}
@@ -71,6 +73,7 @@ public class Application extends Controller {
 	           if (c.admin == 1){
 				   List<Cliente> lclientes = Cliente.findAll();
 				   renderArgs.put("listaclientes", lclientes);
+				   renderArgs.put("visionadmin", visionadmin);
 				   renderTemplate("Application/principalAdmin.html");
 			   }
 
@@ -82,6 +85,7 @@ public class Application extends Controller {
 	}
 	
    public static void registrarCliente(@Valid Cliente nuevocliente, String usuario, String contraseña, String mail) {
+
 		validation.required(usuario);
 	    validation.required(contraseña);
 	    validation.required(mail);
@@ -107,29 +111,46 @@ public class Application extends Controller {
 	   }
    }
 
-	public static void registrarClienteAdmin(@Valid Cliente nuevocliente, String contraseña, String mail) {
+	public static void añadirusuario() {
 
-		validation.required(contraseña);
-		validation.equals(contraseña, nuevocliente.contraseña).message("Las contraseñas no coinciden");
-		if(validation.hasErrors()) {
-			render("@register", nuevocliente, contraseña);
-		}
+		if (visionadmin == 0)
+		visionadmin=1;
 
-		Cliente c = Cliente.find("byUsuario", nuevocliente.usuario).first();
+		else
+			visionadmin=0;
 
-		if (c == null) {
-			nuevocliente.create();
-			session.put("user", nuevocliente.usuario);
-			renderArgs.put("client", nuevocliente);
-			renderTemplate("Application/principal.html");
-		}
-
-		else {
-			render("@register", nuevocliente, contraseña);
-		}
+		renderArgs.put("visionadmin", visionadmin);
+		render("Application/principalAdmin.html");
 	}
 
-   public static void recuperarContra(@Valid Cliente cliente, String mail) {
+   public static void registrarclienteadmin(@Valid Cliente nuevocliente, String usuario, String contraseña, String mail){
+	   validation.required(usuario);
+	   validation.required(contraseña);
+	   validation.required(mail);
+	   validation.equals(contraseña, nuevocliente.contraseña).message("Las contraseñas no coinciden");
+	   if(validation.hasErrors()) {
+		   renderArgs.put("visionadmin", visionadmin);
+		   render("Application/principalAdmin.html");
+	   }
+	   Cliente c = Cliente.find("byUsuario", usuario).first();
+
+	   if (c == null) {
+		   nuevocliente.usuario = usuario;
+		   nuevocliente.mail = mail;
+		   nuevocliente.create();
+		   renderArgs.put("visionadmin", visionadmin);
+		   validation.equals(usuario, "").message("Usuario registrado correctamente");
+		   render("Application/principalAdmin.html");
+	   }
+
+	   else{
+		   renderArgs.put("visionadmin", visionadmin);
+		   validation.equals(usuario, "").message("El usuario ya está en uso");
+		   renderTemplate("Application/principalAdmin.html");
+	   }
+   }
+
+	public static void recuperarContra(@Valid Cliente cliente, String mail) {
 	   validation.required(mail);
 	   validation.equals(mail, cliente.mail).message("Los emails no coinciden");
 	   if(validation.hasErrors()) {
@@ -252,7 +273,7 @@ public class Application extends Controller {
        renderTemplate("Application/loginTemplate.html");
    }
 
-   public void AddStock(Prenda prendaM	){
+   public void AddStock(Prenda prendaM){
 
 	   prendaM.equipo=prendaM.equipo.toUpperCase();
 	   prendaM.tipo=prendaM.tipo.toUpperCase();

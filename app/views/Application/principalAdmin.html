@@ -41,6 +41,14 @@
 
 <!-- Latest compiled and minified JavaScript -->
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<script>
+    window.onload=function() {
+        if (&{visionadmin} == 1)
+        document.getElementById('AñadirUsuario').style.display="block";
+    }
+
+</script>
+
 <head>
     <script type="text/javascript" src=@{'/public/javascripts/Funciones.js'}></script>
     <meta charset="UTF-8">
@@ -71,7 +79,7 @@
 
 <ul class="barra">
     <a class="jumbotron"></a>
-    <li><a onclick="Añadirusuario();">Añadir Usuario</a></li>
+    <li><a href="@{añadirusuario()}">Añadir Usuario</a></li>
     <li><a onclick="Modificarusuario();">Modificar Usuario</a></li>
     <li><a >Eliminar Usuario</a></li>
     <li><a href="@{goAddStock()}">Añadir Stock</a></li>
@@ -80,8 +88,8 @@
 
 <div style="text-align: center; display: none" id ="AñadirUsuario">
 
-#{form @registrarClienteAdmin()}
-    #{field 'nuevocliente.usuario'}
+#{form @registrarclienteadmin()}
+    #{field 'usuario'}
         <p class="${field.errorClass}">
             <strong>Username:</strong> <input type="text" name="${field.name}" size="16"> *
             <span class="error">${field.error}</span>
@@ -105,9 +113,9 @@
         </p>
 
     #{/field}
-    #{field 'nuevocliente.mail'}
+    #{field 'mail'}
         <p class="${field.errorClass}">
-            <strong>Mail:</strong> <input type="text" name="${field.name}" size="16"> *
+            <strong>Mail:</strong> <input type="email" name="${field.name}" size="16"> *
             <span class="error">${field.error}</span>
         </p>
 
@@ -138,7 +146,7 @@
     </p>
 </div>
 <div style="text-align: center; display: none" id = "DatosUsuario" class="column">
-    <div id = "titulo"><h3>Modifica los datos del usuario ${listaclientes[0].usuario}:</h3></div>
+    <div id = "titulo"><h3>Modifica los datos del usuario:</h3></div>
     #{form @ModificarDatosAdmin()}
 
         #{field 'username'}
@@ -156,14 +164,14 @@
 
         #{field 'user.contraseña'}
             <p class="${field.errorClass}">
-                <strong>Contraseña:</strong> <input type="text" name="${field.name}" placeholder="${listaclientes[2].contraseña}" size="16">
+                <strong>Contraseña:</strong> <input type="text" name="${field.name}" size="16">
                 <span class="error">${field.error}</span>
             </p>
         #{/field}
 
         #{field 'user.mail'}
             <p class="${field.errorClass}">
-                <strong>Mail:</strong> <input type="text" name="${field.name}" placeholder="${listaclientes[2].mail}" size="16" >
+                <strong>Mail:</strong> <input type="text" name="${field.name}" size="16" >
                 <span class="error">${field.error}</span>
             </p>
         #{/field}

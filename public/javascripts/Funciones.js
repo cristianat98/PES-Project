@@ -5,12 +5,6 @@ function Modificarusuario(){
     document.getElementById('DatosUsuario').style.display = "none";
 }
 
-function Añadirusuario(){
-    document.getElementById('AñadirUsuario').style.display = "block";
-    document.getElementById('ModificarUsuario').style.display = "none";
-    document.getElementById('DatosUsuario').style.display = "none";
-}
-
 function CargarDatos(){
     document.getElementById('DatosUsuario').style.display = "block";
     var element = document.getElementById('Nombreusuarios').selectedIndex;
