@@ -78,27 +78,53 @@ public class Application extends Controller {
 	            renderTemplate("Application/loginTemplate.html");
 	}
 	
-   public static void registrarCliente(@Valid Cliente nuevocliente, String contraseña, String mail) {
+   public static void registrarCliente(@Valid Cliente nuevocliente, String usuario, String contraseña) {
 
-	   validation.required(contraseña);
-	   validation.equals(contraseña, nuevocliente.contraseña).message("Las contraseñas no coinciden");
-	   if(validation.hasErrors()) {
+		validation.required(usuario);
+	    validation.required(contraseña);
+	    validation.required(nuevocliente.mail);
+	    validation.equals(contraseña, nuevocliente.contraseña).message("Las contraseñas no coinciden");
+	    if(validation.hasErrors()) {
+		   render("@register");
+	    }
 
-	   }
-
-	   Cliente c = Cliente.find("byUsuario", nuevocliente.usuario).first();
+	   Cliente c = Cliente.find("byUsuario", usuario).first();
 
 	   if (c == null) {
-			   nuevocliente.create();
-			   session.put("user", nuevocliente.usuario);
-			   renderArgs.put("client", nuevocliente);
-			   renderTemplate("Application/principal.html");
+	   	   nuevocliente.usuario = usuario;
+		   nuevocliente.create();
+		   session.put("user", nuevocliente);
+		   renderArgs.put("client", nuevocliente);
+		   renderTemplate("Application/principal.html");
 	   }
 
 	   else {
-		   render("@register", nuevocliente, contraseña);
+		   validation.equals(usuario, "").message("El usuario ya está en uso");
+		   render("@register");
 	   }
    }
+
+	public static void registrarClienteAdmin(@Valid Cliente nuevocliente, String contraseña, String mail) {
+
+		validation.required(contraseña);
+		validation.equals(contraseña, nuevocliente.contraseña).message("Las contraseñas no coinciden");
+		if(validation.hasErrors()) {
+			render("@register", nuevocliente, contraseña);
+		}
+
+		Cliente c = Cliente.find("byUsuario", nuevocliente.usuario).first();
+
+		if (c == null) {
+			nuevocliente.create();
+			session.put("user", nuevocliente.usuario);
+			renderArgs.put("client", nuevocliente);
+			renderTemplate("Application/principal.html");
+		}
+
+		else {
+			render("@register", nuevocliente, contraseña);
+		}
+	}
 
    public static void recuperarContra(@Valid Cliente cliente, String mail) {
 	   validation.required(mail);

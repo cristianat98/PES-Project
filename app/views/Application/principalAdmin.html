@@ -67,7 +67,7 @@
         <li><a href="@{Logout()}">Cerrar Sesión</a></li>
     </ul>
 </div>
-<h3 style="text-align: center; width:1900px; height:100px"> ACCIONES SOBRE OTROS USUARIOS</h3>
+<h3 style="text-align: center; width:1900px; height:100px"> ACCIONES DE ADMINISTRADOR</h3>
 
 <ul class="barra">
     <a class="jumbotron"></a>
@@ -80,7 +80,7 @@
 
 <div style="text-align: center; display: none" id ="AñadirUsuario">
 
-#{form @registrarCliente()}
+#{form @registrarClienteAdmin()}
     #{field 'nuevocliente.usuario'}
         <p class="${field.errorClass}">
             <strong>Username:</strong> <input type="text" name="${field.name}" size="16"> *
