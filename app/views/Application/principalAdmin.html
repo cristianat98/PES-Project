@@ -53,6 +53,10 @@
             document.getElementById('ModificarUsuario').style.display="block";
             document.getElementById('DatosUsuario').style.display="block";
         }
+
+    else if (&{visionadmin} === 5){
+            document.getElementById('AñadirStock').style.display="block";
+        }
     }
 
 </script>
@@ -97,6 +101,7 @@
 <div style="text-align: center; display: none" id ="AñadirUsuario">
 
 #{form @registrarclienteadmin()}
+    <h3>Introduce los datos del nuevo usuario:</h3>
     #{field 'usuario'}
         <p class="${field.errorClass}">
             <strong>Username:</strong> <input type="text" name="${field.name}" size="16"> *
@@ -164,21 +169,21 @@
 
         #{field 'usuarioM.usuario'}
             <p class="${field.errorClass}">
-                <strong>Usuario:</strong> <input type="text" name="${field.name}" placeholder="${usuarioM.usuario}" size="16"  > *
+                <strong>Usuario:</strong> <input type="text" name="${field.name}" placeholder="${usuarioM.usuario}" size="16"  >
                 <span class="error">${field.error}</span>
             </p>
         #{/field}
 
         #{field 'usuarioM.contraseña'}
             <p class="${field.errorClass}">
-                <strong>Contraseña:</strong> <input type="text" name="${field.name}" placeholder="${usuarioM.contraseña}"size="16" > *
+                <strong>Contraseña:</strong> <input type="text" name="${field.name}" placeholder="${usuarioM.contraseña}"size="16" >
                 <span class="error">${field.error}</span>
             </p>
         #{/field}
 
         #{field 'usuarioM.mail'}
             <p class="${field.errorClass}">
-                <strong>Mail:</strong> <input type="email" name="${field.name}" placeholder="${usuarioM.mail}" size="16" > *
+                <strong>Mail:</strong> <input type="email" name="${field.name}" placeholder="${usuarioM.mail}" size="16" >
                 <span class="error">${field.error}</span>
             </p>
         #{/field}
@@ -190,5 +195,58 @@
 
 </div>
 </div>
+
+<div style="text-align: center; display: none" id = "AñadirStock" class="column">
+    <h3>Introduce los datos de la prenda:</h3>
+#{form @AddStock()}
+    #{field 'prendaM.tipo'}
+        <p class="${field.errorClass}">
+            <strong>Tipo:</strong> <input type="text" name="${field.name}" size="16" > *
+            <span class="error">${field.error}</span>
+        </p>
+    #{/field}
+
+    #{field 'prendaM.equipo'}
+        <p class="${field.errorClass}">
+            <strong>Equipo:</strong> <input type="text" name="${field.name}" size="16" > *
+            <span class="error">${field.error}</span>
+        </p>
+    #{/field}
+
+    #{field 'prendaM.talla'}
+        <p class="${field.errorClass}">
+            <strong>Talla:</strong> <input type="text" name="${field.name}" size="16" > *
+            <span class="error">${field.error}</span>
+        </p>
+    #{/field}
+
+    #{field 'prendaM.cantidadComprada'}
+        <p class="${field.errorClass}">
+            <strong>Cantidad:</strong> <input type="int" name="${field.name}" size="16" > *
+            <span class="error">${field.error}</span>
+        </p>
+    #{/field}
+
+
+    #{field 'prendaM.precio'}
+        <p class="${field.errorClass}">
+            <strong>Precio:</strong> <input type="int" name="${field.name}" size="16" > *
+            <span class="error">${field.error}</span>
+        </p>
+    #{/field}
+
+    #{field 'prendaM.imagen'}
+        <p class="${field.errorClass}">
+            <input type="file" name="${field.name}" size="16" > *
+            <span class="error">${field.error}</span>
+        </p>
+    #{/field}
+
+    <p class="buttons">
+        <input type="submit" value="Añadir Stock"/>
+    </p>
+#{/form}
+</div>
+
 </body>
 </html>

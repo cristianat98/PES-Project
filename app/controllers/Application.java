@@ -61,10 +61,6 @@ public class Application extends Controller {
 			render();
 	}
 
-   public static void ModificarUsuario() {
-			render();
-	}
-
    public static void Login(@Valid Cliente cliente) {
 		Cliente c = Cliente.find("byUsuarioAndContraseña", cliente.usuario, cliente.contraseña).first();
 		 if(c != null) {
@@ -119,6 +115,7 @@ public class Application extends Controller {
 		else
 			visionadmin=0;
 
+		renderArgs.put("usuarioM", Cliente.findAll().get(0));
 		renderArgs.put("visionadmin", visionadmin);
 		render("Application/principalAdmin.html");
 	}
@@ -208,7 +205,10 @@ public class Application extends Controller {
    }
 
    public static void goAddStock(){
-		renderTemplate("Application/principalAdminAddStock.html");
+		visionadmin = 5;
+		renderArgs.put("visionadmin",visionadmin);
+		renderArgs.put("usuarioM", Cliente.findAll().get(0));
+		renderTemplate("Application/principalAdmin.html");
 	}
 
    public static void ModificarDatosAdmin(Cliente user, String username){
@@ -267,8 +267,9 @@ public class Application extends Controller {
    }
 
    public static void CambiarVistaAdmin(){
-	   List<Cliente> lclientes = Cliente.findAll();
-	   renderArgs.put("listaclientes", lclientes);
+		visionadmin = 0;
+	   renderArgs.put("visionadmin", visionadmin);
+	   renderArgs.put("usuarioM", Cliente.findAll().get(0));
 	   renderTemplate("Application/principalAdmin.html");
    }
 
@@ -292,21 +293,6 @@ public class Application extends Controller {
 		else 
 			renderText("FAIL este cliente no esta en la BD ");	
 	}
-
-   public void eliminarCliente(String usuario, String contraseña) {
-
-		if (usuario == null && contraseña == null)
-			renderText("No has introducido todos los datos.");
-		else{
-			Cliente c = Cliente.find("byUsuarioAndContraseña", usuario, contraseña).first();
-			if(c!= null) {
-				c.delete();
-				renderText("Cliente con usuario: " + c.getUsuario() + " y contraseña "+ c.getContraseña() + "  eliminado de nuestra BD");
-			}
-			else
-				renderText("Los datos introducidos no son correctos.");
-		}
-   }
 
    public static void Logout (){
 	   session.clear();
