@@ -43,8 +43,16 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 <script>
     window.onload=function() {
-        if (&{visionadmin} == 1)
+        if (&{visionadmin} === 1)
         document.getElementById('AñadirUsuario').style.display="block";
+
+        else if (&{visionadmin} === 2)
+        document.getElementById('ModificarUsuario').style.display="block";
+
+    else if (&{visionadmin} === 3){
+            document.getElementById('ModificarUsuario').style.display="block";
+            document.getElementById('DatosUsuario').style.display="block";
+        }
     }
 
 </script>
@@ -80,7 +88,7 @@
 <ul class="barra">
     <a class="jumbotron"></a>
     <li><a href="@{añadirusuario()}">Añadir Usuario</a></li>
-    <li><a onclick="Modificarusuario();">Modificar Usuario</a></li>
+    <li><a href="@{modificarusuario()}">Modificar Usuario</a></li>
     <li><a >Eliminar Usuario</a></li>
     <li><a href="@{goAddStock()}">Añadir Stock</a></li>
     <li><a >Quitar Stock</a></li>
@@ -128,6 +136,7 @@
 </div>
 
 <div  style="text-align: center; display: none" id = "ModificarUsuario" class="column">
+#{form @cargardatos()}
     <p>
         <strong>Selecciona el usuario que quieres modificar:</strong>
     </p>
@@ -136,42 +145,40 @@
         <label for="Nombreusuarios"> Usuarios:</label>
         <select id="Nombreusuarios" name="idusuario">
             #{list items:listaclientes, as:'cliente'}
-                <option value="${cliente.usuario}" >${cliente.usuario}</option>
+                <option value="${cliente.id}" >${cliente.usuario}</option>
             #{/list}
         </select>
     </p>
 
     <p class="buttons">
-        <input onclick="CargarDatos()" type="submit" value="Cargar Datos" />
+        <input type="submit" value="Cargar Datos" />
     </p>
+#{/form}
 </div>
+
 <div style="text-align: center; display: none" id = "DatosUsuario" class="column">
-    <div id = "titulo"><h3>Modifica los datos del usuario:</h3></div>
-    #{form @ModificarDatosAdmin()}
+#{form @ModificarU()}
 
-        #{field 'username'}
+    <h3>Modifica los datos del usuario ${usuarioM.usuario}:</h3>
+
+
+        #{field 'usuarioM.usuario'}
             <p class="${field.errorClass}">
-                <input style="display: none;" type="text" name="${field.name}" size="16">
-                <span class="error">${field.error}</span>
-            </p>
-        #{/field}
-        #{field 'user.usuario'}
-            <p class="${field.errorClass}">
-                <strong>Username:</strong> <input id = "usuario" type="text" name="${field.name}" size="16">
+                <strong>Usuario:</strong> <input type="text" name="${field.name}" placeholder="${usuarioM.usuario}" size="16"  > *
                 <span class="error">${field.error}</span>
             </p>
         #{/field}
 
-        #{field 'user.contraseña'}
+        #{field 'usuarioM.contraseña'}
             <p class="${field.errorClass}">
-                <strong>Contraseña:</strong> <input type="text" name="${field.name}" size="16">
+                <strong>Contraseña:</strong> <input type="text" name="${field.name}" placeholder="${usuarioM.contraseña}"size="16" > *
                 <span class="error">${field.error}</span>
             </p>
         #{/field}
 
-        #{field 'user.mail'}
+        #{field 'usuarioM.mail'}
             <p class="${field.errorClass}">
-                <strong>Mail:</strong> <input type="text" name="${field.name}" size="16" >
+                <strong>Mail:</strong> <input type="email" name="${field.name}" placeholder="${usuarioM.mail}" size="16" > *
                 <span class="error">${field.error}</span>
             </p>
         #{/field}
@@ -180,6 +187,8 @@
             <input type="submit" value="Modificar Usuario" />
         </p>
     #{/form}
+
+</div>
 </div>
 </body>
 </html>

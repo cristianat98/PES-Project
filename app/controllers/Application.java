@@ -71,8 +71,8 @@ public class Application extends Controller {
 	           session.put("user",cliente.usuario);
 	           renderArgs.put("client", c);
 	           if (c.admin == 1){
-				   List<Cliente> lclientes = Cliente.findAll();
-				   renderArgs.put("listaclientes", lclientes);
+	           	   renderArgs.put("usuarioM", cliente);
+	           	   visionadmin = 0;
 				   renderArgs.put("visionadmin", visionadmin);
 				   renderTemplate("Application/principalAdmin.html");
 			   }
@@ -113,7 +113,7 @@ public class Application extends Controller {
 
 	public static void añadirusuario() {
 
-		if (visionadmin == 0)
+		if (visionadmin != 1)
 		visionadmin=1;
 
 		else
@@ -149,6 +149,47 @@ public class Application extends Controller {
 		   renderTemplate("Application/principalAdmin.html");
 	   }
    }
+
+	public static void modificarusuario(){
+
+		if (visionadmin != 2){
+			List<Cliente> lclientes = Cliente.findAll();
+			renderArgs.put("listaclientes", lclientes);
+			renderArgs.put("usuarioM", lclientes.get(0));
+			visionadmin = 2;
+		}
+
+		else{
+			visionadmin = 0;
+		}
+		renderArgs.put("visionadmin", visionadmin);
+		render("Application/principalAdmin.html");
+
+	}
+
+	public void cargardatos(Long idusuario){
+		visionadmin = 3;
+		List<Cliente> lclientes = Cliente.findAll();
+		renderArgs.put("listaclientes", lclientes);
+		Cliente modificar = Cliente.findById(idusuario);
+		renderArgs.put("usuarioM",modificar);
+		renderArgs.put("visionadmin", visionadmin);
+		renderTemplate ("Application/principalAdmin.html");
+	}
+
+	public void ModificarU(Cliente usuarioM){
+		Cliente user = Cliente.find("byUsuario", usuarioM.usuario).first();
+		user.usuario = usuarioM.usuario;
+		user.contraseña = usuarioM.contraseña;
+		user.mail =usuarioM.mail;
+		user.save();
+		List<Cliente> lclientes = Cliente.findAll();
+		renderArgs.put("listaclientes", lclientes);
+		visionadmin = 2;
+		renderArgs.put("visionadmin", visionadmin);
+		renderArgs.put("usuarioM", usuarioM);
+		renderTemplate ("Application/principalAdmin.html");
+	}
 
 	public static void recuperarContra(@Valid Cliente cliente, String mail) {
 	   validation.required(mail);
