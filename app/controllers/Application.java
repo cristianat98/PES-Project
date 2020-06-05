@@ -76,7 +76,6 @@ public class Application extends Controller {
 	           session.put("user",cliente.usuario);
 	           renderArgs.put("client", c);
 	           if (c.admin == 1){
-	           	   renderArgs.put("usuarioM", cliente);
 	           	   visionadmin = 0;
 				   renderArgs.put("visionadmin", visionadmin);
 				   renderTemplate("Application/principalAdmin.html");
@@ -89,11 +88,13 @@ public class Application extends Controller {
 	            renderTemplate("Application/loginTemplate.html");
 	}
 	
-   public static void registrarCliente(@Valid Cliente nuevocliente, String usuario, String contraseña, String mail) {
+   public static void registrarCliente(@Valid Cliente nuevocliente, String usuario, String contraseña, String mail, String nombre, String apellido1) {
 
 		validation.required(usuario);
 	    validation.required(contraseña);
 	    validation.required(mail);
+	   validation.required(nombre);
+	   validation.required(apellido1);
 	    validation.equals(contraseña, nuevocliente.contraseña).message("Las contraseñas no coinciden");
 	    if(validation.hasErrors()) {
 		   render("@register");
@@ -104,6 +105,8 @@ public class Application extends Controller {
 	   if (c == null) {
 	   	   nuevocliente.usuario = usuario;
 	   	   nuevocliente.mail = mail;
+	   	   nuevocliente.nombre = nombre;
+	   	   nuevocliente.apellido1 = apellido1;
 		   nuevocliente.create();
 		   session.put("user", nuevocliente);
 		   renderArgs.put("client", nuevocliente);
@@ -124,7 +127,6 @@ public class Application extends Controller {
 		else
 			visionadmin=0;
 
-		renderArgs.put("usuarioM", Cliente.findAll().get(0));
 		renderArgs.put("visionadmin", visionadmin);
 		render("Application/principalAdmin.html");
 	}
@@ -135,7 +137,6 @@ public class Application extends Controller {
 	   validation.required(mail);
 	   validation.equals(contraseña, nuevocliente.contraseña).message("Las contraseñas no coinciden");
 	   if(validation.hasErrors()) {
-	   	renderArgs.put("usuarioM",Cliente.findAll().get(0));
 		   renderArgs.put("visionadmin", visionadmin);
 		   render("Application/principalAdmin.html");
 	   }
@@ -146,14 +147,12 @@ public class Application extends Controller {
 		   nuevocliente.mail = mail;
 		   nuevocliente.create();
 		   renderArgs.put("visionadmin", visionadmin);
-		   renderArgs.put("usuarioM",Cliente.findAll().get(0));
 		   validation.equals(usuario, "").message("Usuario registrado correctamente");
 		   render("Application/principalAdmin.html");
 	   }
 
 	   else{
 		   renderArgs.put("visionadmin", visionadmin);
-		   renderArgs.put("usuarioM",Cliente.findAll().get(0));
 		   validation.equals(usuario, "").message("El usuario ya está en uso");
 		   renderTemplate("Application/principalAdmin.html");
 	   }
@@ -172,12 +171,11 @@ public class Application extends Controller {
 		}
 
 		renderArgs.put("visionadmin", visionadmin);
-		renderArgs.put("usuarioM",Cliente.findAll().get(0));
 		render("Application/principalAdmin.html");
 
 	}
 
-	public void cargardatos(Long idusuario){
+	public static void cargardatos(Long idusuario){
 		visionadmin = 3;
 		List<Cliente> lclientes = Cliente.findAll();
 		renderArgs.put("listaclientes", lclientes);
@@ -187,17 +185,46 @@ public class Application extends Controller {
 		renderTemplate ("Application/principalAdmin.html");
 	}
 
-	public void ModificarU(Cliente usuarioM){
+	public static void ModificarU(Cliente usuarioM){
 		Cliente user = Cliente.find("byUsuario", usuarioM.usuario).first();
 		user.usuario = usuarioM.usuario;
 		user.contraseña = usuarioM.contraseña;
 		user.mail =usuarioM.mail;
+		user.nombre = usuarioM.nombre;
+		user.apellido1 = usuarioM.apellido1;
+		user.apellido2 = usuarioM.apellido2;
 		user.save();
 		List<Cliente> lclientes = Cliente.findAll();
 		renderArgs.put("listaclientes", lclientes);
 		visionadmin = 2;
 		renderArgs.put("visionadmin", visionadmin);
-		renderArgs.put("usuarioM", usuarioM);
+		renderTemplate ("Application/principalAdmin.html");
+	}
+
+	public static void cargareliminar(){
+
+		if (visionadmin != 4){
+			List<Cliente> lclientes = Cliente.findAll();
+			renderArgs.put("listaclientes", lclientes);
+			visionadmin = 4;
+		}
+
+		else{
+			visionadmin = 0;
+		}
+
+		renderArgs.put("visionadmin", visionadmin);
+		render("Application/principalAdmin.html");
+	}
+
+	public static void eliminarusuario(Long idusuario){
+
+		visionadmin = 4;
+		Cliente eliminar = Cliente.findById(idusuario);
+		eliminar.delete();
+		List<Cliente> lclientes = Cliente.findAll();
+		renderArgs.put("listaclientes", lclientes);
+		renderArgs.put("visionadmin", visionadmin);
 		renderTemplate ("Application/principalAdmin.html");
 	}
 
@@ -225,7 +252,6 @@ public class Application extends Controller {
 			visionadmin=0;
 
 		renderArgs.put("visionadmin",visionadmin);
-		renderArgs.put("usuarioM", Cliente.findAll().get(0));
 		renderTemplate("Application/principalAdmin.html");
 	}
 
@@ -287,7 +313,6 @@ public class Application extends Controller {
    public static void CambiarVistaAdmin(){
 		visionadmin = 0;
 	   renderArgs.put("visionadmin", visionadmin);
-	   renderArgs.put("usuarioM", Cliente.findAll().get(0));
 	   renderTemplate("Application/principalAdmin.html");
    }
 
@@ -338,6 +363,8 @@ public class Application extends Controller {
 		   p.cantidadStock=prendaM.cantidadComprada+p.getCantidadStock();
 		   p.setCantidadStock(p.cantidadStock);
 		   p.save();
+		   renderArgs.put("visionadmin", visionadmin);
+		   renderTemplate("Application/principalAdmin.html");
 	   }
 
    }

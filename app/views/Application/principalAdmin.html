@@ -54,9 +54,12 @@
             document.getElementById('DatosUsuario').style.display="block";
         }
 
-    else if (&{visionadmin} === 5){
+    else if (&{visionadmin} === 4)
+            document.getElementById('EliminarUsuario').style.display="block";
+
+    else if (&{visionadmin} === 5)
             document.getElementById('AñadirStock').style.display="block";
-        }
+
     }
 
 </script>
@@ -93,7 +96,7 @@
     <a class="jumbotron"></a>
     <li><a href="@{añadirusuario()}">Añadir Usuario</a></li>
     <li><a href="@{modificarusuario()}">Modificar Usuario</a></li>
-    <li><a >Eliminar Usuario</a></li>
+    <li><a href="@{cargareliminar()}">Eliminar Usuario</a></li>
     <li><a href="@{goAddStock()}">Añadir Stock</a></li>
     <li><a >Quitar Stock</a></li>
 </ul>
@@ -163,6 +166,7 @@
 
 <div style="text-align: center; display: none" id = "DatosUsuario" class="column">
 #{form @ModificarU()}
+#{if usuarioM}
 
     <h3>Modifica los datos del usuario ${usuarioM.usuario}:</h3>
 
@@ -173,6 +177,29 @@
                 <span class="error">${field.error}</span>
             </p>
         #{/field}
+
+    #{field 'usuarioM.nombre'}
+        <p class="${field.errorClass}">
+            <strong>Nombre:</strong> <input type="text" name="${field.name}" placeholder="${usuarioM.nombre}" size="16">
+            <span class="error">${field.error}</span>
+        </p>
+    #{/field}
+
+    #{field 'usuarioM.apellido1'}
+        <p class="${field.errorClass}">
+            <strong>Apellido 1:</strong> <input type="text" name="${field.name}" placeholder="${usuarioM.apellido1}"size="16">
+            <span class="error">${field.error}</span>
+        </p>
+
+    #{/field}
+
+    #{field 'usuarioM.apellido2'}
+        <p class="${field.errorClass}">
+            <strong>Apellido 2:</strong> <input type="text" name="${field.name}" placeholder="${usuarioM.apellido2}" size="16">
+            <span class="error">${field.error}</span>
+        </p>
+
+    #{/field}
 
         #{field 'usuarioM.contraseña'}
             <p class="${field.errorClass}">
@@ -191,11 +218,34 @@
         <p class="buttons">
             <input type="submit" value="Modificar Usuario" />
         </p>
+#{/if}
     #{/form}
 
 </div>
 </div>
 
+<div style="text-align: center; display: none" id = "EliminarUsuario" class="column">
+
+#{form @eliminarusuario()}
+    <p>
+        <strong>Selecciona el usuario que quieres eliminar:</strong>
+    </p>
+
+    <p>
+        <label for="Nombreusuarios"> Usuarios:</label>
+        <select id="Nombreusuarios" name="idusuario">
+            #{list items:listaclientes, as:'cliente'}
+                <option value="${cliente.id}" >${cliente.usuario}</option>
+            #{/list}
+        </select>
+    </p>
+
+    <p class="buttons">
+        <input type="submit" value="Eliminar Usuario" />
+    </p>
+#{/form}
+
+</div>
 <div style="text-align: center; display: none" id = "AñadirStock" class="column">
     <h3>Introduce los datos de la prenda:</h3>
 #{form @AddStock()}

@@ -6,7 +6,7 @@
 
 .panel.panel-default{
     margin-top: 100px;
-    height: 280px;
+    height: 400px;
     width: 350px;
     margin-left: 500px;
     }
@@ -24,7 +24,6 @@
 
     <meta charset="UTF-8">
     <title>Página Web PES</title>
-        <title>Ejercicio DSA</title>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
@@ -46,6 +45,29 @@
 
 #{/field}
 
+#{field 'nombre'}
+    <p class="${field.errorClass}">
+        <strong>Nombre:</strong> <input type="text" name="${field.name}" size="16"> *
+        <span class="error">${field.error}</span>
+    </p>
+#{/field}
+
+#{field 'apellido1'}
+    <p class="${field.errorClass}">
+        <strong>Apellido 1:</strong> <input type="text" name="${field.name}" size="16"> *
+        <span class="error">${field.error}</span>
+    </p>
+
+#{/field}
+
+#{field 'nuevocliente.apellido2'}
+    <p class="${field.errorClass}">
+        <strong>Apellido 2:</strong> <input type="text" name="${field.name}" size="16">
+        <span class="error">${field.error}</span>
+    </p>
+
+#{/field}
+
 #{field 'nuevocliente.contraseña'}
 <p class="${field.errorClass}">
     <strong>Password:</strong> <input type="password" name="${field.name}" size="16"> *
@@ -53,6 +75,7 @@
 </p>
 
 #{/field}
+
 #{field 'contraseña'}
 <p class="${field.errorClass}">
     <strong>Verify password:</strong> <input type="password" name="${field.name}" size="16"> *
