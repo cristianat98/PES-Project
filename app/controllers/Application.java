@@ -126,6 +126,7 @@ public class Application extends Controller {
 	   validation.required(mail);
 	   validation.equals(contraseña, nuevocliente.contraseña).message("Las contraseñas no coinciden");
 	   if(validation.hasErrors()) {
+	   	renderArgs.put("usuarioM",Cliente.findAll().get(0));
 		   renderArgs.put("visionadmin", visionadmin);
 		   render("Application/principalAdmin.html");
 	   }
@@ -136,12 +137,14 @@ public class Application extends Controller {
 		   nuevocliente.mail = mail;
 		   nuevocliente.create();
 		   renderArgs.put("visionadmin", visionadmin);
+		   renderArgs.put("usuarioM",Cliente.findAll().get(0));
 		   validation.equals(usuario, "").message("Usuario registrado correctamente");
 		   render("Application/principalAdmin.html");
 	   }
 
 	   else{
 		   renderArgs.put("visionadmin", visionadmin);
+		   renderArgs.put("usuarioM",Cliente.findAll().get(0));
 		   validation.equals(usuario, "").message("El usuario ya está en uso");
 		   renderTemplate("Application/principalAdmin.html");
 	   }
@@ -152,14 +155,15 @@ public class Application extends Controller {
 		if (visionadmin != 2){
 			List<Cliente> lclientes = Cliente.findAll();
 			renderArgs.put("listaclientes", lclientes);
-			renderArgs.put("usuarioM", lclientes.get(0));
 			visionadmin = 2;
 		}
 
 		else{
 			visionadmin = 0;
 		}
+
 		renderArgs.put("visionadmin", visionadmin);
+		renderArgs.put("usuarioM",Cliente.findAll().get(0));
 		render("Application/principalAdmin.html");
 
 	}
@@ -205,7 +209,12 @@ public class Application extends Controller {
    }
 
    public static void goAddStock(){
-		visionadmin = 5;
+		if (visionadmin != 5)
+			visionadmin = 5;
+
+		else
+			visionadmin=0;
+
 		renderArgs.put("visionadmin",visionadmin);
 		renderArgs.put("usuarioM", Cliente.findAll().get(0));
 		renderTemplate("Application/principalAdmin.html");
@@ -312,17 +321,14 @@ public class Application extends Controller {
 
 
 	   if(p==null){
-
 		   prendaM.cantidadStock=prendaM.cantidadComprada;
 		   prendaM.save();
-		   renderText("Se han añadido " + prendaM.cantidadComprada + " " + prendaM.tipo + " del " + prendaM.equipo);
 	   }
 
 	   else {
 		   p.cantidadStock=prendaM.cantidadComprada+p.getCantidadStock();
 		   p.setCantidadStock(p.cantidadStock);
 		   p.save();
-		   renderText("Actualmente tenemos " + p.getCantidadStock() + " " + p.getTipo() + " del " + p.getEquipo());
 	   }
 
    }
