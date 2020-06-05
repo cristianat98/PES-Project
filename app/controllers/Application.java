@@ -7,6 +7,8 @@ import play.*;
 import play.data.validation.Validation;
 import play.mvc.*;
 
+import java.security.SecureRandom;
+import java.security.Security;
 import java.util.*;
 
 import models.*;
@@ -14,7 +16,7 @@ import models.*;
 import javax.validation.Valid;
 import javax.xml.transform.Result;
 
-
+@With(Security.class)
 public class Application extends Controller {
 
 	static int visionadmin = 0;
@@ -59,6 +61,13 @@ public class Application extends Controller {
 
 	public static void recuperacionContra() {
 			render();
+	}
+	
+	public class Security extends Secure.Security {
+	    	 boolean authenticate(String username, String password) {
+	         Cliente cliente = Cliente.find("byUsuario", username).first();
+	         return cliente != null && cliente.equals(password);
+	    }
 	}
 
    public static void Login(@Valid Cliente cliente) {
