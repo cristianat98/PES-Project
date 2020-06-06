@@ -2,13 +2,12 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Página modificar datos del usuario  ${idCliente}</title>
 </head>
 
 <body> 
- <h3>Introduzca su contraseña para acceder a modificar sus datos:</h3>
+ <h3>Introduzca su contraseña para proceder a eliminar su cuenta:</h3>
  
-#{form @ModificarDatos()}
+#{form @eliminarusuariocontraseña()}
 #{field 'contraseña'}
 <p class="${field.errorClass}">
     <strong>Contraseña:</strong> <input type="password" name="${field.name}" size="16"> *
@@ -16,12 +15,6 @@
 </p>
 #{/field}
 
-#{field 'c.contraseña'}
-<p class="${field.errorClass}">
-    <strong>Confirme contraseña:</strong> <input type="password" name="${field.name}" size="16"> *
-    <span class="error">${field.error}</span>
-</p>
-#{/field}
 <p class="buttons">
     <input type="submit" value="Comprobar contraseña"> 
    	 <a href="@{register()}">Pagina registro</a>
@@ -34,6 +27,3 @@
 </body>
 </html>
 
-
-
- 

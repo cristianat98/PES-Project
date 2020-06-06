@@ -131,8 +131,11 @@ public class Application extends Controller {
 		render("Application/principalAdmin.html");
 	}
 
-   public static void registrarclienteadmin(@Valid Cliente nuevocliente, String usuario, String contraseña, String mail){
-	   validation.required(usuario);
+   public static void registrarclienteadmin(@Valid Cliente nuevocliente, String usuario, String nombre, String apellido1, String contraseña, String mail){
+
+		validation.required(usuario);
+		validation.required(nombre);
+		validation.required(apellido1);
 	   validation.required(contraseña);
 	   validation.required(mail);
 	   validation.equals(contraseña, nuevocliente.contraseña).message("Las contraseñas no coinciden");
@@ -143,6 +146,8 @@ public class Application extends Controller {
 	   Cliente c = Cliente.find("byUsuario", usuario).first();
 
 	   if (c == null) {
+	   	nuevocliente.nombre = nombre;
+	   	nuevocliente.apellido1 = apellido1;
 		   nuevocliente.usuario = usuario;
 		   nuevocliente.mail = mail;
 		   nuevocliente.create();
@@ -158,7 +163,7 @@ public class Application extends Controller {
 	   }
    }
 
-	public static void modificarusuario(){
+	public static void modificarusuarioadmin(){
 
 		if (visionadmin != 2){
 			List<Cliente> lclientes = Cliente.findAll();
@@ -217,7 +222,7 @@ public class Application extends Controller {
 		render("Application/principalAdmin.html");
 	}
 
-	public static void eliminarusuario(Long idusuario){
+	public static void eliminarusuarioadmin (Long idusuario){
 
 		visionadmin = 4;
 		Cliente eliminar = Cliente.findById(idusuario);
@@ -269,16 +274,24 @@ public class Application extends Controller {
 	   }
    }
 
-   public static void ModificarDatos(String contraseña) {
+   public static void cargardatosusuario(Cliente c, String contraseña){
 	   validation.required(contraseña);
 	   String username = session.get("user");
-	   Cliente c=Cliente.find("byUsuario", username).first();
-	   validation.equals(c.contraseña, contraseña).message("La contraseña es incorrecta, no puede modificar datos");
+	   Cliente usuario=Cliente.find("byUsuario", username).first();
+	   validation.equals(contraseña, c.contraseña).message("La contraseña es incorrecta, no puede modificar datos");
 	   if(validation.hasErrors()) {
-		   render("@ModificarUsuario1", contraseña);
+		   render("@ModificarUsuario");
 	   }
-	   else 
+	   else{
+	   	renderArgs.put("clienteM", usuario);
 		   renderTemplate("Application/ModificarUsuario2.html");
+	   }
+
+
+   }
+
+   public static void ModificarUsuario() {
+	   render();
    }
 
    public static void ModificarDatos2(Cliente clienteM) {
@@ -293,17 +306,23 @@ public class Application extends Controller {
 	   }
    }
 
-   public static void EliminarUsuario (String contraseña) {
-	   validation.required(contraseña);
-	   String username = session.get("user");
-	   Cliente c=Cliente.find("byUsuario", username).first();
-	   validation.equals(c.contraseña, contraseña).message("La contraseña es incorrecta, no puede eliminar su cuenta");
-	   if(validation.hasErrors()) {
-		   render("@EliminarUsuario1", contraseña);
-	   }
-	   else 
-		   	c._delete();
-	   		renderTemplate("Application/loginTemplate.html");
+   public static void EliminarUsuario () {
+	   render();
+   }
+
+   public static void eliminarusuariocontraseña (String contraseña){
+		   validation.required(contraseña);
+		   String username = session.get("user");
+		   Cliente c=Cliente.find("byUsuario", username).first();
+		   validation.equals(contraseña, c.contraseña).message("La contraseña es incorrecta, no puede eliminar su cuenta");
+		   if(validation.hasErrors()) {
+			   render("@EliminarUsuario");
+		   }
+		   else {
+			   c.delete();
+			   session.clear();
+			   renderTemplate("Application/loginTemplate.html");
+		   }
    }
 
    public static void CambiarVistaNormal(){
