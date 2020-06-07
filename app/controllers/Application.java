@@ -431,6 +431,18 @@ public class Application extends Controller {
 	   }
 
    }
+   public static void CargarPrendasEnPrincipal(Prenda prendaM){
+
+		List<Prenda> prendas = Prenda.all().fetch(100);
+		if(prendas != null){
+			for(final Prenda p : prendas){
+				render(prendas, prendaM);
+			}
+	   }
+		else{
+			renderText("no hay objetos de esta lista");
+		}
+   }
 
    public static void comprar (String tipo, String equipo, String talla, int cantidad, String usuario, String contraseña){
 
