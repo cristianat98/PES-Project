@@ -325,6 +325,47 @@ public class Application extends Controller {
 		   }
    }
 
+   public static void quitarstock(){
+
+		if (visionadmin != 6)
+			visionadmin = 6;
+
+		else
+			visionadmin = 0;
+
+		List<Prenda> lprendas = Prenda.findAll();
+		List<String> lequipos = new ArrayList<String>();
+	    lequipos.add(lprendas.get(0).equipo);
+		boolean encontrado = false;
+		int j;
+		for(int i = 0; i<lprendas.size();i++){
+
+			j = 0;
+
+			while (j<lequipos.size() && !encontrado){
+				if (lprendas.get(i).equipo == lequipos.get(j))
+					encontrado = true;
+				j++;
+			}
+
+			if (!encontrado)
+				lequipos.add(lprendas.get(i).equipo);
+
+			else
+				encontrado = false;
+
+		}
+
+		renderArgs.put("listaequipos", lequipos);
+		renderArgs.put("visionadmin", visionadmin);
+	   renderTemplate("Application/principalAdmin.html");
+   }
+
+   public static void cargarequipo(Long idequipo){
+		renderArgs.put("visionadmin", visionadmin);
+	   renderTemplate("Application/principalAdmin.html");
+   }
+
    public static void CambiarVistaNormal(){
 	   renderTemplate("Application/principal.html");
    }

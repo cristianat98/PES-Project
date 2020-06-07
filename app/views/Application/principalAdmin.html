@@ -60,6 +60,9 @@
     else if (&{visionadmin} === 5)
             document.getElementById('AñadirStock').style.display="block";
 
+    else if (&{visionadmin} === 6)
+        document.getElementById('QuitarStock').style.display="block";
+
     }
 
 </script>
@@ -98,7 +101,7 @@
     <li><a href="@{modificarusuarioadmin()}">Modificar Usuario</a></li>
     <li><a href="@{cargareliminar()}">Eliminar Usuario</a></li>
     <li><a href="@{goAddStock()}">Añadir Stock</a></li>
-    <li><a >Quitar Stock</a></li>
+    <li><a href="@{quitarstock()}">Quitar Stock</a></li>
 </ul>
 
 <div style="text-align: center; display: none" id ="AñadirUsuario">
@@ -242,9 +245,8 @@
             <input type="submit" value="Modificar Usuario" />
         </p>
 #{/if}
-    #{/form}
+#{/form}
 
-</div>
 </div>
 
 <div style="text-align: center; display: none" id = "EliminarUsuario" class="column">
@@ -269,6 +271,7 @@
 #{/form}
 
 </div>
+
 <div style="text-align: center; display: none" id = "AñadirStock" class="column">
     <h3>Introduce los datos de la prenda:</h3>
 #{form @AddStock()}
@@ -317,6 +320,27 @@
 
     <p class="buttons">
         <input type="submit" value="Añadir Stock"/>
+    </p>
+#{/form}
+</div>
+
+<div style="text-align: center; display: none" id = "QuitarStock" class="column">
+#{form @cargarequipo()}
+    <p>
+        <strong>Selecciona el equipo que quieres modificar:</strong>
+    </p>
+
+    <p>
+        <label for="Nombreequipos"> Equipos:</label>
+        <select id="Nombreequipos" name="idequipo">
+            #{list items:listaequipos, as:'equipo'}
+                <option value="${equipo}" >${equipo}</option>
+            #{/list}
+        </select>
+    </p>
+
+    <p class="buttons">
+        <input type="submit" value="Cargar Equipo" />
     </p>
 #{/form}
 </div>
