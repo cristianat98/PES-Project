@@ -407,6 +407,7 @@ public class Application extends Controller {
 
 	   prendaM.equipo=prendaM.equipo.toUpperCase();
 	   prendaM.tipo=prendaM.tipo.toUpperCase();
+	   prendaM.talla = prendaM.talla.toUpperCase();
 	   Prenda p = Prenda.find("byTipoAndEquipoAndTallaAndPrecio",prendaM.tipo,prendaM.equipo,prendaM.talla,prendaM.precio).first();
 
 	   //Blob blob = prendaM.imagen;
@@ -416,7 +417,9 @@ public class Application extends Controller {
 
 	   if(p==null){
 		   prendaM.cantidadStock=prendaM.cantidadComprada;
-		   prendaM.save();
+		   prendaM.create();
+		   renderArgs.put("visionadmin", visionadmin);
+		   renderTemplate("Application/principalAdmin.html");
 	   }
 
 	   else {
