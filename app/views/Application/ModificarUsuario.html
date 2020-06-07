@@ -2,13 +2,13 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Página eliminar usuario  ${idCliente}</title>
+    <title>Página modificar datos del usuario  ${idCliente}</title>
 </head>
 
 <body> 
- <h3>Introduzca su contraseña para proceder a eliminar su cuenta:</h3>
+ <h3>Introduzca su contraseña para acceder a modificar sus datos:</h3>
  
-#{form @EliminarUsuario()}
+#{form @cargardatosusuario()}
 #{field 'contraseña'}
 <p class="${field.errorClass}">
     <strong>Contraseña:</strong> <input type="password" name="${field.name}" size="16"> *
@@ -34,3 +34,6 @@
 </body>
 </html>
 
+
+
+ 
