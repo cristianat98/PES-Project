@@ -56,7 +56,9 @@
 
 
 </style>
+
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
 <!-- Latest compiled and minified CSS -->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 
@@ -65,6 +67,7 @@
 
 <!-- Latest compiled and minified JavaScript -->
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
 <script>
     window.onload=function() {
         if (&{client.admin} == 0)
@@ -80,10 +83,11 @@
     <div class="barra">
 
     <a class="jumbotron">
-        </a>
+        </a><!--
         <a href="http://localhost:9000/">Inicio</a>
         <a href="http://localhost:9000/application/principal">Productos</a>
         <a href="http://localhost:9000/application/principal">Pantalones</a>
+        -->
         <img class="avatar" src="/public/images/avatar.jpg">
         <div clas = "usuario"><b>Está conectado como: &{client.usuario}</b></div>
     </div>
@@ -97,18 +101,24 @@
             <span class="caret"></span>
         </button>
         <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-            <li><a href="@{ModificarDatos()}">Modificar datos perfil</a></li>
             <li><a id="admin" href="@{CambiarVistaAdmin()}">Cambiar Vista a Administrador</a></li>
+            <li><a href="@{ModificarUsuario()}">Modificar datos perfil</a></li>
             <li><a href="@{EliminarUsuario()}">Borrar perfil</a></li>
             <li><a href="@{Logout()}">Cerrar Sesión</a></li>
         </ul>
     </div>
 </head>
 <body>
-
-<div class="panel panel-default">
+#{form @CargarPrendasEnPrincipal()}
+<div class="panel panel-default" >
     <div class="panel-heading">Camisetas</div>
     <section class="panel-body">
+        <ul>
+            #{list items:prendas, as:'prenda'}
+            <span class="${product_parity}">${product_index}. ${product}</span>
+            ${product_isLast ? '' : '-'}
+            #{/list}
+        </ul>
         <article class="media">
             <div class="media-left media-middle">
                 <a href="#">
@@ -122,6 +132,8 @@
                 <span class="glyphicon glyphicon" aria-hidden="true"></span> Añadir Carrito
             </button>
         </article>
+
+        <!--
         <article class="media">
             <div class="media-left media-middle">
                 <a href="#">
@@ -191,10 +203,14 @@
                 <span class="glyphicon glyphicon" aria-hidden="true"></span> Añadir Carrito
             </button>
         </article>
+        -->
 
     </section>
 </div>
 
+#{/form}
+
+<!--
 <div class="panel panel-default">
     <div class="panel-heading">Pantalones de deporte</div>
     <section class="panel-body">
@@ -256,5 +272,6 @@
         </article>
     </section>
 </div>
+-->
 </body>
 </html>

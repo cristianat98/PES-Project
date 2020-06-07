@@ -11,7 +11,6 @@ import java.util.*;
 @Entity
 public class Cliente extends Model {
 
-
 	public String nombre;
 	public String mail;
 	public String apellido1;
@@ -30,7 +29,6 @@ public class Cliente extends Model {
 		this.usuario = usuario;
 		this.contraseña = contraseña;
 		this.admin = 0;
-		//this.cuentaBancaria=cuentaBancaria;
 	}
 
 	public String getNombre() {
