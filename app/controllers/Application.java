@@ -431,6 +431,7 @@ public class Application extends Controller {
 	   }
 
    }
+
    public static void CargarPrendasEnPrincipal(Prenda prendaM){
 
 		List<Prenda> prendas = Prenda.all().fetch(100);
