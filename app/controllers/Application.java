@@ -3,8 +3,6 @@ package controllers;
 
 import com.mysql.fabric.xmlrpc.Client;
 import org.eclipse.jdt.internal.core.nd.field.StructDef;
-import org.hibernate.annotations.Check;
-
 import play.*;
 import play.data.validation.Validation;
 import play.mvc.*;
@@ -18,7 +16,7 @@ import models.*;
 import javax.validation.Valid;
 import javax.xml.transform.Result;
 
-@With(Secure.class)
+@With(Security.class)
 public class Application extends Controller {
 
 	static int visionadmin = 0;
@@ -65,10 +63,13 @@ public class Application extends Controller {
 			render();
 	}
 	
+	public class Security extends Secure.Security {
+	    	 boolean authenticate(String username, String password) {
+	         Cliente cliente = Cliente.find("byUsuario", username).first();
+	         return cliente != null && cliente.equals(password);
+	    }
+	}
 
-	
-	
-   @Check("administrator")
    public static void Login(@Valid Cliente cliente) {
 		Cliente c = Cliente.find("byUsuarioAndContraseña", cliente.usuario, cliente.contraseña).first();
 		 if(c != null) {
@@ -86,15 +87,14 @@ public class Application extends Controller {
 		 else
 	            renderTemplate("Application/loginTemplate.html");
 	}
-   
-   
+	
    public static void registrarCliente(@Valid Cliente nuevocliente, String usuario, String contraseña, String mail, String nombre, String apellido1) {
 
 		validation.required(usuario);
 	    validation.required(contraseña);
 	    validation.required(mail);
-	    validation.required(nombre);
-	    validation.required(apellido1);
+	   validation.required(nombre);
+	   validation.required(apellido1);
 	    validation.equals(contraseña, nuevocliente.contraseña).message("Las contraseñas no coinciden");
 	    if(validation.hasErrors()) {
 		   render("@register");
@@ -407,7 +407,6 @@ public class Application extends Controller {
 
 	   prendaM.equipo=prendaM.equipo.toUpperCase();
 	   prendaM.tipo=prendaM.tipo.toUpperCase();
-	   prendaM.talla = prendaM.talla.toUpperCase();
 	   Prenda p = Prenda.find("byTipoAndEquipoAndTallaAndPrecio",prendaM.tipo,prendaM.equipo,prendaM.talla,prendaM.precio).first();
 
 	   //Blob blob = prendaM.imagen;
@@ -417,9 +416,7 @@ public class Application extends Controller {
 
 	   if(p==null){
 		   prendaM.cantidadStock=prendaM.cantidadComprada;
-		   prendaM.create();
-		   renderArgs.put("visionadmin", visionadmin);
-		   renderTemplate("Application/principalAdmin.html");
+		   prendaM.save();
 	   }
 
 	   else {
@@ -431,7 +428,6 @@ public class Application extends Controller {
 	   }
 
    }
-
    public static void CargarPrendasEnPrincipal(Prenda prendaM){
 
 		List<Prenda> prendas = Prenda.all().fetch(100);
