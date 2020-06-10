@@ -20,6 +20,7 @@ public class Cliente extends Model {
 	public String contraseña;
 	public int cuentaBancaria;
 	public int admin;
+	public boolean adminsecure;
 
 	public Cliente(String usuario, String contraseña) {
 		//this.nombre = nombre;
