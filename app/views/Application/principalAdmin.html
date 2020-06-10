@@ -62,7 +62,6 @@
 
     else if (&{visionadmin} === 6)
         document.getElementById('QuitarStock').style.display="block";
-
     }
 
 </script>
@@ -176,8 +175,8 @@
     </p>
 
     <p>
-        <label for="Nombreusuarios"> Usuarios:</label>
-        <select id="Nombreusuarios" name="idusuario">
+        <label for="NombreusuariosM"> Usuarios:</label>
+        <select id="NombreusuariosM" name="idusuario">
             #{list items:listaclientes, as:'cliente'}
                 <option value="${cliente.id}" >${cliente.usuario}</option>
             #{/list}
@@ -257,8 +256,8 @@
     </p>
 
     <p>
-        <label for="Nombreusuarios"> Usuarios:</label>
-        <select id="Nombreusuarios" name="idusuario">
+        <label for="NombreusuariosE"> Usuarios:</label>
+        <select id="NombreusuariosE" name="idusuario">
             #{list items:listaclientes, as:'cliente'}
                 <option value="${cliente.id}" >${cliente.usuario}</option>
             #{/list}
@@ -274,7 +273,7 @@
 
 <div style="text-align: center; display: none" id = "AñadirStock" class="column">
     <h3>Introduce los datos de la prenda:</h3>
-#{form @AddStock()}
+#{form @AddStock(), enctype:'multipart/form-data'}
     #{field 'prendaM.tipo'}
         <p class="${field.errorClass}">
             <strong>Tipo:</strong> <input type="text" name="${field.name}" size="16" > *
@@ -306,14 +305,14 @@
 
     #{field 'prendaM.precio'}
         <p class="${field.errorClass}">
-            <strong>Precio:</strong> <input type="int" name="${field.name}" size="16" > *
+            <strong>Precio:</strong> <input type="number" step="0.01" name="${field.name}" size="16" > *
             <span class="error">${field.error}</span>
         </p>
     #{/field}
 
     #{field 'prendaM.imagen'}
         <p class="${field.errorClass}">
-            <input type="file" name="${field.name}" size="16" > *
+            <input type="file" name="${field.name}"> *
             <span class="error">${field.error}</span>
         </p>
     #{/field}
@@ -344,6 +343,5 @@
     </p>
 #{/form}
 </div>
-
 </body>
 </html>

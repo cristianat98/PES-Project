@@ -5,10 +5,14 @@ import com.mysql.fabric.xmlrpc.Client;
 import org.eclipse.jdt.internal.core.nd.field.StructDef;
 import play.*;
 import play.data.validation.Validation;
+import play.db.jpa.JPABase;
 import play.mvc.*;
 
+import java.io.File;
+import java.io.InputStream;
 import java.security.SecureRandom;
 import java.security.Security;
+import java.sql.Blob;
 import java.util.*;
 
 import models.*;
@@ -403,31 +407,36 @@ public class Application extends Controller {
        renderTemplate("Application/loginTemplate.html");
    }
 
-   public void AddStock(Prenda prendaM){
+   public static void AddStock(Prenda prendaM){
 
 	   prendaM.equipo=prendaM.equipo.toUpperCase();
 	   prendaM.tipo=prendaM.tipo.toUpperCase();
+	   prendaM.talla = prendaM.talla.toUpperCase();
 	   Prenda p = Prenda.find("byTipoAndEquipoAndTallaAndPrecio",prendaM.tipo,prendaM.equipo,prendaM.talla,prendaM.precio).first();
 
-	   //Blob blob = prendaM.imagen;
-	   //byte [] array = blob.getBytes(1l,(int)blob.length());
-	   //File file = File.createTempFile();
+	   //response.setContentTypeIfNotSet(imagen.photo.type());
+	   //InputStream binaryData = prendaM.imagen.get();
+	   //renderBinary(binaryData);
 
 
 	   if(p==null){
 		   prendaM.cantidadStock=prendaM.cantidadComprada;
-		   prendaM.save();
+		   prendaM.create();
+		   renderArgs.put("visionadmin", visionadmin);
+		   renderTemplate("Application/principalAdmin.html");
 	   }
 
 	   else {
 		   p.cantidadStock=prendaM.cantidadComprada+p.getCantidadStock();
 		   p.setCantidadStock(p.cantidadStock);
+		   p.imagen = prendaM.imagen;
 		   p.save();
 		   renderArgs.put("visionadmin", visionadmin);
 		   renderTemplate("Application/principalAdmin.html");
 	   }
 
    }
+
    public static void CargarPrendasEnPrincipal(Prenda prendaM){
 
 		List<Prenda> prendas = Prenda.all().fetch(100);
