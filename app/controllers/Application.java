@@ -3,14 +3,16 @@ package controllers;
 
 import com.mysql.fabric.xmlrpc.Client;
 import org.eclipse.jdt.internal.core.nd.field.StructDef;
-import org.hibernate.annotations.Check;
-
 import play.*;
 import play.data.validation.Validation;
+import play.db.jpa.JPABase;
 import play.mvc.*;
 
+import java.io.File;
+import java.io.InputStream;
 import java.security.SecureRandom;
 import java.security.Security;
+import java.sql.Blob;
 import java.util.*;
 
 import models.*;
@@ -18,8 +20,12 @@ import models.*;
 import javax.validation.Valid;
 import javax.xml.transform.Result;
 
+<<<<<<< HEAD
 @With(Secure.class)
 
+=======
+@With(Security.class)
+>>>>>>> 77f2a2a62ddbb93c82cd7581137aa19305c57d3a
 public class Application extends Controller {
 
 	static int visionadmin = 0;
@@ -67,10 +73,19 @@ public class Application extends Controller {
 			render();
 	}
 	
+	public class Security extends Secure.Security {
+	    	 boolean authenticate(String username, String password) {
+	         Cliente cliente = Cliente.find("byUsuario", username).first();
+	         return cliente != null && cliente.equals(password);
+	    }
+	}
 
+<<<<<<< HEAD
 	
 	
  
+=======
+>>>>>>> 77f2a2a62ddbb93c82cd7581137aa19305c57d3a
    public static void Login(@Valid Cliente cliente) {
 		Cliente c = Cliente.find("byUsuarioAndContraseña", cliente.usuario, cliente.contraseña).first();
 		 if(c != null) {
@@ -88,15 +103,19 @@ public class Application extends Controller {
 		 else
 	            renderTemplate("Application/loginTemplate.html");
 	}
+<<<<<<< HEAD
    
   
+=======
+	
+>>>>>>> 77f2a2a62ddbb93c82cd7581137aa19305c57d3a
    public static void registrarCliente(@Valid Cliente nuevocliente, String usuario, String contraseña, String mail, String nombre, String apellido1) {
 
 		validation.required(usuario);
 	    validation.required(contraseña);
 	    validation.required(mail);
-	    validation.required(nombre);
-	    validation.required(apellido1);
+	   validation.required(nombre);
+	   validation.required(apellido1);
 	    validation.equals(contraseña, nuevocliente.contraseña).message("Las contraseñas no coinciden");
 	    if(validation.hasErrors()) {
 		   render("@register");
@@ -406,31 +425,36 @@ public class Application extends Controller {
        renderTemplate("Application/loginTemplate.html");
    }
 
-   public void AddStock(Prenda prendaM){
+   public static void AddStock(Prenda prendaM){
 
 	   prendaM.equipo=prendaM.equipo.toUpperCase();
 	   prendaM.tipo=prendaM.tipo.toUpperCase();
+	   prendaM.talla = prendaM.talla.toUpperCase();
 	   Prenda p = Prenda.find("byTipoAndEquipoAndTallaAndPrecio",prendaM.tipo,prendaM.equipo,prendaM.talla,prendaM.precio).first();
 
-	   //Blob blob = prendaM.imagen;
-	   //byte [] array = blob.getBytes(1l,(int)blob.length());
-	   //File file = File.createTempFile();
+	   //response.setContentTypeIfNotSet(imagen.photo.type());
+	   //InputStream binaryData = prendaM.imagen.get();
+	   //renderBinary(binaryData);
 
 
 	   if(p==null){
 		   prendaM.cantidadStock=prendaM.cantidadComprada;
-		   prendaM.save();
+		   prendaM.create();
+		   renderArgs.put("visionadmin", visionadmin);
+		   renderTemplate("Application/principalAdmin.html");
 	   }
 
 	   else {
 		   p.cantidadStock=prendaM.cantidadComprada+p.getCantidadStock();
 		   p.setCantidadStock(p.cantidadStock);
+		   p.imagen = prendaM.imagen;
 		   p.save();
 		   renderArgs.put("visionadmin", visionadmin);
 		   renderTemplate("Application/principalAdmin.html");
 	   }
 
    }
+
    public static void CargarPrendasEnPrincipal(Prenda prendaM){
 
 		List<Prenda> prendas = Prenda.all().fetch(100);

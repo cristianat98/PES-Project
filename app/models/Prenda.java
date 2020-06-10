@@ -2,8 +2,7 @@ package models;
 
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
-import java.sql.Blob;
-
+import play.db.jpa.Blob;
 import play.db.jpa.Model;
 
 @Entity
@@ -33,7 +32,6 @@ public class Prenda extends Model {
 
 	public void setTipo(String tipo) {
 		this.tipo = tipo;
-		//this.save();
 	}
 
 	public String getEquipo() {
@@ -42,7 +40,6 @@ public class Prenda extends Model {
 
 	public void setEquipo(String equipo) {
 		this.equipo = equipo;
-		//this.save();
 	}
 
 	public String getTalla() {
