@@ -20,7 +20,8 @@ import models.*;
 import javax.validation.Valid;
 import javax.xml.transform.Result;
 
-@With(Security.class)
+
+@With(Secure.class)
 public class Application extends Controller {
 
 	static int visionadmin = 0;
@@ -44,7 +45,8 @@ public class Application extends Controller {
 		}
 		return null;
 	}
-
+	
+	@Check("user")
 	public static void index() {
 
 		if(connected() != null) {
@@ -91,7 +93,7 @@ public class Application extends Controller {
 		 else
 	            renderTemplate("Application/loginTemplate.html");
 	}
-	
+
    public static void registrarCliente(@Valid Cliente nuevocliente, String usuario, String contraseña, String mail, String nombre, String apellido1) {
 
 		validation.required(usuario);
@@ -137,9 +139,9 @@ public class Application extends Controller {
 
    public static void registrarclienteadmin(@Valid Cliente nuevocliente, String usuario, String nombre, String apellido1, String contraseña, String mail){
 
-		validation.required(usuario);
-		validation.required(nombre);
-		validation.required(apellido1);
+	   validation.required(usuario);
+	   validation.required(nombre);
+	   validation.required(apellido1);
 	   validation.required(contraseña);
 	   validation.required(mail);
 	   validation.equals(contraseña, nuevocliente.contraseña).message("Las contraseñas no coinciden");
@@ -150,14 +152,14 @@ public class Application extends Controller {
 	   Cliente c = Cliente.find("byUsuario", usuario).first();
 
 	   if (c == null) {
-	   	nuevocliente.nombre = nombre;
-	   	nuevocliente.apellido1 = apellido1;
-		   nuevocliente.usuario = usuario;
-		   nuevocliente.mail = mail;
-		   nuevocliente.create();
-		   renderArgs.put("visionadmin", visionadmin);
-		   validation.equals(usuario, "").message("Usuario registrado correctamente");
-		   render("Application/principalAdmin.html");
+	   		nuevocliente.nombre = nombre;
+	   		nuevocliente.apellido1 = apellido1;
+	   		nuevocliente.usuario = usuario;
+	   		nuevocliente.mail = mail;
+	   		nuevocliente.create();
+	   		renderArgs.put("visionadmin", visionadmin);
+	   		validation.equals(usuario, "").message("Usuario registrado correctamente");
+	   		render("Application/principalAdmin.html");
 	   }
 
 	   else{
