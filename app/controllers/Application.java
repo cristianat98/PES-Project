@@ -50,6 +50,15 @@ public class Application extends Controller {
 	public static void index() {
 
 		if(connected() != null) {
+			//Prenda prenda = Prenda.find("order by tipo desc").first();
+			Prenda prenda = Prenda.findAll().get(0);
+			List<Prenda> prendas = Prenda.find(
+					"order by tipo desc"
+			).from(1).fetch(100);
+			//render(prenda, prendas);
+			renderArgs.put("prenda",prendas);
+			renderTemplate("Application/principal.html");
+
 			renderTemplate("Application/principal.html");
 		}
 		else {

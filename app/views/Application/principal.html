@@ -109,16 +109,12 @@
     </div>
 </head>
 <body>
-#{form @CargarPrendasEnPrincipal()}
+
 <div class="panel panel-default" >
     <div class="panel-heading">Camisetas</div>
+    #{if prendas}
     <section class="panel-body">
-        <ul>
-            #{list items:prendas, as:'prenda'}
-            <span class="${product_parity}">${product_index}. ${product}</span>
-            ${product_isLast ? '' : '-'}
-            #{/list}
-        </ul>
+
         <article class="media">
             <div class="media-left media-middle">
                 <a href="#">
@@ -126,7 +122,7 @@
                 </a>
             </div>
             <div class="media-body">
-                <h4 class="media-heading">Camiseta Fútbol Club Barcelona</h4>
+                <h4 class="media-heading">${prenda.tipo} ${prenda.equipo}Camiseta Fútbol Club Barcelona</h4>
             </div>
             <button type="button" class="btn btn-default btn-lg">
                 <span class="glyphicon glyphicon" aria-hidden="true"></span> Añadir Carrito
@@ -206,9 +202,9 @@
         -->
 
     </section>
+    #{/if}
 </div>
 
-#{/form}
 
 <!--
 <div class="panel panel-default">
