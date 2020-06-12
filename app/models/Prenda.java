@@ -1,6 +1,10 @@
 package models;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.Entity;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import play.db.jpa.Blob;
 import play.db.jpa.Model;
@@ -24,6 +28,8 @@ public class Prenda extends Model {
 		this.cantidadComprada=cantidadComprada;
 		this.cantidadStock=cantidadStock;
 		this.precio=precio;
+	
+		
 	}
 	
 	public String getTipo() {
