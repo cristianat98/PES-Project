@@ -8,6 +8,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import play.db.jpa.Blob;
 import play.db.jpa.Model;
+import play.db.jpa.*;
 
 @Entity
 public class Prenda extends Model {
@@ -28,8 +29,6 @@ public class Prenda extends Model {
 		this.cantidadComprada=cantidadComprada;
 		this.cantidadStock=cantidadStock;
 		this.precio=precio;
-	
-		
 	}
 	
 	public String getTipo() {

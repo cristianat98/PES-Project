@@ -1,27 +1,18 @@
 
 package controllers;
 
-import com.mysql.fabric.xmlrpc.Client;
-import org.eclipse.jdt.internal.core.nd.field.StructDef;
-import play.*;
-import play.data.validation.Validation;
+import jdk.nashorn.internal.runtime.regexp.joni.ast.CClassNode;
 import play.db.jpa.JPABase;
 import play.mvc.*;
 
-import java.io.File;
-import java.io.InputStream;
-import java.security.SecureRandom;
-import java.security.Security;
-import java.sql.Blob;
 import java.util.*;
 
 import models.*;
 
 import javax.validation.Valid;
-import javax.xml.transform.Result;
 
 
-@With(Secure.class)
+//@With(Secure.class)
 public class Application extends Controller {
 
 	static int visionadmin = 0;
@@ -39,10 +30,12 @@ public class Application extends Controller {
 		if(renderArgs.get("client") != null) {
 			return renderArgs.get("client", Cliente.class);
 		}
+
 		String username = session.get("user");
 		if(username != null) {
 			return Cliente.find("byUsuario", username).first();
 		}
+
 		return null;
 	}
 
@@ -51,15 +44,13 @@ public class Application extends Controller {
 
 		if(connected() != null) {
 			//Prenda prenda = Prenda.find("order by tipo desc").first();
-			Prenda prenda = Prenda.findAll().get(0);
+			Prenda prenda = (Prenda) Prenda.findAll().get(0);
 			List<Prenda> prendas = Prenda.find(
 					"order by tipo desc"
 			).from(1).fetch(100);
 			//render(prenda, prendas);
-			renderArgs.put("prenda",prendas);
-			renderTemplate("Application/principal.html");
-
-			renderTemplate("Application/principal.html");
+			renderArgs.put("prendas",prenda);
+			render("Application/principal.html");
 		}
 		else {
 			renderTemplate("Application/loginTemplate.html");
@@ -81,9 +72,7 @@ public class Application extends Controller {
 	public static void ModificarUsuario() {
 		   render();
 	}
-	
-	
-	
+
 	public static void registrarAndroid(String user, String password) {
 		 Cliente c = Cliente.find("byUsuario",user).first();
 		 if(c==null) {
@@ -104,11 +93,6 @@ public class Application extends Controller {
 				renderText("FAIL este cliente no esta en la BD ");	
 		}
 
-	
-	
-	
-	
-	
    public static void Login(@Valid Cliente cliente) {
 		Cliente c = Cliente.find("byUsuarioAndContraseña", cliente.usuario, cliente.contraseña).first();
 		 if(c != null) {
@@ -121,13 +105,12 @@ public class Application extends Controller {
 			   }
 
 	           else
-	           	renderTemplate("Application/principal.html");
+	           	index();
 	        }
 		 else
 	            renderTemplate("Application/loginTemplate.html");
 	}
-   
-   
+
 	public static void recuperarContra(@Valid Cliente cliente, String mail) {
 		   validation.required(mail);
 		   validation.equals(mail, cliente.mail).message("Los emails no coinciden");
@@ -142,7 +125,6 @@ public class Application extends Controller {
 		   }
 	 
 	}
-	
 
    public static void registrarCliente(@Valid Cliente nuevocliente, String usuario, String contraseña, String mail, String nombre, String apellido1) {
 
@@ -163,18 +145,15 @@ public class Application extends Controller {
 	   	   nuevocliente.nombre = nombre;
 	   	   nuevocliente.apellido1 = apellido1;
 		   nuevocliente.create();
-		   session.put("user", nuevocliente);
-		   renderArgs.put("client", nuevocliente);
-		   renderTemplate("Application/principal.html");
+		   session.put("user", nuevocliente.usuario);
+		   index();
 	   }
 	   else{
 		   validation.equals(usuario, "").message("El usuario ya está en uso");
 		   render("@register");
 	   }
    }
-   
-   
-   
+
    public static void eliminarusuariocontraseña (String contraseña){
 	   validation.required(contraseña);
 	   String username = session.get("user");
@@ -189,10 +168,7 @@ public class Application extends Controller {
 		   renderTemplate("Application/loginTemplate.html");
 	   }
    }
-   
-   
-   
-   
+
    public static void cargardatosusuario(Cliente c, String contraseña){
 	   validation.required(contraseña);
 	   String username = session.get("user");
@@ -207,7 +183,6 @@ public class Application extends Controller {
 	   }
    }
 
-
    public static void ModificarDatos2(Cliente clienteM) {
 	   String username = session.get("user");
 	   Cliente c=Cliente.find("byUsuario", username).first();
@@ -216,17 +191,11 @@ public class Application extends Controller {
 		   c.contraseña=clienteM.contraseña;
 		   c.mail=clienteM.mail;
 		   c._save();
-		   renderTemplate("Application/principal.html");
+		   index();
 	   }
    }
    
    /////OK
-   
-   
-   
-   
-   
-
 	public static void añadirusuario() {
 
 		if (visionadmin != 1)
@@ -269,7 +238,6 @@ public class Application extends Controller {
 		   renderTemplate("Application/principalAdmin.html");
 	   }
    }
-   
 
 	public static void modificarusuarioadmin(){
 
@@ -341,8 +309,6 @@ public class Application extends Controller {
 		renderTemplate ("Application/principalAdmin.html");
 	}
 
-
-
    public static void goAddStock(){
 		if (visionadmin != 5)
 			visionadmin = 5;
@@ -368,13 +334,9 @@ public class Application extends Controller {
 	   }
    }
 
- 
-
    public static void EliminarUsuario () {
 	   render();
    }
-
-
 
    public static void quitarstock(){
 
@@ -418,7 +380,7 @@ public class Application extends Controller {
    }
 
    public static void CambiarVistaNormal(){
-	   renderTemplate("Application/principal.html");
+		index();
    }
 
    public static void CambiarVistaAdmin(){
@@ -426,8 +388,6 @@ public class Application extends Controller {
 	   renderArgs.put("visionadmin", visionadmin);
 	   renderTemplate("Application/principalAdmin.html");
    }
-
-
 
    public static void Logout (){
 	   session.clear();
@@ -464,34 +424,7 @@ public class Application extends Controller {
 	   }
 
    }
-
-   
-   
-   
-   
-   
-   
-   
    //FUNCION EN PRUEBA FERNANDO
-   
-   public static void CargarPrendasEnPrincipal(Prenda prendaM){
-
-		List<Prenda> prendas = Prenda.all().fetch(100);
-		if(prendas != null){
-			for(final Prenda p : prendas){
-				render(prendas, prendaM);
-			}
-	   }
-		else{
-			renderText("no hay objetos de esta lista");
-		}
-   }
-   
-   
-   
-   
-   
-   
 
    public static void comprar (String tipo, String equipo, String talla, int cantidad, String usuario, String contraseña){
 
