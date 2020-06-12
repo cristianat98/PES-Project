@@ -21,6 +21,8 @@ public class Cliente extends Model {
 	public int cuentaBancaria;
 	public int admin;
 
+
+
 	public Cliente(String usuario, String contraseña) {
 		//this.nombre = nombre;
 		//this.apellido1=apellido1;
