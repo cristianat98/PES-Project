@@ -12,7 +12,7 @@ import models.*;
 import javax.validation.Valid;
 
 
-//@With(Secure.class)
+@With(Secure.class)
 public class Application extends Controller {
 
 	static int visionadmin = 0;
@@ -39,24 +39,6 @@ public class Application extends Controller {
 		return null;
 	}
 
-//	@Check("c.usuario")
-	public static void index() {
-
-		if(connected() != null) {
-			List<Prenda> camisetas =Prenda.find("byTipo", "CAMISETA"
-			).from(0).fetch(100);
-			List<Prenda> pantalones =Prenda.find("byTipo", "PANTALON"
-			).from(0).fetch(100);
-
-			renderArgs.put("camisetas",camisetas);
-			renderArgs.put("pantalones",pantalones);
-
-			render("Application/principal.html");
-		}
-		else {
-			renderTemplate("Application/loginTemplate.html");
-		}
-    }
 	
 	public static void loginTemplate(){
 			render();
@@ -73,7 +55,31 @@ public class Application extends Controller {
 	public static void ModificarUsuario() {
 		   render();
 	}
+	  
+	public static void EliminarUsuario () {
+		   render();
+	}
 
+	public static void CambiarVistaNormal(){
+		index();
+	}
+
+	public static void CambiarVistaAdmin(){
+		  visionadmin = 0;
+		  renderArgs.put("visionadmin", visionadmin);
+		  renderTemplate("Application/principalAdmin.html");
+	}
+
+	
+	public static void Logout (){
+		   session.clear();
+	       renderArgs.put("client",null);
+	       renderTemplate("Application/loginTemplate.html");
+	}
+
+
+	
+	//ANDROID
 	public static void registrarAndroid(String user, String password) {
 		 Cliente c = Cliente.find("byUsuario",user).first();
 		 if(c==null) {
@@ -94,7 +100,26 @@ public class Application extends Controller {
 				renderText("FAIL este cliente no esta en la BD ");	
 		}
 
-   public static void Login(@Valid Cliente cliente) {
+	
+	
+	
+	public static void index() {
+
+		if(connected() != null) {
+			List<Prenda> camisetas =Prenda.find("byTipo", "CAMISETA").from(0).fetch(100);
+			List<Prenda> pantalones =Prenda.find("byTipo", "PANTALON").from(0).fetch(100);
+			renderArgs.put("camisetas",camisetas);
+			renderArgs.put("pantalones",pantalones);
+
+			
+			render("Application/principal.html");
+		}
+		else {
+			renderTemplate("Application/loginTemplate.html");
+		}
+    }
+	
+	public static void Login(@Valid Cliente cliente) {
 		Cliente c = Cliente.find("byUsuarioAndContraseña", cliente.usuario, cliente.contraseña).first();
 		 if(c != null) {
 	           session.put("user",cliente.usuario);
@@ -112,6 +137,38 @@ public class Application extends Controller {
 	            renderTemplate("Application/loginTemplate.html");
 	}
 
+	
+	public static void registrarCliente(@Valid Cliente nuevocliente, String usuario, String contraseña, String mail, String nombre, String apellido1) {
+
+		   validation.required(usuario);
+		   validation.required(contraseña);
+		   validation.required(mail);
+		   validation.required(nombre);
+		   validation.required(apellido1);
+		   validation.equals(contraseña, nuevocliente.contraseña).message("Las contraseñas no coinciden");
+		   if(validation.hasErrors()) {
+			   render("@register");
+		    }
+
+		   Cliente c = Cliente.find("byUsuario", usuario).first();
+		   if (c == null) {
+		   	   nuevocliente.usuario = usuario;
+		   	   nuevocliente.mail = mail;
+		   	   nuevocliente.nombre = nombre;
+		   	   nuevocliente.apellido1 = apellido1;
+			   nuevocliente.create();
+			   session.put("user", nuevocliente.usuario);
+			   index();
+		   }
+		   else{
+			   validation.equals(usuario, "").message("El usuario ya está en uso");
+			   render("@register");
+		   }
+	}
+	
+	
+	
+
 	public static void recuperarContra(@Valid Cliente cliente, String mail) {
 		   validation.required(mail);
 		   validation.equals(mail, cliente.mail).message("Los emails no coinciden");
@@ -127,33 +184,7 @@ public class Application extends Controller {
 	 
 	}
 
-   public static void registrarCliente(@Valid Cliente nuevocliente, String usuario, String contraseña, String mail, String nombre, String apellido1) {
-
-	   validation.required(usuario);
-	   validation.required(contraseña);
-	   validation.required(mail);
-	   validation.required(nombre);
-	   validation.required(apellido1);
-	   validation.equals(contraseña, nuevocliente.contraseña).message("Las contraseñas no coinciden");
-	   if(validation.hasErrors()) {
-		   render("@register");
-	    }
-
-	   Cliente c = Cliente.find("byUsuario", usuario).first();
-	   if (c == null) {
-	   	   nuevocliente.usuario = usuario;
-	   	   nuevocliente.mail = mail;
-	   	   nuevocliente.nombre = nombre;
-	   	   nuevocliente.apellido1 = apellido1;
-		   nuevocliente.create();
-		   session.put("user", nuevocliente.usuario);
-		   index();
-	   }
-	   else{
-		   validation.equals(usuario, "").message("El usuario ya está en uso");
-		   render("@register");
-	   }
-   }
+	
 
    public static void eliminarusuariocontraseña (String contraseña){
 	   validation.required(contraseña);
@@ -170,6 +201,7 @@ public class Application extends Controller {
 	   }
    }
 
+   
    public static void cargardatosusuario(Cliente c, String contraseña){
 	   validation.required(contraseña);
 	   String username = session.get("user");
@@ -184,6 +216,7 @@ public class Application extends Controller {
 	   }
    }
 
+   
    public static void ModificarDatos2(Cliente clienteM) {
 	   String username = session.get("user");
 	   Cliente c=Cliente.find("byUsuario", username).first();
@@ -197,6 +230,16 @@ public class Application extends Controller {
    }
    
    /////OK
+   
+   
+   
+   
+   
+   
+   
+   //FUNCIONES PAG.ADMIN BARRA
+   
+   //AÑADIR USUARIO
 	public static void añadirusuario() {
 
 		if (visionadmin != 1)
@@ -240,6 +283,12 @@ public class Application extends Controller {
 	   }
    }
 
+   
+   
+   
+   
+   
+   //MODIFICAR USUARIO
 	public static void modificarusuarioadmin(){
 
 		if (visionadmin != 2){
@@ -283,6 +332,10 @@ public class Application extends Controller {
 		renderTemplate ("Application/principalAdmin.html");
 	}
 
+	
+	
+	
+	//ELIMINAR USUARIO
 	public static void cargareliminar(){
 
 		if (visionadmin != 4){
@@ -310,6 +363,11 @@ public class Application extends Controller {
 		renderTemplate ("Application/principalAdmin.html");
 	}
 
+	
+	
+	
+	
+	//AÑADIR STOCK
    public static void goAddStock(){
 		if (visionadmin != 5)
 			visionadmin = 5;
@@ -321,24 +379,41 @@ public class Application extends Controller {
 		renderTemplate("Application/principalAdmin.html");
 	}
 
-   public static void ModificarDatosAdmin(Cliente user, String username){
+   public static void AddStock(Prenda prendaM){
 
-	   Cliente client = Cliente.find("byUsuario", username).first();
-	   if (client != null) {
-		   client.usuario = user.usuario;
-		   client.contraseña = user.contraseña;
-		   client.mail = user.mail;
-		   client.save();
-		   List<Cliente> lclientes = Cliente.findAll();
-		   renderArgs.put("listaclientes", lclientes);
-		   renderTemplate ("Application/principalAdmin.html");
+	   prendaM.equipo=prendaM.equipo.toUpperCase();
+	   prendaM.tipo=prendaM.tipo.toUpperCase();
+	   prendaM.talla = prendaM.talla.toUpperCase();
+	   Prenda p = Prenda.find("byTipoAndEquipoAndTallaAndPrecio",prendaM.tipo,prendaM.equipo,prendaM.talla,prendaM.precio).first();
+
+	   //response.setContentTypeIfNotSet(imagen.photo.type());
+	   InputStream binaryData = prendaM.imagen.get();
+	   renderBinary(binaryData);
+
+
+	   if(p==null){
+		   prendaM.cantidadStock=prendaM.cantidadComprada;
+		   prendaM.create();
+		   renderArgs.put("visionadmin", visionadmin);
+		   renderTemplate("Application/principalAdmin.html");
 	   }
-   }
 
-   public static void EliminarUsuario () {
-	   render();
-   }
+	   else {
+		   p.cantidadStock=prendaM.cantidadComprada+p.getCantidadStock();
+		   p.setCantidadStock(p.cantidadStock);
+		   p.imagen = prendaM.imagen;
+		   p.save();
+		   renderArgs.put("visionadmin", visionadmin);
+		   renderTemplate("Application/principalAdmin.html");
+	   }
 
+   }
+   
+   
+   
+   
+   
+   //QUITAR STOCK
    public static void quitarstock(){
 
 		if (visionadmin != 6)
@@ -373,59 +448,37 @@ public class Application extends Controller {
 		renderArgs.put("listaequipos", lequipos);
 		renderArgs.put("visionadmin", visionadmin);
 	    renderTemplate("Application/principalAdmin.html");
-   }
-
+  }
+   
    public static void cargarequipo(Long idequipo){
 		renderArgs.put("visionadmin", visionadmin);
 	   renderTemplate("Application/principalAdmin.html");
    }
+   
+   
+   
+   
+   
+   
+   public static void ModificarDatosAdmin(Cliente user, String username){
 
-   public static void CambiarVistaNormal(){
-		index();
-   }
-
-   public static void CambiarVistaAdmin(){
-	   visionadmin = 0;
-	   renderArgs.put("visionadmin", visionadmin);
-	   renderTemplate("Application/principalAdmin.html");
-   }
-
-   public static void Logout (){
-	   session.clear();
-       renderArgs.put("client",null);
-       renderTemplate("Application/loginTemplate.html");
-   }
-
-   public static void AddStock(Prenda prendaM){
-
-	   prendaM.equipo=prendaM.equipo.toUpperCase();
-	   prendaM.tipo=prendaM.tipo.toUpperCase();
-	   prendaM.talla = prendaM.talla.toUpperCase();
-	   Prenda p = Prenda.find("byTipoAndEquipoAndTallaAndPrecio",prendaM.tipo,prendaM.equipo,prendaM.talla,prendaM.precio).first();
-
-	   //response.setContentTypeIfNotSet(imagen.photo.type());
-	   InputStream binaryData = prendaM.imagen.get();
-	   renderBinary(binaryData);
-
-
-	   if(p==null){
-		   prendaM.cantidadStock=prendaM.cantidadComprada;
-		   prendaM.create();
-		   renderArgs.put("visionadmin", visionadmin);
-		   renderTemplate("Application/principalAdmin.html");
+	   Cliente client = Cliente.find("byUsuario", username).first();
+	   if (client != null) {
+		   client.usuario = user.usuario;
+		   client.contraseña = user.contraseña;
+		   client.mail = user.mail;
+		   client.save();
+		   List<Cliente> lclientes = Cliente.findAll();
+		   renderArgs.put("listaclientes", lclientes);
+		   renderTemplate ("Application/principalAdmin.html");
 	   }
-
-	   else {
-		   p.cantidadStock=prendaM.cantidadComprada+p.getCantidadStock();
-		   p.setCantidadStock(p.cantidadStock);
-		   p.imagen = prendaM.imagen;
-		   p.save();
-		   renderArgs.put("visionadmin", visionadmin);
-		   renderTemplate("Application/principalAdmin.html");
-	   }
-
    }
-   //FUNCION EN PRUEBA FERNANDO
+
+ 
+
+
+
+
 
    public static void comprar (String tipo, String equipo, String talla, int cantidad, String usuario, String contraseña){
 
