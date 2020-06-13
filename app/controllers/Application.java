@@ -39,7 +39,6 @@ public class Application extends Controller {
 		return null;
 	}
 
-	
 	public static void loginTemplate(){
 			render();
     }
@@ -70,7 +69,6 @@ public class Application extends Controller {
 		  renderTemplate("Application/principalAdmin.html");
 	}
 
-	
 	public static void Logout (){
 		   session.clear();
 	       renderArgs.put("client",null);
@@ -78,7 +76,6 @@ public class Application extends Controller {
 	}
 
 
-	
 	//ANDROID
 	public static void registrarAndroid(String user, String password) {
 		 Cliente c = Cliente.find("byUsuario",user).first();
@@ -100,9 +97,6 @@ public class Application extends Controller {
 				renderText("FAIL este cliente no esta en la BD ");	
 		}
 
-	
-	
-	
 	public static void index() {
 
 		if(connected() != null) {
@@ -137,7 +131,6 @@ public class Application extends Controller {
 	            renderTemplate("Application/loginTemplate.html");
 	}
 
-	
 	public static void registrarCliente(@Valid Cliente nuevocliente, String usuario, String contraseña, String mail, String nombre, String apellido1) {
 
 		   validation.required(usuario);
@@ -165,9 +158,6 @@ public class Application extends Controller {
 			   render("@register");
 		   }
 	}
-	
-	
-	
 
 	public static void recuperarContra(@Valid Cliente cliente, String mail) {
 		   validation.required(mail);
@@ -184,8 +174,6 @@ public class Application extends Controller {
 	 
 	}
 
-	
-
    public static void eliminarusuariocontraseña (String contraseña){
 	   validation.required(contraseña);
 	   String username = session.get("user");
@@ -201,7 +189,6 @@ public class Application extends Controller {
 	   }
    }
 
-   
    public static void cargardatosusuario(Cliente c, String contraseña){
 	   validation.required(contraseña);
 	   String username = session.get("user");
@@ -216,7 +203,6 @@ public class Application extends Controller {
 	   }
    }
 
-   
    public static void ModificarDatos2(Cliente clienteM) {
 	   String username = session.get("user");
 	   Cliente c=Cliente.find("byUsuario", username).first();
@@ -228,17 +214,10 @@ public class Application extends Controller {
 		   index();
 	   }
    }
-   
-   /////OK
-   
-   
-   
-   
-   
-   
-   
+
+
    //FUNCIONES PAG.ADMIN BARRA
-   
+
    //AÑADIR USUARIO
 	public static void añadirusuario() {
 
@@ -283,11 +262,7 @@ public class Application extends Controller {
 	   }
    }
 
-   
-   
-   
-   
-   
+
    //MODIFICAR USUARIO
 	public static void modificarusuarioadmin(){
 
@@ -333,8 +308,6 @@ public class Application extends Controller {
 	}
 
 	
-	
-	
 	//ELIMINAR USUARIO
 	public static void cargareliminar(){
 
@@ -363,10 +336,7 @@ public class Application extends Controller {
 		renderTemplate ("Application/principalAdmin.html");
 	}
 
-	
-	
-	
-	
+
 	//AÑADIR STOCK
    public static void goAddStock(){
 		if (visionadmin != 5)
@@ -408,11 +378,8 @@ public class Application extends Controller {
 	   }
 
    }
-   
-   
-   
-   
-   
+
+
    //QUITAR STOCK
    public static void quitarstock(){
 
@@ -454,12 +421,7 @@ public class Application extends Controller {
 		renderArgs.put("visionadmin", visionadmin);
 	   renderTemplate("Application/principalAdmin.html");
    }
-   
-   
-   
-   
-   
-   
+
    public static void ModificarDatosAdmin(Cliente user, String username){
 
 	   Cliente client = Cliente.find("byUsuario", username).first();
@@ -473,12 +435,6 @@ public class Application extends Controller {
 		   renderTemplate ("Application/principalAdmin.html");
 	   }
    }
-
- 
-
-
-
-
 
    public static void comprar (String tipo, String equipo, String talla, int cantidad, String usuario, String contraseña){
 
