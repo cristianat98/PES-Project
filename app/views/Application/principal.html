@@ -109,165 +109,59 @@
     </div>
 </head>
 <body>
-
 <div class="panel panel-default" >
     <div class="panel-heading">Camisetas</div>
-    #{if prendas}
+
     <section class="panel-body">
+        #{if camisetas}
+        #{list items:camisetas, as:'camiseta'}
 
         <article class="media">
             <div class="media-left media-middle">
                 <a href="#">
-                    <img class="media-object" src="/public/images/fcb.jpg" alt="...">
+                    <img class="media-object" src=${camiseta.imagen} alt="...">
                 </a>
             </div>
             <div class="media-body">
-                <h4 class="media-heading">${prendas.tipo} ${prendas.equipo}Camiseta Fútbol Club Barcelona</h4>
+                <h4 class="media-heading">${camiseta.tipo} DEL ${camiseta.equipo} <br> ${camiseta.precio}€</h4>
             </div>
             <button type="button" class="btn btn-default btn-lg">
                 <span class="glyphicon glyphicon" aria-hidden="true"></span> Añadir Carrito
             </button>
         </article>
-
-        <!--
-        <article class="media">
-            <div class="media-left media-middle">
-                <a href="#">
-                    <img class="media-object" src="/public/images/madrid.jpg" alt="...">
-                </a>
-            </div>
-            <div class="media-body">
-                <h4 class="media-heading">Camiseta Real Madrid</h4>
-
-            </div>
-            <button type="button" class="btn btn-default btn-lg">
-                <span class="glyphicon glyphicon" aria-hidden="true"></span> Añadir Carrito
-            </button>
-        </article>
-        <article class="media">
-            <div class="media-left media-middle">
-                <a href="#">
-                    <img class="media-object" src="/public/images/atletico.jpg" alt="...">
-                </a>
-            </div>
-            <div class="media-body">
-                <h4 class="media-heading">Camiseta Atlético de Madrid</h4>
-
-            </div>
-            <button type="button" class="btn btn-default btn-lg">
-                <span class="glyphicon glyphicon" aria-hidden="true"></span> Añadir Carrito
-            </button>
-        </article>
-
-        <article class="media">
-            <div class="media-left media-middle">
-                <a href="#">
-                    <img class="media-object" src="/public/images/sevilla.jpg" alt="...">
-                </a>
-            </div>
-            <div class="media-body">
-                <h4 class="media-heading">Camiseta Sevilla</h4>
-
-            </div>
-            <button type="button" class="btn btn-default btn-lg">
-                <span class="glyphicon glyphicon" aria-hidden="true"></span> Añadir Carrito
-            </button>
-        </article>
-        <article class="media">
-            <div class="media-left media-middle">
-                <a href="#">
-                    <img class="media-object" src="/public/images/fcb.jpg" alt="...">
-                </a>
-            </div>
-            <div class="media-body">
-                <h4 class="media-heading">Camiseta Fútbol Club Barcelona</h4>
-            </div>
-            <button type="button" class="btn btn-default btn-lg">
-                <span class="glyphicon glyphicon" aria-hidden="true"></span> Añadir Carrito
-            </button>
-        </article>
-        <article class="media">
-            <div class="media-left media-middle">
-                <a href="#">
-                    <img class="media-object" src="/public/images/fcb.jpg" alt="...">
-                </a>
-            </div>
-            <div class="media-body">
-                <h4 class="media-heading">Camiseta Fútbol Club Barcelona</h4>
-            </div>
-            <button type="button" class="btn btn-default btn-lg">
-                <span class="glyphicon glyphicon" aria-hidden="true"></span> Añadir Carrito
-            </button>
-        </article>
-        -->
+        #{/list}
+        #{/if}
 
     </section>
-    #{/if}
 </div>
+<div class="panel panel-default" >
+    <div class="panel-heading">Pantalones</div>
 
-
-<!--
-<div class="panel panel-default">
-    <div class="panel-heading">Pantalones de deporte</div>
     <section class="panel-body">
+        #{if pantalones}
+        #{list items:pantalones, as:'pantalon'}
+
         <article class="media">
             <div class="media-left media-middle">
                 <a href="#">
-                    <img class="media-object" src="/public/images/pantalon-fcb.jpg" alt="...">
+                    <img class="media-object" src="/public/images/fcb.jpg" alt="...">
                 </a>
             </div>
+
             <div class="media-body">
-                <h4 class="media-heading">Pantalón corto Fútbol Club Barcelona</h4>
+                <h4 class="media-heading">${pantalon.tipo} DEL ${pantalon.equipo} <br> ${pantalon.precio}€</h4>
             </div>
             <button type="button" class="btn btn-default btn-lg">
                 <span class="glyphicon glyphicon" aria-hidden="true"></span> Añadir Carrito
             </button>
         </article>
-        <article class="media">
-            <div class="media-left media-middle">
-                <a href="#">
-                    <img class="media-object" src="/public/images/pantalon-madrid.jpg" alt="...">
-                </a>
-            </div>
-            <div class="media-body">
-                <h4 class="media-heading">Pantalón corto Real Madrid</h4>
+        #{/list}
+        #{/if}
 
-            </div>
-            <button type="button" class="btn btn-default btn-lg">
-                <span class="glyphicon glyphicon" aria-hidden="true"></span> Añadir Carrito
-            </button>
-        </article>
-        <article class="media">
-            <div class="media-left media-middle">
-                <a href="#">
-                    <img class="media-object" src="/public/images/pantalon-atletico.jpg" alt="...">
-                </a>
-            </div>
-            <div class="media-body">
-                <h4 class="media-heading">Pantalón corto Atlético de Madrid</h4>
-
-            </div>
-            <button type="button" class="btn btn-default btn-lg">
-                <span class="glyphicon glyphicon" aria-hidden="true"></span> Añadir Carrito
-            </button>
-        </article>
-
-        <article class="media">
-            <div class="media-left media-middle">
-                <a href="#">
-                    <img class="media-object" src="/public/images/pantalon-sevilla.jpg" alt="...">
-                </a>
-            </div>
-            <div class="media-body">
-                <h4 class="media-heading">Pantalón corto Sevilla</h4>
-
-            </div>
-            <button type="button" class="btn btn-default btn-lg">
-                <span class="glyphicon glyphicon" aria-hidden="true"></span> Añadir Carrito
-            </button>
-        </article>
     </section>
 </div>
--->
+
+
+
 </body>
 </html>
