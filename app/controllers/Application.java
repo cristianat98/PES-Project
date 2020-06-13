@@ -4,7 +4,7 @@ package controllers;
 import jdk.nashorn.internal.runtime.regexp.joni.ast.CClassNode;
 import play.db.jpa.JPABase;
 import play.mvc.*;
-
+import java.io.InputStream;
 import java.util.*;
 
 import models.*;
@@ -43,13 +43,14 @@ public class Application extends Controller {
 	public static void index() {
 
 		if(connected() != null) {
-			//Prenda prenda = Prenda.find("order by tipo desc").first();
-			Prenda prenda = (Prenda) Prenda.findAll().get(0);
-			List<Prenda> prendas = Prenda.find(
-					"order by tipo desc"
-			).from(1).fetch(100);
-			//render(prenda, prendas);
-			renderArgs.put("prendas",prenda);
+			List<Prenda> camisetas =Prenda.find("byTipo", "CAMISETA"
+			).from(0).fetch(100);
+			List<Prenda> pantalones =Prenda.find("byTipo", "PANTALON"
+			).from(0).fetch(100);
+
+			renderArgs.put("camisetas",camisetas);
+			renderArgs.put("pantalones",pantalones);
+
 			render("Application/principal.html");
 		}
 		else {
@@ -403,8 +404,8 @@ public class Application extends Controller {
 	   Prenda p = Prenda.find("byTipoAndEquipoAndTallaAndPrecio",prendaM.tipo,prendaM.equipo,prendaM.talla,prendaM.precio).first();
 
 	   //response.setContentTypeIfNotSet(imagen.photo.type());
-	   //InputStream binaryData = prendaM.imagen.get();
-	   //renderBinary(binaryData);
+	   InputStream binaryData = prendaM.imagen.get();
+	   renderBinary(binaryData);
 
 
 	   if(p==null){
