@@ -5,6 +5,7 @@ import jdk.nashorn.internal.runtime.regexp.joni.ast.CClassNode;
 import play.db.jpa.JPABase;
 import play.mvc.*;
 
+import java.io.InputStream;
 import java.util.*;
 
 import models.*;
@@ -12,7 +13,7 @@ import models.*;
 import javax.validation.Valid;
 
 
-//@With(Secure.class)
+@With(Secure.class)
 public class Application extends Controller {
 
 	static int visionadmin = 0;
@@ -403,7 +404,7 @@ public class Application extends Controller {
 	   Prenda p = Prenda.find("byTipoAndEquipoAndTallaAndPrecio",prendaM.tipo,prendaM.equipo,prendaM.talla,prendaM.precio).first();
 
 	   //response.setContentTypeIfNotSet(imagen.photo.type());
-	   //InputStream binaryData = prendaM.imagen.get();
+	   //InputStream binaryData = prendaM.imagen;
 	   //renderBinary(binaryData);
 
 
