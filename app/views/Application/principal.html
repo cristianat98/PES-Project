@@ -4,47 +4,47 @@
 
 
     img{
-    width: 100px;
-    height: 100px;
+        width: 100px;
+        height: 100px;
     }
 
     .dropdown{
-    position: relative;
-    left: 1050px;
+        position: relative;
+        left: 1050px;
     }
 
     .btn btn-default btn-lg{
-    position: relative;
-    left: 1000px;
-    width: 150px;
-    height: 150px;
+        position: relative;
+        left: 1000px;
+        width: 150px;
+        height: 150px;
     }
 
     article{
-    width: 250px;
-    height: 250px;
-    margin-left: 10px;
-    margin-top: 0px;
-    float: left;
+        width: 250px;
+        height: 250px;
+        margin-left: 10px;
+        margin-top: 0px;
+        float: left;
     }
 
     .panel.panel-default{
-    height: 280px;
-    width: 1200px;
-    margin-left: 50px;
-    overflow-x: hidden;
-    overflow-y: scroll;
+        height: 280px;
+        width: 1200px;
+        margin-left: 50px;
+        overflow-x: hidden;
+        overflow-y: scroll;
     }
 
     .barra{
-    width: 500px;
+        width: 500px;
     }
 
     .avatar{
-    width: 75px;
-    height: 75px;
-    border-radius: 50%;
-    margin-left: 1215px;
+        width: 75px;
+        height: 75px;
+        border-radius: 50%;
+        margin-left: 1215px;
     }
 
     .usuario{
@@ -71,7 +71,7 @@
 <script>
     window.onload=function() {
         if (&{client.admin} == 0)
-            document.getElementById('admin').style.display="none";
+        document.getElementById('admin').style.display="none";
     }
 
 </script>
@@ -82,7 +82,7 @@
     <h1>Tienda Online!</h1>
     <div class="barra">
 
-    <a class="jumbotron">
+        <a class="jumbotron">
         </a><!--
         <a href="http://localhost:9000/">Inicio</a>
         <a href="http://localhost:9000/application/principal">Productos</a>
@@ -113,24 +113,24 @@
     <div class="panel-heading">Camisetas</div>
 
     <section class="panel-body">
-        #{if camisetas}
+    #{if camisetas}
         #{list items:camisetas, as:'camiseta'}
 
-        <article class="media">
-            <div class="media-left media-middle">
-                <a href="#">
-                    <img class="media-object" src=${camiseta.imagen} alt="...">
-                </a>
-            </div>
-            <div class="media-body">
-                <h4 class="media-heading">${camiseta.tipo} DEL ${camiseta.equipo} <br> ${camiseta.precio}€</h4>
-            </div>
-            <button type="button" class="btn btn-default btn-lg">
-                <span class="glyphicon glyphicon" aria-hidden="true"></span> Añadir Carrito
-            </button>
-        </article>
+            <article class="media">
+                <div class="media-left media-middle">
+                    <a href="#">
+                        <img class="media-object" src="@{Mostrar(camiseta.id)}" alt="...">
+                    </a>
+                </div>
+                <div class="media-body">
+                    <h4 class="media-heading">${camiseta.tipo} DEL ${camiseta.equipo} <br> ${camiseta.precio}€</h4>
+                </div>
+                <button type="button" class="btn btn-default btn-lg">
+                    <span class="glyphicon glyphicon" aria-hidden="true"></span> Añadir Carrito
+                </button>
+            </article>
         #{/list}
-        #{/if}
+    #{/if}
 
     </section>
 </div>
@@ -138,25 +138,25 @@
     <div class="panel-heading">Pantalones</div>
 
     <section class="panel-body">
-        #{if pantalones}
+    #{if pantalones}
         #{list items:pantalones, as:'pantalon'}
 
-        <article class="media">
-            <div class="media-left media-middle">
-                <a href="#">
-                    <img class="media-object" src="/public/images/fcb.jpg" alt="...">
-                </a>
-            </div>
+            <article class="media">
+                <div class="media-left media-middle">
+                    <a href="#">
+                        <img class="media-object" src="@{Mostrar(pantalon.id)}" alt="...">
+                    </a>
+                </div>
 
-            <div class="media-body">
-                <h4 class="media-heading">${pantalon.tipo} DEL ${pantalon.equipo} <br> ${pantalon.precio}€</h4>
-            </div>
-            <button type="button" class="btn btn-default btn-lg">
-                <span class="glyphicon glyphicon" aria-hidden="true"></span> Añadir Carrito
-            </button>
-        </article>
+                <div class="media-body">
+                    <h4 class="media-heading">${pantalon.tipo} DEL ${pantalon.equipo} <br> ${pantalon.precio}€</h4>
+                </div>
+                <button type="button" class="btn btn-default btn-lg">
+                    <span class="glyphicon glyphicon" aria-hidden="true"></span> Añadir Carrito
+                </button>
+            </article>
         #{/list}
-        #{/if}
+    #{/if}
 
     </section>
 </div>

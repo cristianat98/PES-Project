@@ -43,7 +43,13 @@ public class Application extends Controller {
 			render();
     }
 	
-	public static void register() {
+	public static void Mostrar(Long id){
+
+		Prenda prenda = Prenda.findById(id);
+		renderBinary(prenda.imagen.get());
+	}
+
+    public static void register() {
 	        render();
 	}
 
@@ -100,12 +106,11 @@ public class Application extends Controller {
 	public static void index() {
 
 		if(connected() != null) {
-			List<Prenda> camisetas =Prenda.find("byTipo", "CAMISETA").from(0).fetch(100);
-			List<Prenda> pantalones =Prenda.find("byTipo", "PANTALON").from(0).fetch(100);
+			List<Prenda> camisetas =Prenda.find("byTipo", "CAMISETA").fetch();
+			List<Prenda> pantalones =Prenda.find("byTipo", "PANTALON").fetch();
 			renderArgs.put("camisetas",camisetas);
 			renderArgs.put("pantalones",pantalones);
 
-			
 			render("Application/principal.html");
 		}
 		else {
@@ -356,9 +361,7 @@ public class Application extends Controller {
 	   prendaM.talla = prendaM.talla.toUpperCase();
 	   Prenda p = Prenda.find("byTipoAndEquipoAndTallaAndPrecio",prendaM.tipo,prendaM.equipo,prendaM.talla,prendaM.precio).first();
 
-	   //response.setContentTypeIfNotSet(imagen.photo.type());
-	   InputStream binaryData = prendaM.imagen.get();
-	   renderBinary(binaryData);
+
 
 
 	   if(p==null){
