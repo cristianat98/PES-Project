@@ -111,7 +111,7 @@
 
 <h1 style="text-align: center; width:auto;"> VISTA ADMINISTRADOR</h1>
 <div class="prueba">
-<img class="avatar" src="/public/images/avatar.jpg">
+<img class="avatar" src="@{MostrarPerfil()}" alt="ERROR AL CARGAR LA IMAGEN">
 <div class ="usuario"> <b>Está conectado como: &{client.usuario}</b></div>
     <div class="cart pull-right">
         <div class="dropdown">
@@ -148,7 +148,7 @@
 <div class="right">
 <div style="text-align: center; display: none" id ="AñadirUsuario">
 
-#{form @registrarclienteadmin()}
+#{form @registrarclienteadmin(), enctype:'multipart/form-data'}
     <h3>Introduce los datos del nuevo usuario:</h3>
     #{field 'usuario'}
         <p class="${field.errorClass}">
@@ -204,6 +204,13 @@
         </p>
 
     #{/field}
+
+    #{field 'nuevocliente.perfil'}
+        <p class="${field.errorClass}">
+            <strong>Foto Perfil:</strong><input type="file" name="${field.name}">
+            <span class="error">${field.error}</span>
+        </p>
+    #{/field}
     <p class="buttons">
         <input type="submit" value="Register">
     </p>
@@ -233,13 +240,19 @@
 </div>
 
 <div style="text-align: center; display: none" id = "DatosUsuario" class="column">
-#{form @ModificarU()}
+#{form @ModificarU(), enctype:'multipart/form-data'}
 #{if usuarioM}
 
     <h3>Modifica los datos del usuario ${usuarioM.usuario}:</h3>
 
+    #{field 'usuarioinicial'}
+        <p class="${field.errorClass}">
+            <input style="display: none" name="${field.name}" value="${usuarioM.usuario}" size="16"  >
+            <span class="error">${field.error}</span>
+        </p>
+    #{/field}
 
-        #{field 'usuarioM.usuario'}
+        #{field 'usuariofinal'}
             <p class="${field.errorClass}">
                 <strong>Usuario:</strong> <input type="text" name="${field.name}" placeholder="${usuarioM.usuario}" size="16"  >
                 <span class="error">${field.error}</span>
@@ -282,6 +295,13 @@
                 <span class="error">${field.error}</span>
             </p>
         #{/field}
+
+    #{field 'usuarioM.perfil'}
+        <p class="${field.errorClass}">
+            <strong>Foto Perfil:</strong><input type="file" name="${field.name}">
+            <span class="error">${field.error}</span>
+        </p>
+    #{/field}
 
         <p class="buttons">
             <input type="submit" value="Modificar Usuario" />

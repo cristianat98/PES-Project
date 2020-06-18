@@ -36,7 +36,7 @@
 
 <body>
 
-#{form @registrarCliente()}
+#{form @registrarCliente(), enctype:'multipart/form-data'}
 #{field 'usuario'}
 <p class="${field.errorClass}">
     <strong>Username:</strong> <input type="text" name="${field.name}" size="16"> *
@@ -62,7 +62,7 @@
 
 #{field 'nuevocliente.apellido2'}
     <p class="${field.errorClass}">
-        <strong>Apellido 2:</strong> <input type="text" name="${field.name}" size="16">
+        <strong>Apellido 2:</strong> <input type="text" name="${field.name}" value ="" size="16">
         <span class="error">${field.error}</span>
     </p>
 
@@ -70,7 +70,7 @@
 
 #{field 'nuevocliente.contraseña'}
 <p class="${field.errorClass}">
-    <strong>Password:</strong> <input type="password" name="${field.name}" size="16"> *
+    <strong>Contraseña:</strong> <input type="password" name="${field.name}" size="16"> *
     <span class="error">${field.error}</span>
 </p>
 
@@ -78,7 +78,7 @@
 
 #{field 'contraseña'}
 <p class="${field.errorClass}">
-    <strong>Verify password:</strong> <input type="password" name="${field.name}" size="16"> *
+    <strong>Verificar Contraseña:</strong> <input type="password" name="${field.name}" size="16"> *
     <span class="error">${field.error}</span>
 </p>
 
@@ -92,8 +92,15 @@
 </p>
 
 #{/field}
+
+    #{field 'nuevocliente.perfil'}
+    <p class="${field.errorClass}">
+        <strong>Foto Perfil:</strong><input type="file" name="${field.name}">
+        <span class="error">${field.error}</span>
+    </p>
+    #{/field}
 <p class="buttons">
-    <input type="submit" value="Register"> 
+    <input type="submit" value="Register">
     <a href="@{index()}">Cancel</a>
 </p>
 

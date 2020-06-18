@@ -2,8 +2,16 @@ package models;
 
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
+import javax.sql.rowset.serial.SerialBlob;
+import javax.swing.*;
+
+import play.db.jpa.Blob;
 
 import play.db.jpa.Model;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.util.*;
 
 
@@ -15,22 +23,23 @@ public class Cliente extends Model {
 	public String mail;
 	public String apellido1;
 	public String apellido2;
-	public String direccion;
 	public String usuario;
 	public String contraseña;
-	public int cuentaBancaria;
 	public int admin;
+	public Blob perfil;
 
 
 
 	public Cliente(String usuario, String contraseña) {
-		//this.nombre = nombre;
-		//this.apellido1=apellido1;
-		//this.apellido2=apellido2;
-		//this.direccion=direccion;
+
+		this.nombre = "";
+		this.apellido1="";
+		this.apellido2="";
 		this.usuario = usuario;
 		this.contraseña = contraseña;
 		this.admin = 0;
+		this.mail ="";
+		this.perfil = null;
 	}
 
 	public String getNombre() {
@@ -49,7 +58,6 @@ public class Cliente extends Model {
 
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
-		
 	}
 
 	public String getApellido1() {
@@ -60,21 +68,12 @@ public class Cliente extends Model {
 		this.apellido1 = apellido1;
 	}
 
-	public String getApellido2()
-	{
+	public String getApellido2(){
 		return apellido2;
 	}
 
 	public void setApellido2(String apellido2) {
 		this.apellido2 = apellido2;
-	}
-
-	public String getDireccion() {
-		return direccion;
-	}
-
-	public void setDireccion(String direccion) {
-		this.direccion = direccion;
 	}
 
 	public String getUsuario() {
@@ -92,16 +91,4 @@ public class Cliente extends Model {
 	public void setContraseña(String contraseña) {
 		this.contraseña = contraseña;
 	}
-
-	public int getCuentaBancaria() {
-		return cuentaBancaria;
-	}
-
-	public void setCuentaBancaria(int cuentaBancaria) {
-		this.cuentaBancaria = cuentaBancaria;
-	}
-	
-
-
-
 }

@@ -3,30 +3,112 @@
 <head>
     <meta charset="UTF-8">
     <title>Modificar Datos</title>
+
+    <script>
+
+        window.onload=function() {
+            if (&{modificar} == 1)
+                document.getElementById('ModificarDatos').style.display="none";
+
+        }
+
+    </script>
 </head>
 
-<body> 
- <h3>Introduzca su contraseña para acceder a modificar sus datos:</h3>
- 
-#{form @cargardatosusuario()}
-#{field 'contraseña'}
-<p class="${field.errorClass}">
-    <strong>Contraseña:</strong> <input type="password" name="${field.name}" size="16"> *
-    <span class="error">${field.error}</span>
-</p>
-#{/field}
+<body>
+<div id ="ModificarDatos">
+    <h3>Introduzca su contraseña para acceder a modificar sus datos:</h3>
 
-#{field 'c.contraseña'}
-<p class="${field.errorClass}">
-    <strong>Confirme contraseña:</strong> <input type="password" name="${field.name}" size="16"> *
-    <span class="error">${field.error}</span>
-</p>
-#{/field}
-<p>
-    <input type="submit" value="Comprobar contraseña">
-</p>
+#{form @cargardatosusuario()}
+
+    #{field 'contraseña'}
+        <p class="${field.errorClass}">
+            <strong>Contraseña:</strong> <input type="password" name="${field.name}" size="16"> *
+            <span class="error">${field.error}</span>
+        </p>
+    #{/field}
+    <p>
+        <input type="submit" value="Comprobar contraseña">
+    </p>
 
 #{/form}
+</div>
+
+#{if clienteM}
+
+ <h3>Sus datos personales son:</h3>
+
+ #{form @ModificarDatos2(), enctype:'multipart/form-data'}
+
+     #{field 'clienteM.usuario'}
+     <p class="${field.errorClass}">
+         <strong>Username:</strong> <input type="text" name="${field.name}" placeholder="&{clienteM.usuario}" size="16">
+         <span class="error">${field.error}</span>
+     </p>
+
+     #{/field}
+
+     #{field 'clienteM.nombre'}
+     <p class="${field.errorClass}">
+         <strong>Nombre:</strong> <input type="text" name="${field.name}" placeholder="&{clienteM.nombre}"size="16">
+         <span class="error">${field.error}</span>
+     </p>
+     #{/field}
+
+     #{field 'clienteM.apellido1'}
+     <p class="${field.errorClass}">
+         <strong>Apellido 1:</strong> <input type="text" name="${field.name}" placeholder="&{clienteM.apellido1}" size="16">
+         <span class="error">${field.error}</span>
+     </p>
+
+     #{/field}
+
+     #{field 'clienteM.apellido2'}
+     <p class="${field.errorClass}">
+         <strong>Apellido 2:</strong> <input type="text" name="${field.name}"  placeholder="&{clienteM.apellido2}" size="16">
+         <span class="error">${field.error}</span>
+     </p>
+
+     #{/field}
+
+     #{field 'clienteM.contraseña'}
+     <p class="${field.errorClass}">
+         <strong>Contraseña:</strong> <input type="password" name="${field.name}" size="16">
+         <span class="error">${field.error}</span>
+     </p>
+
+     #{/field}
+
+     #{field 'contraseña'}
+     <p class="${field.errorClass}">
+         <strong>Verificar Contraseña:</strong> <input type="password" name="${field.name}" size="16">
+         <span class="error">${field.error}</span>
+     </p>
+
+     </p>
+
+     #{/field}
+     #{field 'clienteM.mail'}
+     <p class="${field.errorClass}">
+         <strong>Mail:</strong> <input type="email" name="${field.name}" placeholder="&{clienteM.mail}" size="16">
+         <span class="error">${field.error}</span>
+     </p>
+
+     #{/field}
+
+     #{field 'clienteM.perfil'}
+     <p class="${field.errorClass}">
+         <strong>Foto Perfil:</strong><input type="file" name="${field.name}">
+         <span class="error">${field.error}</span>
+     </p>
+     #{/field}
+
+ <p class="buttons">
+     <input type="submit" value="Modificar datos">
+ </p>
+
+ #{/form}
+#{/if}
  <a href= "@{Logout()}"><button>Cerrar Sesión</button></a>
  <a href= "@{index()}"><button>Atrás</button></a>
 </body>

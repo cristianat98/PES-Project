@@ -19,9 +19,9 @@ public class BootStrap extends Job {
             Cliente cristian = new Cliente("cristian", "cristianat98").save();
             Cliente david = new Cliente ("david", "davidp").save();
             Cliente fernando = new Cliente ("fernando", "fernandow").save();
-            cristian.setAdmin(1);
-            david.setAdmin(1);
-            fernando.setAdmin(1);
+            cristian.admin = 1;
+            david.admin = 1;
+            fernando.admin = 1;
             cristian.save();
             david.save();
             fernando.save();

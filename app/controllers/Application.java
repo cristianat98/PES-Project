@@ -4,6 +4,8 @@ package controllers;
 import jdk.nashorn.internal.runtime.regexp.joni.ast.CClassNode;
 import play.db.jpa.JPABase;
 import play.mvc.*;
+
+import java.io.File;
 import java.io.InputStream;
 import java.util.*;
 
@@ -43,10 +45,21 @@ public class Application extends Controller {
 			render();
     }
 	
-	public static void Mostrar(Long id){
+	public static void MostrarPrenda(Long id){
 
 		Prenda prenda = Prenda.findById(id);
 		renderBinary(prenda.imagen.get());
+	}
+
+	public static void MostrarPerfil(){
+
+		Cliente c = Cliente.find("byUsuario", session.get("user")).first();
+		c.perfil.toString();
+		if (c.perfil.get() == null)
+			renderBinary(new File("C:/Users/cristian/Desktop/play-1.5.3/Proyecto-PES/public/images/avatar.jpg"));
+
+		else
+			renderBinary(c.perfil.get());
 	}
 
     public static void register() {
@@ -58,6 +71,7 @@ public class Application extends Controller {
 	}
 	
 	public static void ModificarUsuario() {
+		renderArgs.put("modificar", 0);
 		   render();
 	}
 	  
@@ -110,7 +124,6 @@ public class Application extends Controller {
 			List<Prenda> pantalones =Prenda.find("byTipo", "PANTALON").fetch();
 			renderArgs.put("camisetas",camisetas);
 			renderArgs.put("pantalones",pantalones);
-
 			render("Application/principal.html");
 		}
 		else {
@@ -128,6 +141,7 @@ public class Application extends Controller {
 					renderArgs.put("erroradmin", erroradmin);
 					renderTemplate("Application/loginTemplate.html");
 				}
+
 				else{
 					session.put("user",cliente.usuario);
 					renderArgs.put("client", c);
@@ -159,9 +173,9 @@ public class Application extends Controller {
 		   validation.required(nombre);
 		   validation.required(apellido1);
 		   validation.equals(contraseña, nuevocliente.contraseña).message("Las contraseñas no coinciden");
-		   if(validation.hasErrors()) {
+		   if(validation.hasErrors())
 			   render("@register");
-		    }
+
 
 		   Cliente c = Cliente.find("byUsuario", usuario).first();
 		   if (c == null) {
@@ -173,6 +187,7 @@ public class Application extends Controller {
 			   session.put("user", nuevocliente.usuario);
 			   index();
 		   }
+
 		   else{
 			   validation.equals(usuario, "").message("El usuario ya está en uso");
 			   render("@register");
@@ -209,29 +224,61 @@ public class Application extends Controller {
 	   }
    }
 
-   public static void cargardatosusuario(Cliente c, String contraseña){
+   public static void cargardatosusuario(String contraseña){
+	   int i = 0;
 	   validation.required(contraseña);
 	   String username = session.get("user");
 	   Cliente usuario=Cliente.find("byUsuario", username).first();
 	   validation.equals(contraseña, usuario.contraseña).message("La contraseña es incorrecta, no puede modificar datos");
-	   validation.equals(contraseña, c.contraseña).message("Las contraseñas no coinciden");
+	   renderArgs.put("modificar", i);
 	   if(validation.hasErrors()) {
 		   render("@ModificarUsuario");
 	   }
 	   else{
-	   		renderArgs.put("clienteM", usuario);   //Variable en HTML , Variable en java//
-		    renderTemplate("Application/ModificarUsuario2.html");
+	   	renderArgs.put("modificar", 1);
+	   	renderArgs.put("clienteM", usuario);   //Variable en HTML , Variable en java//
+		renderTemplate("Application/ModificarUsuario.html");
 	   }
    }
 
-   public static void ModificarDatos2(Cliente clienteM) {
+   public static void ModificarDatos2(Cliente clienteM, String contraseña) {
+
 	   String username = session.get("user");
 	   Cliente c=Cliente.find("byUsuario", username).first();
+	   validation.equals(contraseña, clienteM.contraseña).message("Las contraseñas no coinciden");
+	   if(validation.hasErrors()) {
+	   	int i = 1;
+	   	renderArgs.put("clienteM", c);
+	   	renderArgs.put("modificar", 1);
+		   render("@ModificarUsuario");
+	   }
+
 	   if(c!=null) {
-		   c.usuario=clienteM.usuario;
-		   c.contraseña=clienteM.contraseña;
-		   c.mail=clienteM.mail;
-		   c._save();
+	   	if (!clienteM.usuario.equals("")){
+			c.usuario=clienteM.usuario;
+			session.clear();
+			session.put("user", c.usuario);
+		}
+
+	   	if (!clienteM.contraseña.equals(""))
+	   		c.contraseña=clienteM.contraseña;
+
+	   	if (!clienteM.mail.equals(""))
+	   		c.mail=clienteM.mail;
+
+	   	if (!clienteM.nombre.equals(""))
+	   		c.nombre=clienteM.nombre;
+
+	   	if (!clienteM.apellido1.equals(""))
+	   		c.apellido1=clienteM.apellido1;
+
+	   	if (!clienteM.apellido2.equals(""))
+	   		c.apellido2=clienteM.apellido2;
+
+	   	if (clienteM.perfil != null)
+	   		c.perfil = clienteM.perfil;
+
+		   c.save();
 		   index();
 	   }
    }
@@ -312,20 +359,57 @@ public class Application extends Controller {
 		renderTemplate ("Application/principalAdmin.html");
 	}
 
-	public static void ModificarU(Cliente usuarioM){
-		Cliente user = Cliente.find("byUsuario", usuarioM.usuario).first();
-		user.usuario = usuarioM.usuario;
-		user.contraseña = usuarioM.contraseña;
-		user.mail =usuarioM.mail;
-		user.nombre = usuarioM.nombre;
-		user.apellido1 = usuarioM.apellido1;
-		user.apellido2 = usuarioM.apellido2;
-		user.save();
-		List<Cliente> lclientes = Cliente.findAll();
-		renderArgs.put("listaclientes", lclientes);
-		visionadmin = 2;
-		renderArgs.put("visionadmin", visionadmin);
-		renderTemplate ("Application/principalAdmin.html");
+	public static void ModificarU(Cliente usuarioM, String usuarioinicial, String usuariofinal){
+
+		Cliente c = Cliente.find("byUsuario", usuariofinal).first();
+
+		if (c != null){
+			List<Cliente> lclientes = Cliente.findAll();
+			renderArgs.put("listaclientes", lclientes);
+			renderArgs.put("visionadmin", visionadmin);
+			c = Cliente.find("byUsuario", usuarioinicial).first();
+			renderArgs.put("usuarioM", c);
+			validation.equals(usuariofinal, "").message("El usuario ya está en uso");
+			renderTemplate("Application/principalAdmin.html");
+		}
+
+		c = Cliente.find("byUsuario", usuarioinicial).first();
+		if(c!=null) {
+			if (!usuariofinal.equals("")){
+				if (usuarioinicial.equals(session.get("user"))){
+					session.clear();
+					session.put("user", usuariofinal);
+				}
+
+				c.usuario = usuariofinal;
+			}
+
+			if (!usuarioM.contraseña.equals(""))
+				c.contraseña = usuarioM.contraseña;
+
+			if (!usuarioM.mail.equals(""))
+				c.mail = usuarioM.mail;
+
+			if (!usuarioM.nombre.equals(""))
+				c.nombre = usuarioM.nombre;
+
+			if (!usuarioM.apellido1.equals(""))
+				c.apellido1 = usuarioM.apellido1;
+
+			if (!usuarioM.apellido2.equals(""))
+				c.apellido2 = usuarioM.apellido2;
+
+			if (usuarioM.perfil != null)
+				c.perfil = usuarioM.perfil;
+
+			c.save();
+			List<Cliente> lclientes = Cliente.findAll();
+			renderArgs.put("listaclientes", lclientes);
+			visionadmin = 2;
+			renderArgs.put("client", c);
+			renderArgs.put("visionadmin", visionadmin);
+			renderTemplate("Application/principalAdmin.html");
+		}
 	}
 
 	
@@ -376,8 +460,6 @@ public class Application extends Controller {
 	   prendaM.tipo=prendaM.tipo.toUpperCase();
 	   prendaM.talla = prendaM.talla.toUpperCase();
 	   Prenda p = Prenda.find("byTipoAndEquipoAndTallaAndPrecio",prendaM.tipo,prendaM.equipo,prendaM.talla,prendaM.precio).first();
-
-
 
 
 	   if(p==null){
