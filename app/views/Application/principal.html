@@ -11,6 +11,7 @@
     .dropdown{
         position: relative;
         left: 1050px;
+        width: 300px;
     }
 
     .btn btn-default btn-lg{
@@ -47,13 +48,12 @@
         margin-left: 1215px;
     }
 
-    .usuario{
-        position: relative;
-        left: 0px;
-        width: 150px;
-        height: 150px;
+    .usuario {
+        width: 300px;
+        height: auto;
+        border-radius: 50%;
+        margin-left: 1100px;
     }
-
 
 </style>
 
@@ -89,7 +89,7 @@
         <a href="http://localhost:9000/application/principal">Pantalones</a>
         -->
         <img class="avatar" src="/public/images/avatar.jpg">
-        <div clas = "usuario"><b>Está conectado como: &{client.usuario}</b></div>
+        <div class ="usuario"> <b>Está conectado como: &{client.usuario}</b></div>
     </div>
 
     <div class="dropdown">

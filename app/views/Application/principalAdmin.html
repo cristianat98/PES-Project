@@ -7,12 +7,11 @@
         height: 100px;
     }
 
-    .dropdown{
-        position: relative;
-        left: 0px;
+    .dropdown > li{
+        float: right;
     }
 
-    .barra li a{
+    .column li a{
         background-color: #000000;
         color:#ffffff;
         padding:10px 15px;
@@ -67,7 +66,6 @@
 </script>
 
 <head>
-    <script type="text/javascript" src=@{'/public/javascripts/Funciones.js'}></script>
     <meta charset="UTF-8">
     <title>Página Administrador</title>
 </head>
@@ -79,26 +77,28 @@
 <div style="text-align: right; height:50px"><b>Está conectado como: &{client.usuario}</b></div>
 
 <p>Esta es la vista de Administrador de la Página Web. Solos los usuarios con derechos de administrador pueden acceder a esta página.</p>
-
+<div class="cart pull-right">
 <div class="dropdown">
     <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
         Opciones Usuario
         <span class="caret"></span>
     </button>
-    <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+    <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu1">
         <li><a href="@{CambiarVistaNormal()}">Cambiar Vista a Normal</a></li>
         <li><a href="@{EliminarUsuario()}">Borrar perfil</a></li>
         <li><a href="@{ModificarUsuario()}">Modificar datos perfil</a></li>
         <li><a href="@{Logout()}">Cerrar Sesión</a></li>
     </ul>
 </div>
+</div>
 <h3 style="text-align: center; width:1900px; height:100px"> ACCIONES DE ADMINISTRADOR</h3>
-
-<ul class="barra">
+<ul class="column">
+    <h2>PARA USUARIO</h2>
     <a class="jumbotron"></a>
     <li><a href="@{añadirusuario()}">Añadir Usuario</a></li>
     <li><a href="@{modificarusuarioadmin()}">Modificar Usuario</a></li>
     <li><a href="@{cargareliminar()}">Eliminar Usuario</a></li>
+    <h2>PARA PRENDAS</h2>
     <li><a href="@{goAddStock()}">Añadir Stock</a></li>
     <li><a href="@{quitarstock()}">Quitar Stock</a></li>
 </ul>
