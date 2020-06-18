@@ -118,22 +118,37 @@ public class Application extends Controller {
 		}
     }
 	
-	public static void Login(@Valid Cliente cliente) {
-		Cliente c = Cliente.find("byUsuarioAndContraseña", cliente.usuario, cliente.contraseña).first();
-		 if(c != null) {
-	           session.put("user",cliente.usuario);
-	           renderArgs.put("client", c);
-	           if (c.admin == 1){
-	           	   visionadmin = 0;
-				   renderArgs.put("visionadmin", visionadmin);
-				   renderTemplate("Application/principalAdmin.html");
-			   }
+	public static void Login(@Valid Cliente cliente, String adm) {
 
-	           else
-	           	index();
-	        }
-		 else
-	            renderTemplate("Application/loginTemplate.html");
+		Cliente c = Cliente.find("byUsuarioAndContraseña", cliente.usuario, cliente.contraseña).first();
+		if (c != null) {
+			if (adm.equals("Entrar Como Administrador")) {
+				if (c.admin == 0) {
+					String erroradmin = "erroradmin";
+					renderArgs.put("erroradmin", erroradmin);
+					renderTemplate("Application/loginTemplate.html");
+				}
+				else{
+					session.put("user",cliente.usuario);
+					renderArgs.put("client", c);
+					renderArgs.put("visionadmin", visionadmin);
+					renderArgs.put("client", c);
+					renderTemplate("Application/principalAdmin.html");
+				}
+			}
+
+			else{
+				session.put("user",cliente.usuario);
+				renderArgs.put("client", c);
+				index();
+			}
+
+		}
+		else{
+			String error = "error";
+			renderArgs.put("error", error);
+			renderTemplate("Application/loginTemplate.html");
+		}
 	}
 
 	public static void registrarCliente(@Valid Cliente nuevocliente, String usuario, String contraseña, String mail, String nombre, String apellido1) {
@@ -198,7 +213,8 @@ public class Application extends Controller {
 	   validation.required(contraseña);
 	   String username = session.get("user");
 	   Cliente usuario=Cliente.find("byUsuario", username).first();
-	   validation.equals(contraseña, c.contraseña).message("La contraseña es incorrecta, no puede modificar datos");
+	   validation.equals(contraseña, usuario.contraseña).message("La contraseña es incorrecta, no puede modificar datos");
+	   validation.equals(contraseña, c.contraseña).message("Las contraseñas no coinciden");
 	   if(validation.hasErrors()) {
 		   render("@ModificarUsuario");
 	   }

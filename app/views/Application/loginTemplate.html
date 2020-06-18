@@ -51,20 +51,28 @@
         <input type="password"  size="19" name="${field.name}"/>
     </p>
     #{/field}
-    
-    
-    <p class="buttons">
-        <input type="submit" value="Login" />
-    </p>
-    
+
+    #{field 'adm'}
+       <p class="field">
+           <input type="submit"  value = "Login" name="${field.name}"/>
+           <input type="submit" value="Entrar Como Administrador" name="${field.name}"/>
+       </p>
+    #{/field}
      <span class="error">${field.error}</span>
       
     #{/form}
-    
+
+   #{if error}
+   <p style="color: #ea0833">*Los datos introducidos no son correctos</p>
+   #{/if}
+
+   #{if erroradmin}
+   <p style="color: #ea0833">*Esta cuenta no tiene permisos de administrador</p>
+   #{/if}
     <p>
         <a href="@{register()}">Registrar Nuevo Cliente</a>
     </p>
-    
+
      <p>
         <a href="@{recuperarContra()}">Olvidaste tu contraseña?</a>
     </p>
