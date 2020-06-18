@@ -8,7 +8,7 @@
     }
 
     .dropdown > li{
-        float: right;
+        left: 1050px;
     }
 
     .column li a{
@@ -28,6 +28,43 @@
         left: 1200px;
         width: 150px;
         height: 150px;
+    }
+
+    .left {
+        padding-left: 10px;
+        padding-top: 10px;
+        margin-left: 57px;
+        float: left;
+        position: relative;
+        width: auto;
+        height: auto;
+    }
+
+    .right {
+        padding-top: 10px;
+        padding-left: 10px;
+        margin-left: 10px;
+        position: relative;
+        float: left;
+        width: 45%;
+        height: auto;
+    }
+
+    .avatar{
+        width: 75px;
+        height: 75px;
+        border-radius: 50%;
+        margin-left: 1400px;
+    }
+
+    .usuario {
+        width: auto;
+        height: auto;
+        margin-left: 1300px;
+    }
+
+    .prueba{
+        float:right;
     }
 
 </style>
@@ -70,39 +107,45 @@
     <title>Página Administrador</title>
 </head>
 <body>
-<div style="background: linear-gradient(#58e51b,#e9ece7); width:1900px; height:90px"></div>
+<div style="background: linear-gradient(#58e51b,#e9ece7); width:auto; height:90px"></div>
 
-<h1 style="text-align: center; width:1900px; height:100px"> VISTA ADMINISTRADOR</h1>
+<h1 style="text-align: center; width:auto;"> VISTA ADMINISTRADOR</h1>
+<div class="prueba">
+<img class="avatar" src="/public/images/avatar.jpg">
+<div class ="usuario"> <b>Está conectado como: &{client.usuario}</b></div>
+    <div class="cart pull-right">
+        <div class="dropdown">
+            <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                Opciones Usuario
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu1">
+                <li><a href="@{CambiarVistaNormal()}">Cambiar Vista a Normal</a></li>
+                <li><a href="@{EliminarUsuario()}">Borrar perfil</a></li>
+                <li><a href="@{ModificarUsuario()}">Modificar datos perfil</a></li>
+                <li><a href="@{Logout()}">Cerrar Sesión</a></li>
+            </ul>
+        </div>
+    </div>
+    <p>Esta es la vista de Administrador de la Página Web. Solos los usuarios con derechos de administrador pueden acceder a esta página.</p>
+    <h3 style="text-align: center; width:auto;"> ACCIONES DE ADMINISTRADOR</h3>
+</div>
 
-<div style="text-align: right; height:50px"><b>Está conectado como: &{client.usuario}</b></div>
-
-<p>Esta es la vista de Administrador de la Página Web. Solos los usuarios con derechos de administrador pueden acceder a esta página.</p>
-<div class="cart pull-right">
-<div class="dropdown">
-    <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-        Opciones Usuario
-        <span class="caret"></span>
-    </button>
-    <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu1">
-        <li><a href="@{CambiarVistaNormal()}">Cambiar Vista a Normal</a></li>
-        <li><a href="@{EliminarUsuario()}">Borrar perfil</a></li>
-        <li><a href="@{ModificarUsuario()}">Modificar datos perfil</a></li>
-        <li><a href="@{Logout()}">Cerrar Sesión</a></li>
+<div class="left" style="width: auto">
+    <ul class="column">
+        <h2>PARA USUARIO</h2>
+        <a class="jumbotron"></a>
+        <li><a href="@{añadirusuario()}">Añadir Usuario</a></li>
+        <li><a href="@{modificarusuarioadmin()}">Modificar Usuario</a></li>
+        <li><a href="@{cargareliminar()}">Eliminar Usuario</a></li>
+        <h2>PARA PRENDAS</h2>
+        <li><a href="@{goAddStock()}">Añadir Stock</a></li>
+        <li><a href="@{quitarstock()}">Quitar Stock</a></li>
     </ul>
 </div>
-</div>
-<h3 style="text-align: center; width:1900px; height:100px"> ACCIONES DE ADMINISTRADOR</h3>
-<ul class="column">
-    <h2>PARA USUARIO</h2>
-    <a class="jumbotron"></a>
-    <li><a href="@{añadirusuario()}">Añadir Usuario</a></li>
-    <li><a href="@{modificarusuarioadmin()}">Modificar Usuario</a></li>
-    <li><a href="@{cargareliminar()}">Eliminar Usuario</a></li>
-    <h2>PARA PRENDAS</h2>
-    <li><a href="@{goAddStock()}">Añadir Stock</a></li>
-    <li><a href="@{quitarstock()}">Quitar Stock</a></li>
-</ul>
 
+
+<div class="right">
 <div style="text-align: center; display: none" id ="AñadirUsuario">
 
 #{form @registrarclienteadmin()}
@@ -343,6 +386,7 @@
         <input type="submit" value="Cargar Equipo" />
     </p>
 #{/form}
+</div>
 </div>
 </body>
 </html>
