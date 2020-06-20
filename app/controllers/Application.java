@@ -41,82 +41,7 @@ public class Application extends Controller {
 		return null;
 	}
 
-	public static void loginTemplate(){
-			render();
-    }
-	
-	public static void MostrarPrenda(Long id){
-
-		Prenda prenda = Prenda.findById(id);
-		renderBinary(prenda.imagen.get());
-	}
-
-	public static void MostrarPerfil(){
-
-		Cliente c = Cliente.find("byUsuario", session.get("user")).first();
-		c.perfil.toString();
-		if (c.perfil.get() == null)
-			renderBinary(new File("C:/Users/cristian/Desktop/play-1.5.3/Proyecto-PES/public/images/avatar.jpg"));
-
-		else
-			renderBinary(c.perfil.get());
-	}
-
-    public static void register() {
-	        render();
-	}
-
-	public static void recuperacionContra() {
-			render();
-	}
-	
-	public static void ModificarUsuario() {
-		renderArgs.put("modificar", 0);
-		   render();
-	}
-	  
-	public static void EliminarUsuario () {
-		   render();
-	}
-
-	public static void CambiarVistaNormal(){
-		index();
-	}
-
-	public static void CambiarVistaAdmin(){
-		  visionadmin = 0;
-		  renderArgs.put("visionadmin", visionadmin);
-		  renderTemplate("Application/principalAdmin.html");
-	}
-
-	public static void Logout (){
-		   session.clear();
-	       renderArgs.put("client",null);
-	       renderTemplate("Application/loginTemplate.html");
-	}
-
-
-	//ANDROID
-	public static void registrarAndroid(String user, String password) {
-		 Cliente c = Cliente.find("byUsuario",user).first();
-		 if(c==null) {
-			 c= new Cliente(user,password);
-			 c._save();	   
-			 renderText("OK, Cliente se puede registrar, añadido a la BD");
-		 }
-		 else
-			   renderText("FAIL, este nombre de usuario ya existe");
-	}
-	   
-	public static void loginAndroid(String user, String password){
-		Cliente c = Cliente.find("byUsuarioAndContraseña", user, password).first();
-		if(c!=null) {
-			renderText("OK ,este cliente esta en la BD");
-		}
-		else 
-				renderText("FAIL este cliente no esta en la BD ");	
-		}
-
+	//INDEX
 	public static void index() {
 
 		if(connected() != null) {
@@ -129,8 +54,34 @@ public class Application extends Controller {
 		else {
 			renderTemplate("Application/loginTemplate.html");
 		}
-    }
-	
+	}
+
+
+	//ACCIONES PRIMERA VEZ
+
+	//ANDROID
+	public static void registrarAndroid(String user, String password) {
+		Cliente c = Cliente.find("byUsuario",user).first();
+		if(c==null) {
+			c= new Cliente(user,password);
+			c._save();
+			renderText("OK, Cliente se puede registrar, añadido a la BD");
+		}
+		else
+			renderText("FAIL, este nombre de usuario ya existe");
+	}
+
+	public static void loginAndroid(String user, String password){
+		Cliente c = Cliente.find("byUsuarioAndContraseña", user, password).first();
+		if(c!=null) {
+			renderText("OK ,este cliente esta en la BD");
+		}
+		else
+			renderText("FAIL este cliente no esta en la BD ");
+	}
+
+
+	//SERVIDOR WEB
 	public static void Login(@Valid Cliente cliente, String adm) {
 
 		Cliente c = Cliente.find("byUsuarioAndContraseña", cliente.usuario, cliente.contraseña).first();
@@ -165,125 +116,190 @@ public class Application extends Controller {
 		}
 	}
 
+	public static void loginTemplate(){
+		render();
+	}
+
+	public static void register() {
+		render();
+	}
+
 	public static void registrarCliente(@Valid Cliente nuevocliente, String usuario, String contraseña, String mail, String nombre, String apellido1) {
 
-		   validation.required(usuario);
-		   validation.required(contraseña);
-		   validation.required(mail);
-		   validation.required(nombre);
-		   validation.required(apellido1);
-		   validation.equals(contraseña, nuevocliente.contraseña).message("Las contraseñas no coinciden");
-		   if(validation.hasErrors())
-			   render("@register");
+		validation.required(usuario);
+		validation.required(contraseña);
+		validation.required(mail);
+		validation.required(nombre);
+		validation.required(apellido1);
+		validation.equals(contraseña, nuevocliente.contraseña).message("Las contraseñas no coinciden");
+		if(validation.hasErrors())
+			render("@register");
 
 
-		   Cliente c = Cliente.find("byUsuario", usuario).first();
-		   if (c == null) {
-		   	   nuevocliente.usuario = usuario;
-		   	   nuevocliente.mail = mail;
-		   	   nuevocliente.nombre = nombre;
-		   	   nuevocliente.apellido1 = apellido1;
-			   nuevocliente.create();
-			   session.put("user", nuevocliente.usuario);
-			   index();
-		   }
+		Cliente c = Cliente.find("byUsuario", usuario).first();
+		if (c == null) {
+			nuevocliente.usuario = usuario;
+			nuevocliente.mail = mail;
+			nuevocliente.nombre = nombre;
+			nuevocliente.apellido1 = apellido1;
+			nuevocliente.create();
+			session.put("user", nuevocliente.usuario);
+			index();
+		}
 
-		   else{
-			   validation.equals(usuario, "").message("El usuario ya está en uso");
-			   render("@register");
-		   }
+		else{
+			validation.equals(usuario, "").message("El usuario ya está en uso");
+			render("@register");
+		}
+	}
+
+	public static void recuperacionContra() {
+		render();
 	}
 
 	public static void recuperarContra(@Valid Cliente cliente, String mail) {
-		   validation.required(mail);
-		   validation.equals(mail, cliente.mail).message("Los emails no coinciden");
-		   if(validation.hasErrors()) {
-			   render("@recuperacionContra",cliente, mail);
-		   }
-		   else {
-			   Cliente c= Cliente.find("byMail", cliente.mail).first();
-			   if(c!=null) {
-				   renderText("La contraeña es:" +c.contraseña);
-			   }
-		   }
-	 
-	}
-
-   public static void eliminarusuariocontraseña (String contraseña){
-	   validation.required(contraseña);
-	   String username = session.get("user");
-	   Cliente c=Cliente.find("byUsuario", username).first();
-	   validation.equals(contraseña, c.contraseña).message("La contraseña es incorrecta, no puede eliminar su cuenta");
-	   if(validation.hasErrors()) {
-		   render("@EliminarUsuario");
-	   }
-	   else {
-		   c.delete();
-		   session.clear();
-		   renderTemplate("Application/loginTemplate.html");
-	   }
-   }
-
-   public static void cargardatosusuario(String contraseña){
-	   int i = 0;
-	   validation.required(contraseña);
-	   String username = session.get("user");
-	   Cliente usuario=Cliente.find("byUsuario", username).first();
-	   validation.equals(contraseña, usuario.contraseña).message("La contraseña es incorrecta, no puede modificar datos");
-	   renderArgs.put("modificar", i);
-	   if(validation.hasErrors()) {
-		   render("@ModificarUsuario");
-	   }
-	   else{
-	   	renderArgs.put("modificar", 1);
-	   	renderArgs.put("clienteM", usuario);   //Variable en HTML , Variable en java//
-		renderTemplate("Application/ModificarUsuario.html");
-	   }
-   }
-
-   public static void ModificarDatos2(Cliente clienteM, String contraseña) {
-
-	   String username = session.get("user");
-	   Cliente c=Cliente.find("byUsuario", username).first();
-	   validation.equals(contraseña, clienteM.contraseña).message("Las contraseñas no coinciden");
-	   if(validation.hasErrors()) {
-	   	int i = 1;
-	   	renderArgs.put("clienteM", c);
-	   	renderArgs.put("modificar", 1);
-		   render("@ModificarUsuario");
-	   }
-
-	   if(c!=null) {
-	   	if (!clienteM.usuario.equals("")){
-			c.usuario=clienteM.usuario;
-			session.put("user", c.usuario);
+		validation.required(mail);
+		validation.equals(mail, cliente.mail).message("Los emails no coinciden");
+		if(validation.hasErrors()) {
+			render("@recuperacionContra",cliente, mail);
+		}
+		else {
+			Cliente c= Cliente.find("byMail", cliente.mail).first();
+			if(c!=null) {
+				renderText("La contraeña es:" +c.contraseña);
+			}
 		}
 
-	   	if (!clienteM.contraseña.equals(""))
-	   		c.contraseña=clienteM.contraseña;
-
-	   	if (!clienteM.mail.equals(""))
-	   		c.mail=clienteM.mail;
-
-	   	if (!clienteM.nombre.equals(""))
-	   		c.nombre=clienteM.nombre;
-
-	   	if (!clienteM.apellido1.equals(""))
-	   		c.apellido1=clienteM.apellido1;
-
-	   	if (!clienteM.apellido2.equals(""))
-	   		c.apellido2=clienteM.apellido2;
-
-	   	if (clienteM.perfil != null)
-	   		c.perfil = clienteM.perfil;
-
-		   c.save();
-		   index();
-	   }
-   }
+	}
 
 
-   //FUNCIONES PAG.ADMIN BARRA
+	//CARGAR PÁGINA
+	public static void MostrarPrenda(Long id){
+
+		Prenda prenda = Prenda.findById(id);
+		renderBinary(prenda.imagen.get());
+	}
+
+	public static void MostrarPerfil(){
+
+		Cliente c = Cliente.find("byUsuario", session.get("user")).first();
+		c.perfil.toString();
+		if (c.perfil.get() == null)
+			renderBinary(new File("C:/Users/cristian/Desktop/play-1.5.3/Proyecto-PES/public/images/avatar.jpg"));
+
+		else
+			renderBinary(c.perfil.get());
+	}
+
+
+	//ACCIONES USUARIO
+
+	//MODIFICAR PERFIL
+	public static void ModificarUsuario() {
+		renderArgs.put("modificar", 0);
+		render();
+	}
+
+	public static void cargardatosusuario(String contraseña){
+		int i = 0;
+		validation.required(contraseña);
+		String username = session.get("user");
+		Cliente usuario=Cliente.find("byUsuario", username).first();
+		validation.equals(contraseña, usuario.contraseña).message("La contraseña es incorrecta, no puede modificar datos");
+		renderArgs.put("modificar", i);
+		if(validation.hasErrors()) {
+			render("@ModificarUsuario");
+		}
+		else{
+			renderArgs.put("modificar", 1);
+			renderArgs.put("clienteM", usuario);   //Variable en HTML , Variable en java//
+			renderTemplate("Application/ModificarUsuario.html");
+		}
+	}
+
+	public static void ModificarDatos2(Cliente clienteM, String contraseña) {
+
+		String username = session.get("user");
+		Cliente c=Cliente.find("byUsuario", username).first();
+		validation.equals(contraseña, clienteM.contraseña).message("Las contraseñas no coinciden");
+		if(validation.hasErrors()) {
+			int i = 1;
+			renderArgs.put("clienteM", c);
+			renderArgs.put("modificar", 1);
+			render("@ModificarUsuario");
+		}
+
+		if(c!=null) {
+			if (!clienteM.usuario.equals("")){
+				c.usuario=clienteM.usuario;
+				session.put("user", c.usuario);
+			}
+
+			if (!clienteM.contraseña.equals(""))
+				c.contraseña=clienteM.contraseña;
+
+			if (!clienteM.mail.equals(""))
+				c.mail=clienteM.mail;
+
+			if (!clienteM.nombre.equals(""))
+				c.nombre=clienteM.nombre;
+
+			if (!clienteM.apellido1.equals(""))
+				c.apellido1=clienteM.apellido1;
+
+			if (!clienteM.apellido2.equals(""))
+				c.apellido2=clienteM.apellido2;
+
+			if (clienteM.perfil != null)
+				c.perfil = clienteM.perfil;
+
+			c.save();
+			index();
+		}
+	}
+
+
+	//BORRAR PERFIL
+	public static void EliminarUsuario () {
+		render();
+	}
+
+	public static void eliminarusuariocontraseña (String contraseña){
+		validation.required(contraseña);
+		String username = session.get("user");
+		Cliente c=Cliente.find("byUsuario", username).first();
+		validation.equals(contraseña, c.contraseña).message("La contraseña es incorrecta, no puede eliminar su cuenta");
+		if(validation.hasErrors()) {
+			render("@EliminarUsuario");
+		}
+		else {
+			c.delete();
+			session.clear();
+			renderTemplate("Application/loginTemplate.html");
+		}
+	}
+
+
+	//CERRAR SESIÓN
+	public static void Logout (){
+		session.clear();
+		renderArgs.put("client",null);
+		renderTemplate("Application/loginTemplate.html");
+	}
+
+
+
+	//FUNCIONES ADMINISTRADOR
+	public static void CambiarVistaNormal(){
+		index();
+	}
+
+	public static void CambiarVistaAdmin(){
+		  visionadmin = 0;
+		  renderArgs.put("visionadmin", visionadmin);
+		  renderTemplate("Application/principalAdmin.html");
+	}
+
 
    //AÑADIR USUARIO
 	public static void añadirusuario() {
