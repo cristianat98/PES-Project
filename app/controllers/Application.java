@@ -256,7 +256,6 @@ public class Application extends Controller {
 	   if(c!=null) {
 	   	if (!clienteM.usuario.equals("")){
 			c.usuario=clienteM.usuario;
-			session.clear();
 			session.put("user", c.usuario);
 		}
 
@@ -376,10 +375,8 @@ public class Application extends Controller {
 		c = Cliente.find("byUsuario", usuarioinicial).first();
 		if(c!=null) {
 			if (!usuariofinal.equals("")){
-				if (usuarioinicial.equals(session.get("user"))){
-					session.clear();
+				if (usuarioinicial.equals(session.get("user")))
 					session.put("user", usuariofinal);
-				}
 
 				c.usuario = usuariofinal;
 			}
