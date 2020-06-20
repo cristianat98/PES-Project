@@ -359,7 +359,7 @@
         </p>
     #{/field}
 
-    #{field 'prendaM.cantidadComprada'}
+    #{field 'prendaM.cantidadStock'}
         <p class="${field.errorClass}">
             <strong>Cantidad:</strong> <input type="int" name="${field.name}" size="16" > *
             <span class="error">${field.error}</span>
@@ -370,6 +370,13 @@
     #{field 'prendaM.precio'}
         <p class="${field.errorClass}">
             <strong>Precio:</strong> <input type="number" step="0.01" name="${field.name}" size="16" > *
+            <span class="error">${field.error}</span>
+        </p>
+    #{/field}
+
+    #{field 'prendaM.año'}
+        <p class="${field.errorClass}">
+            <strong>Año:</strong> <input type="number" name="${field.name}" size="16" > *
             <span class="error">${field.error}</span>
         </p>
     #{/field}

@@ -17,18 +17,19 @@ public class Prenda extends Model {
 	public String tipo;
 	public String equipo;
 	public String talla;
-	public int cantidadComprada;
+	public int año;
+	public int cantidadVendida;
 	public int cantidadStock;
 	public double precio;
 	public Blob imagen;
 	
-	public Prenda(String tipo, String equipo, String talla, int cantidadStock, double precio) {
+	public Prenda(String tipo, String equipo, int año, String talla, int cantidadStock, double precio) {
 		this.tipo = tipo;
 		this.equipo = equipo;
 		this.talla = talla;
-		this.cantidadComprada=cantidadStock;
 		this.cantidadStock=cantidadStock;
 		this.precio=precio;
+		this.año = año;
 	}
 	
 	public String getTipo() {
@@ -55,12 +56,12 @@ public class Prenda extends Model {
 		this.talla = talla;
 	}
 
-	public int getCantidadComprada() {
-		return cantidadComprada;
+	public int getCantidadVendida() {
+		return cantidadVendida;
 	}
 
-	public void setCantidadComprada(int cantidadComprada) {
-		this.cantidadComprada = cantidadComprada;
+	public void setCantidadVendida(int cantidadVendida) {
+		this.cantidadVendida = cantidadVendida;
 	}
 
 	public int getCantidadStock() {

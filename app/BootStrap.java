@@ -12,10 +12,10 @@ public class BootStrap extends Job {
         // Check if the database is empty
         if(Cliente.count() == 0) {
             //Fixtures.loadModels("initial-data.yml");
-            Prenda p1= new Prenda("CAMISETA", "BARCELONA", "M", 20, 75).save();
-            Prenda p2= new Prenda("PANTALON", "MADRID", "L",50, 22.5).save();
-            Prenda p3= new Prenda("PANTALON", "VALENCIA", "XL",10, 22.5).save();
-            Prenda p4= new Prenda("CAMISETA", "MADRID", "M",30, 73.5).save();
+            Prenda p1= new Prenda("CAMISETA", "BARCELONA", 2019,"M", 20, 75).save();
+            Prenda p2= new Prenda("PANTALON", "MADRID", 2019,"L",50, 22.5).save();
+            Prenda p3= new Prenda("PANTALON", "VALENCIA", 2019, "XL",10, 22.5).save();
+            Prenda p4= new Prenda("CAMISETA", "MADRID", 2019,"M",30, 73.5).save();
             Cliente cristian = new Cliente("cristian", "cristianat98").save();
             Cliente david = new Cliente ("david", "davidp").save();
             Cliente fernando = new Cliente ("fernando", "fernandow").save();

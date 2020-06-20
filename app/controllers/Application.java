@@ -459,19 +459,17 @@ public class Application extends Controller {
 	   prendaM.equipo=prendaM.equipo.toUpperCase();
 	   prendaM.tipo=prendaM.tipo.toUpperCase();
 	   prendaM.talla = prendaM.talla.toUpperCase();
-	   Prenda p = Prenda.find("byTipoAndEquipoAndTallaAndPrecio",prendaM.tipo,prendaM.equipo,prendaM.talla,prendaM.precio).first();
+	   Prenda p = Prenda.find("byTipoAndEquipoAndTallaAndPrecioAndAño",prendaM.tipo,prendaM.equipo,prendaM.talla,prendaM.precio, prendaM.año).first();
 
 
 	   if(p==null){
-		   prendaM.cantidadStock=prendaM.cantidadComprada;
 		   prendaM.create();
 		   renderArgs.put("visionadmin", visionadmin);
 		   renderTemplate("Application/principalAdmin.html");
 	   }
 
 	   else {
-		   p.cantidadStock=prendaM.cantidadComprada+p.getCantidadStock();
-		   p.setCantidadStock(p.cantidadStock);
+		   p.cantidadStock = p.cantidadStock + prendaM.cantidadStock;
 		   p.imagen = prendaM.imagen;
 		   p.save();
 		   renderArgs.put("visionadmin", visionadmin);
@@ -554,7 +552,6 @@ public class Application extends Controller {
 					if (p.getCantidadStock() >= cantidad) {
 						Date fecha = new Date();
 						p.setCantidadStock(p.getCantidadStock() - cantidad);
-						p.setCantidadComprada(p.getCantidadComprada() + cantidad);
 						Compra Compra = new Compra(c, p, fecha);
 						Compra.save();
 						renderText("Has comprado " + cantidad + " " + tipo + " del " + equipo);
