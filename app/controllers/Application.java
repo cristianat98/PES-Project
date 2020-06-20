@@ -22,6 +22,39 @@ public class Application extends Controller {
 
 	static int visionadmin = 0;
 
+	static List<Prenda> OrdenarPrendas(){
+
+		List<Prenda> prendas = Prenda.findAll();
+		for(int i = 0; i<prendas.size();i++){
+			for (int j = i+1; j<prendas.size(); j++){
+				if (prendas.get(i).tipo.equals(prendas.get(j).tipo) && prendas.get(i).equipo.equals(prendas.get(j).equipo) && prendas.get(i).año == prendas.get(j).año){
+					prendas.remove(j);
+					j--;
+				}
+			}
+		}
+
+		List<String> equipos = new ArrayList<String>();
+
+		for (int i = 0; i<prendas.size();i++){
+			equipos.add(prendas.get(i).equipo);
+		}
+		Collections.sort(equipos);
+		List<Prenda> listaprendas = new ArrayList<Prenda>();
+
+		for(int i = 0;i<equipos.size();i++){
+			for(int j = 0;j<prendas.size();j++){
+				if (equipos.get(i).equals(prendas.get(j).equipo)){
+					listaprendas.add(prendas.get(j));
+					prendas.remove(j);
+					j--;
+				}
+			}
+		}
+
+		return listaprendas;
+	}
+
 	@Before
 	static void addUser() {
 		Cliente user = connected();
@@ -50,14 +83,19 @@ public class Application extends Controller {
 		if(connected() != null) {
 			List<Prenda> camisetas =Prenda.find("byTipo", "CAMISETA").fetch();
 			for (int i = 0; i < camisetas.size(); i++){
-				if (camisetas.get(i).cantidadStock == 0)
+				if (camisetas.get(i).cantidadStock == 0){
 					camisetas.remove(i);
+					i--;
+				}
 			}
 
 			List<Prenda> pantalones =Prenda.find("byTipo", "PANTALON").fetch();
 			for (int i = 0; i < pantalones.size(); i++){
-				if (pantalones.get(i). cantidadStock == 0)
+				if (pantalones.get(i).cantidadStock == 0){
 					pantalones.remove(i);
+					i--;
+
+				}
 			}
 
 			renderArgs.put("camisetas",camisetas);
@@ -368,9 +406,9 @@ public class Application extends Controller {
 			visionadmin = 2;
 		}
 
-		else{
+		else
 			visionadmin = 0;
-		}
+
 
 		renderArgs.put("visionadmin", visionadmin);
 		render("Application/principalAdmin.html");
@@ -481,10 +519,7 @@ public class Application extends Controller {
 
 	public static void añadirprendaadmin(String tipo, String equipo, double precio, int año, Blob imagen){
 
-		validation.required(tipo);
 		validation.required(equipo);
-		validation.required(precio);
-		validation.required(año);
 		validation.required(imagen);
 
 		if(validation.hasErrors()){
@@ -492,18 +527,23 @@ public class Application extends Controller {
 			render("Application/principalAdmin.html");
 		}
 
-		equipo=equipo.toUpperCase();
-		Prenda prenda = Prenda.find("byTipoAndEquipoAndAño", tipo, equipo, año).first();
+		if (precio>0 && año>0){
 
-		if (prenda != null){
-			validation.equals(equipo,"").message("Este equipo ya está en la Base de Datos");
-		}
+			equipo=equipo.toUpperCase();
+			Prenda prenda = Prenda.find("byTipoAndEquipoAndAño", tipo, equipo, año).first();
 
-		else{
-			prenda = new Prenda(tipo, equipo, año, null, 0, precio, imagen);
-			prenda.create();
-			validation.equals(equipo,"").message("Equipo añadido a la Base de Datos");
+			if (prenda != null){
+				validation.equals(equipo,"").message("Este equipo ya está en la Base de Datos");
+			}
+
+			else{
+				prenda = new Prenda(tipo, equipo, año, null, 0, precio, imagen);
+				prenda.create();
+				validation.equals(equipo,"").message("Equipo añadido a la Base de Datos");
+			}
 		}
+		else
+			validation.equals(equipo,"").message("No se han introducido todos los datos correctamente");
 
 		renderArgs.put("visionadmin", visionadmin);
 		render("Application/principalAdmin.html");
@@ -517,14 +557,8 @@ public class Application extends Controller {
 		else
 			visionadmin=0;
 
-		List<Prenda> prendas = Prenda.findAll();
-		for(int i = 0; i<prendas.size();i++){
-			for (int j = i+1; j<prendas.size(); j++){
-				if (prendas.get(i).tipo == prendas.get(j).tipo && prendas.get(i).equipo == prendas.get(j).equipo && prendas.get(i).año == prendas.get(j).año)
-					prendas.remove(j);
-			}
-		}
 
+	   List<Prenda> prendas = OrdenarPrendas();
 		renderArgs.put("prendas", prendas);
 		renderArgs.put("visionadmin",visionadmin);
 		renderTemplate("Application/principalAdmin.html");
@@ -532,32 +566,33 @@ public class Application extends Controller {
 
    public static void AddStock(Prenda prendaM, Long idprenda){
 
-	   prendaM.talla = prendaM.talla.toUpperCase();
-	   Prenda p = Prenda.findById(idprenda);
+		String mensaje;
 
-	   if (p.talla.equals(prendaM.talla)) {
-		   p.cantidadStock = p.cantidadStock + prendaM.cantidadStock;
-		   p.save();
-	   }
+		if (!prendaM.talla.equals("") && prendaM.cantidadStock>0){
+			prendaM.talla = prendaM.talla.toUpperCase();
+			Prenda p = Prenda.findById(idprenda);
+			p = Prenda.find("byTipoAndEquipoAndTallaAndAño", p.tipo, p.equipo, prendaM.talla, p.año).first();
 
-	   else {
-		   prendaM.tipo = p.tipo;
-		   prendaM.equipo = p.equipo;
-		   prendaM.año = p.año;
-		   prendaM.imagen = p.imagen;
-		   prendaM.precio = p.precio;
-		   prendaM.create();
-	   }
+			if (p != null) {
+				p.cantidadStock = p.cantidadStock + prendaM.cantidadStock;
+				p.save();
+			}
 
-	   List<Prenda> prendas = Prenda.findAll();
-	   for(int i = 0; i<prendas.size();i++){
-		   for (int j = i+1; j<prendas.size(); j++){
-			   if (prendas.get(i).tipo.equals(prendas.get(j).tipo) && prendas.get(i).equipo.equals(prendas.get(j).equipo) && prendas.get(i).año == prendas.get(j).año)
-				   prendas.remove(j);
-		   }
-	   }
+			else {
+				p = Prenda.findById(idprenda);
+				Prenda prenda = new Prenda(p.tipo, p.equipo, p.año, prendaM.talla, prendaM.cantidadStock, p.precio, p.imagen);
+				prenda.create();
+			}
+			mensaje = "Stock añadido correctamente";
+		}
 
+	   else
+	   	mensaje = "No se han introducido todos los datos correctamente";
+
+	   List<Prenda> prendas = OrdenarPrendas();
 	   renderArgs.put("prendas", prendas);
+	   renderArgs.put("mensaje", mensaje);
+
 	   renderArgs.put("visionadmin", visionadmin);
 	   renderTemplate("Application/principalAdmin.html");
    }

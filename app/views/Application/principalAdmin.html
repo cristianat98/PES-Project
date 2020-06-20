@@ -389,18 +389,18 @@
 <div style="text-align: center; display: none" id = "AñadirStock" class="column">
     <h3>Introduce los datos de la prenda:</h3>
     
-#{form @AddStock(), enctype:'multipart/form-data'}
+#{form @AddStock()}
 
         <p>
             <label for="Equipo"> Equipos:</label>
             <select id="idprenda" name="idprenda">
                 #{list items:prendas, as:'prenda'}
-                    <option value="${prenda.id}" >${prenda.tipo} ${prenda.equipo} ${prenda.año}</option>
+                    <option value="${prenda.id}" >${prenda.equipo} ${prenda.año} ${prenda.tipo}</option>
                 #{/list}
             </select>*
         </p>
 
-    #{field 'talla'}
+    #{field 'prendaM.talla'}
         <p class="${field.errorClass}">
             <strong>Talla:</strong> <input type="text" name="${field.name}" size="16" > *
             <span class="error">${field.error}</span>
@@ -414,14 +414,17 @@
         </p>
     #{/field}
 
-    #{if error}
-        <p style="color: #08ea0c">*Stock Añadido Correctamente</p>
-    #{/if}
+
 
     <p class="buttons">
         <input type="submit" value="Añadir Stock"/>
     </p>
 #{/form}
+
+#{if mensaje}
+    <p style="color: #08ea0c">${mensaje}</p>
+#{/if}
+
 </div>
 
 <div style="text-align: center; display: none" id = "QuitarStock" class="column">
