@@ -12,11 +12,4 @@ public class Security extends Secure.Security {
         else
             return false;
     }
-
-    /*static boolean authenticate(String username, String password) {
-        if (!username.equals("") && !password.equals(""))
-        	return true;
-        else
-        	return false;
-    	}*/
 }

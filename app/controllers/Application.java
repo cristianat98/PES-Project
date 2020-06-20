@@ -2,6 +2,9 @@
 package controllers;
 
 import jdk.nashorn.internal.runtime.regexp.joni.ast.CClassNode;
+import org.hibernate.annotations.Check;
+import play.data.validation.Validation;
+import play.db.jpa.Blob;
 import play.db.jpa.JPABase;
 import play.mvc.*;
 
@@ -46,7 +49,17 @@ public class Application extends Controller {
 
 		if(connected() != null) {
 			List<Prenda> camisetas =Prenda.find("byTipo", "CAMISETA").fetch();
+			for (int i = 0; i < camisetas.size(); i++){
+				if (camisetas.get(i).cantidadStock == 0)
+					camisetas.remove(i);
+			}
+
 			List<Prenda> pantalones =Prenda.find("byTipo", "PANTALON").fetch();
+			for (int i = 0; i < pantalones.size(); i++){
+				if (pantalones.get(i). cantidadStock == 0)
+					pantalones.remove(i);
+			}
+
 			renderArgs.put("camisetas",camisetas);
 			renderArgs.put("pantalones",pantalones);
 			render("Application/principal.html");
@@ -454,6 +467,47 @@ public class Application extends Controller {
 		renderTemplate ("Application/principalAdmin.html");
 	}
 
+	//AÑADIR EQUIPO
+	public static void añadirprenda(){
+		if (visionadmin != 7)
+			visionadmin = 7;
+
+		else
+			visionadmin = 0;
+
+		renderArgs.put("visionadmin", visionadmin);
+		render("Application/principalAdmin.html");
+	}
+
+	public static void añadirprendaadmin(String tipo, String equipo, double precio, int año, Blob imagen){
+
+		validation.required(tipo);
+		validation.required(equipo);
+		validation.required(precio);
+		validation.required(año);
+		validation.required(imagen);
+
+		if(validation.hasErrors()){
+			renderArgs.put("visionadmin", visionadmin);
+			render("Application/principalAdmin.html");
+		}
+
+		equipo=equipo.toUpperCase();
+		Prenda prenda = Prenda.find("byTipoAndEquipoAndAño", tipo, equipo, año).first();
+
+		if (prenda != null){
+			validation.equals(equipo,"").message("Este equipo ya está en la Base de Datos");
+		}
+
+		else{
+			prenda = new Prenda(tipo, equipo, año, null, 0, precio, imagen);
+			prenda.create();
+			validation.equals(equipo,"").message("Equipo añadido a la Base de Datos");
+		}
+
+		renderArgs.put("visionadmin", visionadmin);
+		render("Application/principalAdmin.html");
+	}
 
 	//AÑADIR STOCK
    public static void goAddStock(){
@@ -463,32 +517,49 @@ public class Application extends Controller {
 		else
 			visionadmin=0;
 
+		List<Prenda> prendas = Prenda.findAll();
+		for(int i = 0; i<prendas.size();i++){
+			for (int j = i+1; j<prendas.size(); j++){
+				if (prendas.get(i).tipo == prendas.get(j).tipo && prendas.get(i).equipo == prendas.get(j).equipo && prendas.get(i).año == prendas.get(j).año)
+					prendas.remove(j);
+			}
+		}
+
+		renderArgs.put("prendas", prendas);
 		renderArgs.put("visionadmin",visionadmin);
 		renderTemplate("Application/principalAdmin.html");
 	}
 
-   public static void AddStock(Prenda prendaM){
+   public static void AddStock(Prenda prendaM, Long idprenda){
 
-	   prendaM.equipo=prendaM.equipo.toUpperCase();
-	   prendaM.tipo=prendaM.tipo.toUpperCase();
 	   prendaM.talla = prendaM.talla.toUpperCase();
-	   Prenda p = Prenda.find("byTipoAndEquipoAndTallaAndPrecioAndAño",prendaM.tipo,prendaM.equipo,prendaM.talla,prendaM.precio, prendaM.año).first();
+	   Prenda p = Prenda.findById(idprenda);
 
-
-	   if(p==null){
-		   prendaM.create();
-		   renderArgs.put("visionadmin", visionadmin);
-		   renderTemplate("Application/principalAdmin.html");
+	   if (p.talla.equals(prendaM.talla)) {
+		   p.cantidadStock = p.cantidadStock + prendaM.cantidadStock;
+		   p.save();
 	   }
 
 	   else {
-		   p.cantidadStock = p.cantidadStock + prendaM.cantidadStock;
-		   p.imagen = prendaM.imagen;
-		   p.save();
-		   renderArgs.put("visionadmin", visionadmin);
-		   renderTemplate("Application/principalAdmin.html");
+		   prendaM.tipo = p.tipo;
+		   prendaM.equipo = p.equipo;
+		   prendaM.año = p.año;
+		   prendaM.imagen = p.imagen;
+		   prendaM.precio = p.precio;
+		   prendaM.create();
 	   }
 
+	   List<Prenda> prendas = Prenda.findAll();
+	   for(int i = 0; i<prendas.size();i++){
+		   for (int j = i+1; j<prendas.size(); j++){
+			   if (prendas.get(i).tipo.equals(prendas.get(j).tipo) && prendas.get(i).equipo.equals(prendas.get(j).equipo) && prendas.get(i).año == prendas.get(j).año)
+				   prendas.remove(j);
+		   }
+	   }
+
+	   renderArgs.put("prendas", prendas);
+	   renderArgs.put("visionadmin", visionadmin);
+	   renderTemplate("Application/principalAdmin.html");
    }
 
 

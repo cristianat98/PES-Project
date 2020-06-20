@@ -23,13 +23,14 @@ public class Prenda extends Model {
 	public double precio;
 	public Blob imagen;
 	
-	public Prenda(String tipo, String equipo, int año, String talla, int cantidadStock, double precio) {
+	public Prenda(String tipo, String equipo, int año, String talla, int cantidadStock, double precio, Blob imagen) {
 		this.tipo = tipo;
 		this.equipo = equipo;
-		this.talla = talla;
 		this.cantidadStock=cantidadStock;
+		this.talla = talla;
 		this.precio=precio;
 		this.año = año;
+		this.imagen = imagen;
 	}
 	
 	public String getTipo() {

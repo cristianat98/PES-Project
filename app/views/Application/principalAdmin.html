@@ -97,7 +97,10 @@
             document.getElementById('AñadirStock').style.display="block";
 
     	else if (&{visionadmin} === 6)
-        document.getElementById('QuitarStock').style.display="block";
+    	    document.getElementById('QuitarStock').style.display="block";
+
+        else if (&{visionadmin} === 7)
+            document.getElementById('AñadirEquipo').style.display="block";
     	}
 
 </script>
@@ -139,13 +142,14 @@
         <li><a href="@{modificarusuarioadmin()}">Modificar Usuario</a></li>
         <li><a href="@{cargareliminar()}">Eliminar Usuario</a></li>
         <h2>PARA PRENDAS</h2>
+        <li><a href="@{añadirprenda()}">Añadir Prenda</a></li>
         <li><a href="@{goAddStock()}">Añadir Stock</a></li>
         <li><a href="@{quitarstock()}">Quitar Stock</a></li>
     </ul>
 </div>
 
-
 <div class="right">
+
 <div style="text-align: center; display: none" id ="AñadirUsuario">
 
 #{form @registrarclienteadmin(), enctype:'multipart/form-data'}
@@ -334,25 +338,69 @@
 
 </div>
 
+<div style="text-align: center; display: none" id = "AñadirEquipo" class="column">
+        <h3>Introduce los datos del nuevo equipo:</h3>
+
+    #{form @añadirprendaadmin(), enctype:'multipart/form-data'}
+        #{field 'tipo'}
+            <p class="${field.errorClass}">
+                <label for="TiposPrenda"> Tipo de Prenda:</label>
+                <select id="TiposPrenda" name="tipo">
+                    <option value="CAMISETA" >Camiseta</option>
+                    <option value="PANTALON" >Pantalón</option>
+                </select>*
+            </p>
+        #{/field}
+
+        #{field 'equipo'}
+            <p class="${field.errorClass}">
+                <strong>Equipo:</strong> <input type="text" name="${field.name}" size="16" > *
+                <span class="error">${field.error}</span>
+            </p>
+        #{/field}
+
+        #{field 'precio'}
+            <p class="${field.errorClass}">
+                <strong>Precio:</strong> <input type="number" step="0.01" name="${field.name}" size="16" > *
+                <span class="error">${field.error}</span>
+            </p>
+        #{/field}
+
+        #{field 'año'}
+            <p class="${field.errorClass}">
+                <strong>Año:</strong> <input type="number" name="${field.name}" size="16" > *
+                <span class="error">${field.error}</span>
+            </p>
+        #{/field}
+
+        #{field 'imagen'}
+            <p class="${field.errorClass}">
+                <input type="file" name="${field.name}"> *
+                <span class="error">${field.error}</span>
+            </p>
+        #{/field}
+
+        <p class="buttons">
+            <input type="submit" value="Añadir Stock"/>
+        </p>
+    #{/form}
+</div>
+
 <div style="text-align: center; display: none" id = "AñadirStock" class="column">
     <h3>Introduce los datos de la prenda:</h3>
     
 #{form @AddStock(), enctype:'multipart/form-data'}
-    #{field 'prendaM.tipo'}
-        <p class="${field.errorClass}">
-            <strong>Tipo:</strong> <input type="text" name="${field.name}" size="16" > *
-            <span class="error">${field.error}</span>
-        </p>
-    #{/field}
 
-    #{field 'prendaM.equipo'}
-        <p class="${field.errorClass}">
-            <strong>Equipo:</strong> <input type="text" name="${field.name}" size="16" > *
-            <span class="error">${field.error}</span>
+        <p>
+            <label for="Equipo"> Equipos:</label>
+            <select id="idprenda" name="idprenda">
+                #{list items:prendas, as:'prenda'}
+                    <option value="${prenda.id}" >${prenda.tipo} ${prenda.equipo} ${prenda.año}</option>
+                #{/list}
+            </select>*
         </p>
-    #{/field}
 
-    #{field 'prendaM.talla'}
+    #{field 'talla'}
         <p class="${field.errorClass}">
             <strong>Talla:</strong> <input type="text" name="${field.name}" size="16" > *
             <span class="error">${field.error}</span>
@@ -366,27 +414,9 @@
         </p>
     #{/field}
 
-
-    #{field 'prendaM.precio'}
-        <p class="${field.errorClass}">
-            <strong>Precio:</strong> <input type="number" step="0.01" name="${field.name}" size="16" > *
-            <span class="error">${field.error}</span>
-        </p>
-    #{/field}
-
-    #{field 'prendaM.año'}
-        <p class="${field.errorClass}">
-            <strong>Año:</strong> <input type="number" name="${field.name}" size="16" > *
-            <span class="error">${field.error}</span>
-        </p>
-    #{/field}
-
-    #{field 'prendaM.imagen'}
-        <p class="${field.errorClass}">
-            <input type="file" name="${field.name}"> *
-            <span class="error">${field.error}</span>
-        </p>
-    #{/field}
+    #{if error}
+        <p style="color: #08ea0c">*Stock Añadido Correctamente</p>
+    #{/if}
 
     <p class="buttons">
         <input type="submit" value="Añadir Stock"/>
