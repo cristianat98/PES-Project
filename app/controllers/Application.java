@@ -21,10 +21,12 @@ import javax.validation.Valid;
 public class Application extends Controller {
 
 	static int visionadmin = 0;
+	static Prenda referencia;
 
 	static List<Prenda> OrdenarPrendas(){
 
 		List<Prenda> prendas = Prenda.findAll();
+
 		for(int i = 0; i<prendas.size();i++){
 			for (int j = i+1; j<prendas.size(); j++){
 				if (prendas.get(i).tipo.equals(prendas.get(j).tipo) && prendas.get(i).equipo.equals(prendas.get(j).equipo) && prendas.get(i).año == prendas.get(j).año){
@@ -34,13 +36,30 @@ public class Application extends Controller {
 			}
 		}
 
+		List<Integer> años = new ArrayList<Integer>();
 		List<String> equipos = new ArrayList<String>();
 
 		for (int i = 0; i<prendas.size();i++){
 			equipos.add(prendas.get(i).equipo);
+			años.add(prendas.get(i).año);
 		}
-		Collections.sort(equipos);
+
 		List<Prenda> listaprendas = new ArrayList<Prenda>();
+		Collections.sort(años);
+
+		for(int i = 0;i<años.size();i++){
+			for(int j = 0;j<prendas.size();j++){
+				if (años.get(i) == prendas.get(j).año){
+					listaprendas.add(prendas.get(j));
+					prendas.remove(j);
+					j--;
+				}
+			}
+		}
+
+		prendas = listaprendas;
+		listaprendas = new ArrayList<>();
+		Collections.sort(equipos);
 
 		for(int i = 0;i<equipos.size();i++){
 			for(int j = 0;j<prendas.size();j++){
@@ -549,6 +568,70 @@ public class Application extends Controller {
 		render("Application/principalAdmin.html");
 	}
 
+	//MODIFICAR PRENDA
+	public static void modificarprenda(){
+
+		if (visionadmin != 8)
+			visionadmin = 8;
+
+		else
+			visionadmin=0;
+
+		List<Prenda> prendas = OrdenarPrendas();
+		renderArgs.put("prendas", prendas);
+		renderArgs.put("visionadmin",visionadmin);
+		renderTemplate("Application/principalAdmin.html");
+	}
+
+	public static void cargardatosprenda(Long idprenda){
+
+		Prenda PrendaM = Prenda.findById(idprenda);
+		List<Prenda> prendas = OrdenarPrendas();
+		referencia = PrendaM;
+		renderArgs.put("prendas", prendas);
+		renderArgs.put("prendaModificar", PrendaM);
+		renderArgs.put("visionadmin", visionadmin);
+		render("Application/principalAdmin.html");
+	}
+
+	public static void modificarprendaadmin(Prenda prendaM){
+
+		Prenda prenda = Prenda.findById(referencia.id);
+		List<Prenda> prendasiguales = Prenda.find("byTipoAndEquipoAndAño", prenda.tipo, prenda.equipo, prenda.año).fetch();
+
+		if (!prendaM.equipo.equals("")){
+			prendaM.equipo = prendaM.equipo.toUpperCase();
+			prenda.equipo = prendaM.equipo;
+		}
+
+		if (prendaM.precio>0)
+			prenda.precio = prendaM.precio;
+
+		if (prendaM.año > 0)
+			prenda.año = prendaM.año;
+
+		if (prendaM.imagen != null)
+			prenda.imagen = prendaM.imagen;
+
+		Prenda comprobar = Prenda.find("byTipoAndEquipoAndAño", prenda.tipo, prenda.equipo, prenda.año).first();
+		if (comprobar == null){
+			for (int i = 0;i<prendasiguales.size();i++){
+				Prenda p = prendasiguales.get(i);
+				p.tipo = prenda.tipo;
+				p.equipo = prenda.equipo;
+				p.precio = prenda.precio;
+				p.año = prenda.año;
+				p.imagen = prenda.imagen;
+				p.save();
+			}
+		}
+
+		List<Prenda> prendas = OrdenarPrendas();
+		renderArgs.put("prendas", prendas);
+		renderArgs.put("visionadmin", visionadmin);
+		render("Application/principalAdmin.html");
+	}
+
 	//AÑADIR STOCK
    public static void goAddStock(){
 		if (visionadmin != 5)
@@ -571,17 +654,25 @@ public class Application extends Controller {
 		if (!prendaM.talla.equals("") && prendaM.cantidadStock>0){
 			prendaM.talla = prendaM.talla.toUpperCase();
 			Prenda p = Prenda.findById(idprenda);
-			p = Prenda.find("byTipoAndEquipoAndTallaAndAño", p.tipo, p.equipo, prendaM.talla, p.año).first();
-
-			if (p != null) {
+			if (p.talla == null){
+				p.talla = prendaM.talla;
 				p.cantidadStock = p.cantidadStock + prendaM.cantidadStock;
 				p.save();
 			}
 
-			else {
-				p = Prenda.findById(idprenda);
-				Prenda prenda = new Prenda(p.tipo, p.equipo, p.año, prendaM.talla, prendaM.cantidadStock, p.precio, p.imagen);
-				prenda.create();
+			else{
+				p = Prenda.find("byTipoAndEquipoAndTallaAndAño", p.tipo, p.equipo, prendaM.talla, p.año).first();
+
+				if (p != null) {
+					p.cantidadStock = p.cantidadStock + prendaM.cantidadStock;
+					p.save();
+				}
+
+				else {
+					p = Prenda.findById(idprenda);
+					Prenda prenda = new Prenda(p.tipo, p.equipo, p.año, prendaM.talla, prendaM.cantidadStock, p.precio, p.imagen);
+					prenda.create();
+				}
 			}
 			mensaje = "Stock añadido correctamente";
 		}
@@ -599,7 +690,7 @@ public class Application extends Controller {
 
 
    //QUITAR STOCK
-   public static void quitarstock(){
+   public static void cargarquitarstock(){
 
 		if (visionadmin != 6)
 			visionadmin = 6;
@@ -607,52 +698,84 @@ public class Application extends Controller {
 		else
 			visionadmin = 0;
 
-		List<Prenda> lprendas = Prenda.findAll();
-		List<String> lequipos = new ArrayList<String>();
-	    lequipos.add(lprendas.get(0).equipo);
-		boolean encontrado = false;
-		int j;
-		for(int i = 0; i<lprendas.size();i++){
+		List<Prenda> listaprenda = OrdenarPrendas();
+		List<Prenda> listaprendas = new ArrayList<>();
 
-			j = 0;
-
-			while (j<lequipos.size() && !encontrado){
-				if (lprendas.get(i).equipo == lequipos.get(j))
-					encontrado = true;
-				j++;
+		for (int i = 0; i<listaprenda.size();i++){
+			Prenda p = listaprenda.get(i);
+			List<Prenda> prendax = Prenda.find("byTipoAndEquipoAndAño", p.tipo, p.equipo, p.año).fetch();
+			for (int j = 0;j<prendax.size();j++){
+				listaprendas.add(prendax.get(j));
 			}
-
-			if (!encontrado)
-				lequipos.add(lprendas.get(i).equipo);
-
-			else
-				encontrado = false;
-
 		}
 
-		renderArgs.put("listaequipos", lequipos);
+		renderArgs.put("listaprendas", listaprendas);
 		renderArgs.put("visionadmin", visionadmin);
 	    renderTemplate("Application/principalAdmin.html");
   }
    
-   public static void cargarequipo(Long idequipo){
-		renderArgs.put("visionadmin", visionadmin);
+   public static void cargarequipo(Long idprenda) {
+
+	   List<Prenda> listaprenda = OrdenarPrendas();
+	   List<Prenda> listaprendas = new ArrayList<>();
+
+	   for (int i = 0; i < listaprenda.size(); i++) {
+		   Prenda p = listaprenda.get(i);
+		   List<Prenda> prendax = Prenda.find("byTipoAndEquipoAndAño", p.tipo, p.equipo, p.año).fetch();
+		   for (int j = 0; j < prendax.size(); j++) {
+			   listaprendas.add(prendax.get(j));
+		   }
+	   }
+
+	   Prenda p = Prenda.findById(idprenda);
+	   referencia = p;
+	   renderArgs.put("listaprendas", listaprendas);
+	   renderArgs.put("quitarprenda", p);
+	   renderArgs.put("visionadmin", visionadmin);
 	   renderTemplate("Application/principalAdmin.html");
    }
 
-   public static void ModificarDatosAdmin(Cliente user, String username){
+   public static void quitarStock(int cantidad) {
 
-	   Cliente client = Cliente.find("byUsuario", username).first();
-	   if (client != null) {
-		   client.usuario = user.usuario;
-		   client.contraseña = user.contraseña;
-		   client.mail = user.mail;
-		   client.save();
-		   List<Cliente> lclientes = Cliente.findAll();
-		   renderArgs.put("listaclientes", lclientes);
-		   renderTemplate ("Application/principalAdmin.html");
+		Prenda p = Prenda.findById(referencia.id);
+
+	   if (cantidad < 0) {
+		   String error = "Cantidad no introducida correctamente";
+		   renderArgs.put("error", error);
 	   }
+
+	   else {
+
+		   if (cantidad > p.cantidadStock)
+			   p.cantidadStock = 0;
+		   else
+			   p.cantidadStock = p.cantidadStock - cantidad;
+
+		   p.save();
+		   String mensaje = "Stock quitado correctamente";
+		   renderArgs.put("mensaje", mensaje);
+	   }
+
+	   List<Prenda> listaprenda = OrdenarPrendas();
+	   List<Prenda> listaprendas = new ArrayList<>();
+
+	   for (int i = 0; i < listaprenda.size(); i++) {
+		   Prenda prenda = listaprenda.get(i);
+		   List<Prenda> prendax = Prenda.find("byTipoAndEquipoAndAño", prenda.tipo, prenda.equipo, prenda.año).fetch();
+		   for (int j = 0; j < prendax.size(); j++) {
+			   listaprendas.add(prendax.get(j));
+		   }
+	   }
+
+	   renderArgs.put("listaprendas", listaprendas);
+	   renderArgs.put("quitarprenda", p);
+	   renderArgs.put("visionadmin", visionadmin);
+	   render("Application/principalAdmin.html");
    }
+
+
+
+
 
    public static void comprar (String tipo, String equipo, String talla, int cantidad, String usuario, String contraseña){
 
