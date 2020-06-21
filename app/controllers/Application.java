@@ -628,17 +628,22 @@ public class Application extends Controller {
 			Prenda prenda = Prenda.find("byTipoAndEquipoAndAño", tipo, equipo, año).first();
 
 			if (prenda != null){
-				validation.equals(equipo,"").message("Este equipo ya está en la Base de Datos");
+				String error = "Este equipo ya está en la Base de Datos";
+				renderArgs.put("error", error);
 			}
 
 			else{
 				prenda = new Prenda(tipo, equipo, año, null, 0, precio, imagen);
 				prenda.create();
-				validation.equals(equipo,"").message("Equipo añadido a la Base de Datos");
+				String mensaje = "Equipo añadido a la Base de Datos";
+				renderArgs.put("mensaje", mensaje);
 			}
 		}
-		else
-			validation.equals(equipo,"").message("No se han introducido todos los datos correctamente");
+
+		else{
+			String error = "No se han introducido todos los datos correctamente";
+			renderArgs.put("error", error);
+		}
 
 		renderArgs.put("visionadmin", visionadmin);
 		render("Application/principalAdmin.html");
@@ -676,30 +681,25 @@ public class Application extends Controller {
 		Prenda prenda = Prenda.findById(referencia.id);
 		List<Prenda> prendasiguales = Prenda.find("byTipoAndEquipoAndAño", prenda.tipo, prenda.equipo, prenda.año).fetch();
 
-		if (!equipo.equals("")){
+		if (!equipo.equals(""))
 			equipo = equipo.toUpperCase();
-			prenda.equipo = equipo;
-		}
 
 		else
 			equipo = prenda.equipo;
 
 		if (precio>0)
-			prenda.precio = precio;
+			precio = precio;
 
 		else
 			precio = prenda.precio;
 
 		if (año > 0)
-			año = prenda.año;
+			año = año;
 
 		else
 			año = prenda.año;
 
-		if (imagen != null)
-			prenda.imagen = imagen;
-
-		else
+		if (imagen == null)
 			imagen = prenda.imagen;
 
 		Prenda comprobar = Prenda.find("byTipoAndEquipoAndAño", tipo, equipo, año).first();
@@ -713,6 +713,14 @@ public class Application extends Controller {
 				p.imagen = imagen;
 				p.save();
 			}
+			String mensaje = "Prenda modificada correctamente";
+			renderArgs.put("mensaje", mensaje);
+		}
+
+		else{
+			String error = "Esta prenda ya existe en la Base de Datos";
+			renderArgs.put("error", error);
+			renderArgs.put("prendaModificar", prenda);
 		}
 
 		List<Prenda> prendas = OrdenarPrendas();
@@ -739,8 +747,6 @@ public class Application extends Controller {
 
    public static void AddStock(Prenda prendaM, Long idprenda){
 
-		String mensaje;
-
 		if (!prendaM.talla.equals("") && prendaM.cantidadStock>0){
 			prendaM.talla = prendaM.talla.toUpperCase();
 			Prenda p = Prenda.findById(idprenda);
@@ -764,16 +770,18 @@ public class Application extends Controller {
 					prenda.create();
 				}
 			}
-			mensaje = "Stock añadido correctamente";
+			String mensaje = "Stock añadido correctamente";
+			renderArgs.put("mensaje", mensaje);
 		}
 
-	   else
-	   	mensaje = "No se han introducido todos los datos correctamente";
+	   else {
+
+			String error = "No se han introducido todos los datos correctamente";
+			renderArgs.put("error", error);
+		}
 
 	   List<Prenda> prendas = OrdenarPrendas();
 	   renderArgs.put("prendas", prendas);
-	   renderArgs.put("mensaje", mensaje);
-
 	   renderArgs.put("visionadmin", visionadmin);
 	   renderTemplate("Application/principalAdmin.html");
    }
@@ -862,8 +870,6 @@ public class Application extends Controller {
 	   renderArgs.put("visionadmin", visionadmin);
 	   render("Application/principalAdmin.html");
    }
-
-
 
 
 
