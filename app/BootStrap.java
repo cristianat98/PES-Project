@@ -16,9 +16,9 @@ public class BootStrap extends Job {
             Prenda p2= new Prenda("PANTALON", "MADRID", 2019,"L",50, 22.5, null).save();
             Prenda p3= new Prenda("PANTALON", "VALENCIA", 2019, "XL",10, 22.5, null).save();
             Prenda p4= new Prenda("CAMISETA", "MADRID", 2019,"M",30, 73.5, null).save();
-            Cliente cristian = new Cliente("cristian", "cristianat98").save();
-            Cliente david = new Cliente ("david", "davidp").save();
-            Cliente fernando = new Cliente ("fernando", "fernandow").save();
+            Cliente cristian = new Cliente("cristian", "cristian", "armesto", "cristianat98", "cristian@es").save();
+            Cliente david = new Cliente ("david", "david", "david","davidp", "david@es").save();
+            Cliente fernando = new Cliente ("fernando", "fernando","fernando","fernandop", "fernando@es").save();
             cristian.admin = 1;
             david.admin = 1;
             fernando.admin = 1;

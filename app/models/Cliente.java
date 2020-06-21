@@ -30,15 +30,15 @@ public class Cliente extends Model {
 
 
 
-	public Cliente(String usuario, String contraseña) {
+	public Cliente(String usuario, String nombre, String apellido1, String contraseña, String mail) {
 
-		this.nombre = "";
-		this.apellido1="";
+		this.nombre = nombre;
+		this.apellido1=apellido1;
 		this.apellido2="";
 		this.usuario = usuario;
 		this.contraseña = contraseña;
 		this.admin = 0;
-		this.mail ="";
+		this.mail = mail;
 		this.perfil = null;
 	}
 

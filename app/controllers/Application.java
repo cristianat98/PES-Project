@@ -22,6 +22,7 @@ public class Application extends Controller {
 
 	static int visionadmin = 0;
 	static Prenda referencia;
+	static Cliente visualizar;
 
 	static List<Prenda> OrdenarPrendas(){
 
@@ -133,7 +134,8 @@ public class Application extends Controller {
 	public static void registrarAndroid(String user, String password) {
 		Cliente c = Cliente.find("byUsuario",user).first();
 		if(c==null) {
-			c= new Cliente(user,password);
+			String mail = user + "@es";
+			c= new Cliente(user,user, user, password, mail);
 			c._save();
 			renderText("OK, Cliente se puede registrar, añadido a la BD");
 		}
@@ -250,9 +252,16 @@ public class Application extends Controller {
 		renderBinary(prenda.imagen.get());
 	}
 
-	public static void MostrarPerfil(){
+	public static void MostrarPerfil(int num) {
 
-		Cliente c = Cliente.find("byUsuario", session.get("user")).first();
+		Cliente c;
+
+		if (num == 1)
+			c = Cliente.find("byUsuario", session.get("user")).first();
+
+		else
+			c = visualizar;
+
 		c.perfil.toString();
 		if (c.perfil.get() == null)
 			renderBinary(new File("C:/Users/cristian/Desktop/play-1.5.3/Proyecto-PES/public/images/avatar.jpg"));
@@ -353,7 +362,8 @@ public class Application extends Controller {
 	//CERRAR SESIÓN
 	public static void Logout (){
 		session.clear();
-		renderArgs.put("client",null);
+		visionadmin = 0;
+		//renderArgs.put("client",null);
 		renderTemplate("Application/loginTemplate.html");
 	}
 
@@ -384,7 +394,7 @@ public class Application extends Controller {
 		render("Application/principalAdmin.html");
 	}
 
-   public static void registrarclienteadmin(@Valid Cliente nuevocliente, String usuario, String nombre, String apellido1, String contraseña, String mail){
+   public static void registrarclienteadmin(@Valid Cliente nuevocliente, String usuario, String nombre, String apellido1, String contraseña, String mail, int admin){
 
 	   validation.required(usuario);
 	   validation.required(nombre);
@@ -393,24 +403,38 @@ public class Application extends Controller {
 	   validation.required(mail);
 	   validation.equals(contraseña, nuevocliente.contraseña).message("Las contraseñas no coinciden");
 	   if(validation.hasErrors()) {
+		   String error = "No has introducido todos los datos";
+		   renderArgs.put("error", error);
 		   renderArgs.put("visionadmin", visionadmin);
 		   render("Application/principalAdmin.html");
 	   }
-	   Cliente c = Cliente.find("byUsuario", usuario).first();
-	   if (c == null) {
+
+	   Cliente comprobarusuario = Cliente.find("byUsuario", usuario).first();
+	   Cliente comprobarcorreo = Cliente.find("byMail", mail).first();
+	   if (comprobarusuario == null && comprobarcorreo == null) {
 	   		nuevocliente.nombre = nombre;
 	   		nuevocliente.apellido1 = apellido1;
 	   		nuevocliente.usuario = usuario;
 	   		nuevocliente.mail = mail;
+	   		nuevocliente.admin = admin;
 	   		nuevocliente.create();
+	   		String mensaje = "Usuario registrado correctamente";
+	   		renderArgs.put("mensaje", mensaje);
 	   		renderArgs.put("visionadmin", visionadmin);
-	   		validation.equals(usuario, "").message("Usuario registrado correctamente");
-	   		render("Application/principalAdmin.html");
+	   		renderTemplate("Application/principalAdmin.html");
+	   }
+
+	   else if (comprobarcorreo == null){
+		   renderArgs.put("visionadmin", visionadmin);
+		   String error = "Este nombre de usuario ya está en uso";
+		   renderArgs.put("error", error);
+		   renderTemplate("Application/principalAdmin.html");
 	   }
 
 	   else{
 		   renderArgs.put("visionadmin", visionadmin);
-		   validation.equals(usuario, "").message("El usuario ya está en uso");
+		   String error = "Este correo ya está en uso";
+		   renderArgs.put("error", error);
 		   renderTemplate("Application/principalAdmin.html");
 	   }
    }
@@ -428,74 +452,113 @@ public class Application extends Controller {
 		else
 			visionadmin = 0;
 
-
 		renderArgs.put("visionadmin", visionadmin);
 		render("Application/principalAdmin.html");
 
 	}
 
 	public static void cargardatos(Long idusuario){
-		visionadmin = 3;
 		List<Cliente> lclientes = Cliente.findAll();
 		renderArgs.put("listaclientes", lclientes);
 		Cliente modificar = Cliente.findById(idusuario);
+		if (modificar.admin == 0)
+			renderArgs.put("admin", 1);
+		visualizar = modificar;
 		renderArgs.put("usuarioM",modificar);
 		renderArgs.put("visionadmin", visionadmin);
 		renderTemplate ("Application/principalAdmin.html");
 	}
 
-	public static void ModificarU(Cliente usuarioM, String usuarioinicial, String usuariofinal){
+	public static void ModificarU(Cliente usuarioM, String usuarioinicial, String usuariofinal, String mailinicial, String mailfinal, int admin){
 
-		Cliente c = Cliente.find("byUsuario", usuariofinal).first();
+		Cliente comprobarusuario = null;
+		Cliente comprobarcorreo = null;
+		if (!usuarioinicial.equals(usuariofinal))
+			comprobarusuario = Cliente.find("byUsuario", usuariofinal).first();
 
-		if (c != null){
-			List<Cliente> lclientes = Cliente.findAll();
-			renderArgs.put("listaclientes", lclientes);
-			renderArgs.put("visionadmin", visionadmin);
-			c = Cliente.find("byUsuario", usuarioinicial).first();
-			renderArgs.put("usuarioM", c);
-			validation.equals(usuariofinal, "").message("El usuario ya está en uso");
-			renderTemplate("Application/principalAdmin.html");
-		}
+		if (!mailinicial.equals(mailfinal))
+			comprobarcorreo = Cliente.find("byMail", mailfinal).first();
 
-		c = Cliente.find("byUsuario", usuarioinicial).first();
-		if(c!=null) {
-			if (!usuariofinal.equals("")){
-				if (usuarioinicial.equals(session.get("user")))
-					session.put("user", usuariofinal);
 
-				c.usuario = usuariofinal;
+		if (comprobarusuario == null && comprobarcorreo == null) {
+
+			Cliente c = Cliente.find("byUsuario", usuarioinicial).first();
+			if (c != null) {
+				if (!usuariofinal.equals("")) {
+					if (usuarioinicial.equals(session.get("user")))
+						session.put("user", usuariofinal);
+
+					c.usuario = usuariofinal;
+				}
+
+				if (!usuarioM.contraseña.equals(""))
+					c.contraseña = usuarioM.contraseña;
+
+				if (!mailfinal.equals(""))
+					c.mail = mailfinal;
+
+				if (!usuarioM.nombre.equals(""))
+					c.nombre = usuarioM.nombre;
+
+				if (!usuarioM.apellido1.equals(""))
+					c.apellido1 = usuarioM.apellido1;
+
+				if (!usuarioM.apellido2.equals(""))
+					c.apellido2 = usuarioM.apellido2;
+
+				if (usuarioM.perfil != null)
+					c.perfil = usuarioM.perfil;
+
+				c.admin = admin;
+
+				c.save();
+				List<Cliente> lclientes = Cliente.findAll();
+				renderArgs.put("listaclientes", lclientes);
+				renderArgs.put("usuarioM", c);
+				renderArgs.put("visionadmin", visionadmin);
+				String mensaje = "Usuario modificado correctamente";
+				renderArgs.put("mensaje", mensaje);
 			}
+		}
 
-			if (!usuarioM.contraseña.equals(""))
-				c.contraseña = usuarioM.contraseña;
-
-			if (!usuarioM.mail.equals(""))
-				c.mail = usuarioM.mail;
-
-			if (!usuarioM.nombre.equals(""))
-				c.nombre = usuarioM.nombre;
-
-			if (!usuarioM.apellido1.equals(""))
-				c.apellido1 = usuarioM.apellido1;
-
-			if (!usuarioM.apellido2.equals(""))
-				c.apellido2 = usuarioM.apellido2;
-
-			if (usuarioM.perfil != null)
-				c.perfil = usuarioM.perfil;
-
-			c.save();
+		else {
 			List<Cliente> lclientes = Cliente.findAll();
 			renderArgs.put("listaclientes", lclientes);
-			visionadmin = 2;
-			renderArgs.put("client", c);
 			renderArgs.put("visionadmin", visionadmin);
-			renderTemplate("Application/principalAdmin.html");
+			Cliente c = Cliente.find("byUsuario", usuarioinicial).first();
+			renderArgs.put("usuarioM", c);
+			String error;
+
+			if (comprobarusuario != null)
+				error = "Este nombre de usuario ya está en uso";
+
+			else
+				error = "Este correo ya está en uso";
+
+			renderArgs.put("error", error);
 		}
+
+			renderTemplate("Application/principalAdmin.html");
 	}
 
-	
+
+	//VER USUARIO
+	public static void verusuario(){
+
+		if (visionadmin != 3){
+			List<Cliente> lclientes = Cliente.findAll();
+			renderArgs.put("listaclientes", lclientes);
+			visionadmin = 3;
+		}
+
+		else
+			visionadmin = 0;
+
+		renderArgs.put("visionadmin", visionadmin);
+		render("Application/principalAdmin.html");
+	}
+
+
 	//ELIMINAR USUARIO
 	public static void cargareliminar(){
 
@@ -515,14 +578,27 @@ public class Application extends Controller {
 
 	public static void eliminarusuarioadmin (Long idusuario){
 
-		visionadmin = 4;
 		Cliente eliminar = Cliente.findById(idusuario);
-		eliminar.delete();
+		List<Cliente> listaadmin = Cliente.find("byAdmin", 1).fetch();
+		if (eliminar.admin == 1 && listaadmin.size() == 1) {
+			if (listaadmin.size() == 1) {
+				String error = "No se puede eliminar este usuario, ya que es el último con permisos de Administrador";
+				renderArgs.put("error", error);
+			}
+		}
+
+		else{
+			eliminar.delete();
+			String mensaje = "Usuario eliminado correctamente";
+			renderArgs.put("mensaje", mensaje);
+		}
+
 		List<Cliente> lclientes = Cliente.findAll();
 		renderArgs.put("listaclientes", lclientes);
 		renderArgs.put("visionadmin", visionadmin);
 		renderTemplate ("Application/principalAdmin.html");
 	}
+
 
 	//AÑADIR EQUIPO
 	public static void añadirprenda(){
@@ -568,6 +644,7 @@ public class Application extends Controller {
 		render("Application/principalAdmin.html");
 	}
 
+
 	//MODIFICAR PRENDA
 	public static void modificarprenda(){
 
@@ -594,34 +671,46 @@ public class Application extends Controller {
 		render("Application/principalAdmin.html");
 	}
 
-	public static void modificarprendaadmin(Prenda prendaM){
+	public static void modificarprendaadmin(String tipo, String equipo, double precio, int año, Blob imagen){
 
 		Prenda prenda = Prenda.findById(referencia.id);
 		List<Prenda> prendasiguales = Prenda.find("byTipoAndEquipoAndAño", prenda.tipo, prenda.equipo, prenda.año).fetch();
 
-		if (!prendaM.equipo.equals("")){
-			prendaM.equipo = prendaM.equipo.toUpperCase();
-			prenda.equipo = prendaM.equipo;
+		if (!equipo.equals("")){
+			equipo = equipo.toUpperCase();
+			prenda.equipo = equipo;
 		}
 
-		if (prendaM.precio>0)
-			prenda.precio = prendaM.precio;
+		else
+			equipo = prenda.equipo;
 
-		if (prendaM.año > 0)
-			prenda.año = prendaM.año;
+		if (precio>0)
+			prenda.precio = precio;
 
-		if (prendaM.imagen != null)
-			prenda.imagen = prendaM.imagen;
+		else
+			precio = prenda.precio;
 
-		Prenda comprobar = Prenda.find("byTipoAndEquipoAndAño", prenda.tipo, prenda.equipo, prenda.año).first();
+		if (año > 0)
+			año = prenda.año;
+
+		else
+			año = prenda.año;
+
+		if (imagen != null)
+			prenda.imagen = imagen;
+
+		else
+			imagen = prenda.imagen;
+
+		Prenda comprobar = Prenda.find("byTipoAndEquipoAndAño", tipo, equipo, año).first();
 		if (comprobar == null){
 			for (int i = 0;i<prendasiguales.size();i++){
 				Prenda p = prendasiguales.get(i);
-				p.tipo = prenda.tipo;
-				p.equipo = prenda.equipo;
-				p.precio = prenda.precio;
-				p.año = prenda.año;
-				p.imagen = prenda.imagen;
+				p.tipo = tipo;
+				p.equipo = equipo;
+				p.precio = precio;
+				p.año = año;
+				p.imagen = imagen;
 				p.save();
 			}
 		}
@@ -631,6 +720,7 @@ public class Application extends Controller {
 		renderArgs.put("visionadmin", visionadmin);
 		render("Application/principalAdmin.html");
 	}
+
 
 	//AÑADIR STOCK
    public static void goAddStock(){

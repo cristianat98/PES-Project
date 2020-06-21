@@ -57,6 +57,12 @@
         margin-left: 1400px;
     }
 
+    .avatar1{
+        width: 75px;
+        height: 75px;
+        border-radius: 50%;
+    }
+
     .usuario {
         width: auto;
         height: auto;
@@ -86,10 +92,8 @@
         else if (&{visionadmin} === 2)
         document.getElementById('ModificarUsuario').style.display="block";
 
-    	else if (&{visionadmin} === 3){
-            document.getElementById('ModificarUsuario').style.display="block";
-            document.getElementById('DatosUsuario').style.display="block";
-        }
+        else if (&{visionadmin} === 3)
+            document.getElementById('VerUsuario').style.display="block";
 
     	else if (&{visionadmin} === 4)
             document.getElementById('EliminarUsuario').style.display="block";
@@ -107,6 +111,16 @@
             document.getElementById('ModificarPrenda').style.display="block";
     	}
 
+    	function ComprobarCheckAñadir (){
+            if (document.getElementById('crearusuarioadmin').checked)
+                document.getElementById('crearusuarioadmin').value = 1;
+        }
+
+        function ComprobarCheckModificar (){
+        if (document.getElementById('modificarusuarioadmin').checked)
+            document.getElementById('modificarusuarioadmin').value = 1;
+        }
+
 </script>
 
 <head>
@@ -118,7 +132,7 @@
 
 <h1 style="text-align: center; width:auto;"> VISTA ADMINISTRADOR</h1>
 <div class="prueba">
-<img class="avatar" src="@{MostrarPerfil()}" alt="ERROR AL CARGAR LA IMAGEN">
+<img class="avatar" src="@{MostrarPerfil(1)}" alt="ERROR AL CARGAR LA IMAGEN">
 <div class ="usuario"> <b>Está conectado como: &{client.usuario}</b></div>
     <div class="cart pull-right">
         <div class="dropdown">
@@ -144,6 +158,7 @@
         <a class="jumbotron"></a>
         <li><a href="@{añadirusuario()}">Añadir Usuario</a></li>
         <li><a href="@{modificarusuarioadmin()}">Modificar Usuario</a></li>
+        <li><a href="@{verusuario()}">Ver Usuario</a></li>
         <li><a href="@{cargareliminar()}">Eliminar Usuario</a></li>
         <h2>PARA PRENDAS</h2>
         <li><a href="@{añadirprenda()}">Añadir Prenda</a></li>
@@ -192,14 +207,14 @@
 
     #{field 'nuevocliente.contraseña'}
         <p class="${field.errorClass}">
-            <strong>Password:</strong> <input type="password" name="${field.name}" size="16"> *
+            <strong>Contraseña:</strong> <input type="password" name="${field.name}" size="16"> *
             <span class="error">${field.error}</span>
         </p>
 
     #{/field}
     #{field 'contraseña'}
         <p class="${field.errorClass}">
-            <strong>Verify password:</strong> <input type="password" name="${field.name}" size="16"> *
+            <strong>Verificar Contraseña:</strong> <input type="password" name="${field.name}" size="16"> *
             <span class="error">${field.error}</span>
         </p>
 
@@ -214,17 +229,33 @@
 
     #{/field}
 
+    #{field 'admin'}
+        <p class="${field.errorClass}">
+            <strong>Usuario Admin:</strong><input type="checkbox" id ="crearusuarioadmin"name="${field.name}" value="0">
+            <span class="error">${field.error}</span>
+        </p>
+    #{/field}
+
     #{field 'nuevocliente.perfil'}
         <p class="${field.errorClass}">
             <strong>Foto Perfil:</strong><input type="file" name="${field.name}">
             <span class="error">${field.error}</span>
         </p>
     #{/field}
+
     <p class="buttons">
-        <input type="submit" value="Register">
+        <input type="submit" value="Register" onclick="ComprobarCheckAñadir();">
     </p>
 
 #{/form}
+
+#{if mensaje}
+    <p style="color: #08ea0c">${mensaje}</p>
+#{/if}
+
+#{if error}
+    <p style="color: #ea0808">${error}</p>
+#{/if}
 </div>
 
 <div  style="text-align: center; display: none" id = "ModificarUsuario" class="column">
@@ -246,11 +277,10 @@
         <input type="submit" value="Cargar Datos" />
     </p>
 #{/form}
-</div>
 
-<div style="text-align: center; display: none" id = "DatosUsuario" class="column">
-#{form @ModificarU(), enctype:'multipart/form-data'}
 #{if usuarioM}
+#{form @ModificarU(), enctype:'multipart/form-data'}
+
 
     <h3>Modifica los datos del usuario ${usuarioM.usuario}:</h3>
 
@@ -298,12 +328,35 @@
             </p>
         #{/field}
 
-        #{field 'usuarioM.mail'}
+    #{field 'contraseña'}
+        <p class="${field.errorClass}">
+            <strong>Verificar Contraseña:</strong> <input type="text" name="${field.name}" placeholder="${usuarioM.contraseña}"size="16" >
+            <span class="error">${field.error}</span>
+        </p>
+    #{/field}
+
+    #{field 'mailinicial'}
+        <p class="${field.errorClass}">
+            <input style="display: none" name="${field.name}" value="${usuarioM.mail}" size="16"  >
+            <span class="error">${field.error}</span>
+        </p>
+    #{/field}
+
+        #{field 'mailfinal'}
             <p class="${field.errorClass}">
                 <strong>Mail:</strong> <input type="email" name="${field.name}" placeholder="${usuarioM.mail}" size="16" >
                 <span class="error">${field.error}</span>
             </p>
         #{/field}
+
+#{if admin}
+    #{field 'admin'}
+        <p class="${field.errorClass}">
+            <strong>Hacer Admin:</strong><input type="checkbox" id ="modificarusuarioadmin"name="${field.name}" value="0">
+            <span class="error">${field.error}</span>
+        </p>
+    #{/field}
+#{/if}
 
     #{field 'usuarioM.perfil'}
         <p class="${field.errorClass}">
@@ -313,10 +366,55 @@
     #{/field}
 
         <p class="buttons">
-            <input type="submit" value="Modificar Usuario" />
+            <input type="submit" onclick="ComprobarCheckModificar();" value="Modificar Usuario" />
         </p>
-#{/if}
 #{/form}
+#{/if}
+
+#{if mensaje}
+    <p style="color: #08ea0c">${mensaje}</p>
+#{/if}
+
+#{if error}
+    <p style="color: #ea0808">${error}</p>
+#{/if}
+</div>
+
+<div style="text-align: center; display: none" id = "VerUsuario" class="column">
+#{form @cargardatos()}
+    <p>
+        <strong>Selecciona el usuario que quieres ver:</strong>
+    </p>
+
+    <p>
+        <label for="NombreusuariosM"> Usuarios:</label>
+        <select id="NombreusuariosM" name="idusuario">
+            #{list items:listaclientes, as:'cliente'}
+                <option value="${cliente.id}" >${cliente.usuario}</option>
+            #{/list}
+        </select>
+    </p>
+
+    <p class="buttons">
+        <input type="submit" value="Cargar Datos" />
+    </p>
+#{/form}
+
+#{if usuarioM}
+
+    <h3>Estos son los datos del usuario ${usuarioM.usuario}:</h3>
+
+    <p>- Nombre de Usuario: ${usuarioM.usuario}</p>
+    <p>- NOMBRE DE LA CUENTA: ${usuarioM.nombre}</p>
+    <p>- PRIMER APELLIDO: ${usuarioM.apellido1}</p>
+    <p>- SEGUNDO APELLIDO: ${usuarioM.apellido2}</p>
+    <p>- CONTRASEÑA: ${usuarioM.contraseña}</p>
+    <p>- MAIL: ${usuarioM.mail}</p>
+    <p>- Si hay un 0, quiere decir que no es Admin, si hay un 1 quiere decir que sí es admin
+    <p>- USUARIO ADMIN: ${usuarioM.admin}</p>
+    <p>- FOTO DE PERFIL: <img class="avatar1" src="@{MostrarPerfil(0)}" alt="ERROR AL CARGAR LA IMAGEN">
+
+#{/if}
 
 </div>
 
@@ -340,6 +438,14 @@
         <input type="submit" value="Eliminar Usuario" />
     </p>
 #{/form}
+
+#{if mensaje}
+    <p style="color: #08ea0c">${mensaje}</p>
+#{/if}
+
+#{if error}
+    <p style="color: #ea0808">${error}</p>
+#{/if}
 
 </div>
 
@@ -414,7 +520,7 @@
     #{if prendaModificar}
 
         #{form @modificarprendaadmin(), enctype:'multipart/form-data'}
-            #{field 'prendaM.tipo'}
+            #{field 'tipo'}
                 <p class="${field.errorClass}">
                     <label for="TiposPrenda"> Tipo de Prenda (Prenda actual: &{prendaModificar.tipo}:</label>
                     <select id="TiposPrenda" name="tipo">
@@ -424,28 +530,28 @@
                 </p>
             #{/field}
 
-            #{field 'prendaM.equipo'}
+            #{field 'equipo'}
                 <p class="${field.errorClass}">
                     <strong>Equipo:</strong> <input type="text" name="${field.name}" placeholder="&{prendaModificar.equipo}" size="16" >
                     <span class="error">${field.error}</span>
                 </p>
             #{/field}
 
-            #{field 'prendaM.precio'}
+            #{field 'precio'}
                 <p class="${field.errorClass}">
                     <strong>Precio:</strong> <input type="number" step="0.01" name="${field.name}" placeholder="&{prendaModificar.precio}" size="16" >
                     <span class="error">${field.error}</span>
                 </p>
             #{/field}
 
-            #{field 'prendaM.año'}
+            #{field 'año'}
                 <p class="${field.errorClass}">
                     <strong>Año:</strong> <input type="number" name="${field.name}" placeholder="&{prendaModificar.año}" size="16" >
                     <span class="error">${field.error}</span>
                 </p>
             #{/field}
 
-            #{field 'prendaM.imagen'}
+            #{field 'imagen'}
                 <p class="${field.errorClass}">
                     <input type="file" name="${field.name}">
                     <span class="error">${field.error}</span>
