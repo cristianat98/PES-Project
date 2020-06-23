@@ -600,7 +600,7 @@ public class Application extends Controller {
 	}
 
 
-	//AÑADIR EQUIPO
+	//AÑADIR PRENDA
 	public static void añadirprenda(){
 		if (visionadmin != 7)
 			visionadmin = 7;
@@ -729,6 +729,38 @@ public class Application extends Controller {
 		render("Application/principalAdmin.html");
 	}
 
+	//VER PRENDA
+	public static void verprenda(){
+
+		if (visionadmin != 9)
+			visionadmin = 9;
+
+		else
+			visionadmin = 0;
+
+		List<Prenda> listaprendas = OrdenarPrendas();
+		renderArgs.put("listaprendas", listaprendas);
+		renderArgs.put("visionadmin", visionadmin);
+		render("Application/principalAdmin.html");
+	}
+
+	public static void cargarprenda(Long idprenda){
+
+		Prenda p = Prenda.findById(idprenda);
+		List<Prenda> prendas = Prenda.find("byTipoAndEquipoAndAño", p.tipo, p.equipo, p.año).fetch();
+
+		if (prendas.size() ==1)
+			renderArgs.put("prendamostrar", p);
+
+		else
+			renderArgs.put("prendas", prendas);
+
+		List<Prenda> listaprendas = OrdenarPrendas();
+		renderArgs.put("listaprendas", listaprendas);
+		renderArgs.put("visionadmin", visionadmin);
+		render("Application/principalAdmin.html");
+	}
+
 
 	//AÑADIR STOCK
    public static void goAddStock(){
@@ -786,6 +818,73 @@ public class Application extends Controller {
 	   renderTemplate("Application/principalAdmin.html");
    }
 
+   //MODIFICAR STOCK
+	public static void modificarstock(){
+
+		if (visionadmin != 10)
+			visionadmin = 10;
+
+		else
+			visionadmin = 0;
+
+		List<Prenda> listaprenda = OrdenarPrendas();
+		List<Prenda> listaprendas = new ArrayList<>();
+
+		for (int i = 0; i<listaprenda.size();i++){
+			Prenda p = listaprenda.get(i);
+			List<Prenda> prendax = Prenda.find("byTipoAndEquipoAndAño", p.tipo, p.equipo, p.año).fetch();
+			for (int j = 0;j<prendax.size();j++){
+				if (prendax.get(j).talla != null)
+					listaprendas.add(prendax.get(j));
+			}
+		}
+
+		renderArgs.put("listaprendas", listaprendas);
+		renderArgs.put("visionadmin", visionadmin);
+		render("Application/principalAdmin.html");
+	}
+
+	public static void modificarstockadmin(String talla){
+
+		validation.required(talla);
+		if (validation.hasErrors()){
+			renderArgs.put("visionadmin", visionadmin);
+			render("Application/principalAdmin.html");
+		}
+
+		talla = talla.toUpperCase();
+		Prenda p = Prenda.findById(referencia.id);
+		Prenda comprobar = Prenda.find("byTipoAndEquipoAndAñoAndTalla", p.tipo, p.equipo, p.año, talla).first();
+
+		if (comprobar != null){
+			String error = "Esta prenda ya existe";
+			renderArgs.put("error", error);
+		}
+
+		else{
+			p.talla = talla;
+			p.save();
+			String mensaje = "Prenda modificada correctamente";
+			renderArgs.put("mensaje", mensaje);
+		}
+
+		List<Prenda> listaprenda = OrdenarPrendas();
+		List<Prenda> listaprendas = new ArrayList<>();
+
+		for (int i = 0; i < listaprenda.size(); i++) {
+			Prenda prenda = listaprenda.get(i);
+			List<Prenda> prendax = Prenda.find("byTipoAndEquipoAndAño", prenda.tipo, prenda.equipo, prenda.año).fetch();
+			for (int j = 0; j < prendax.size(); j++) {
+				if (prendax.get(j).talla != null)
+					listaprendas.add(prendax.get(j));
+			}
+		}
+		renderArgs.put("listaprendas", listaprendas);
+		renderArgs.put("quitarprenda", p);
+		renderArgs.put("visionadmin", visionadmin);
+		render("Application/principalAdmin.html");
+	}
+
 
    //QUITAR STOCK
    public static void cargarquitarstock(){
@@ -803,7 +902,8 @@ public class Application extends Controller {
 			Prenda p = listaprenda.get(i);
 			List<Prenda> prendax = Prenda.find("byTipoAndEquipoAndAño", p.tipo, p.equipo, p.año).fetch();
 			for (int j = 0;j<prendax.size();j++){
-				listaprendas.add(prendax.get(j));
+				if (prendax.get(j).talla != null)
+					listaprendas.add(prendax.get(j));
 			}
 		}
 
@@ -821,6 +921,7 @@ public class Application extends Controller {
 		   Prenda p = listaprenda.get(i);
 		   List<Prenda> prendax = Prenda.find("byTipoAndEquipoAndAño", p.tipo, p.equipo, p.año).fetch();
 		   for (int j = 0; j < prendax.size(); j++) {
+		   	if (prendax.get(j).talla != null)
 			   listaprendas.add(prendax.get(j));
 		   }
 	   }
@@ -861,7 +962,8 @@ public class Application extends Controller {
 		   Prenda prenda = listaprenda.get(i);
 		   List<Prenda> prendax = Prenda.find("byTipoAndEquipoAndAño", prenda.tipo, prenda.equipo, prenda.año).fetch();
 		   for (int j = 0; j < prendax.size(); j++) {
-			   listaprendas.add(prendax.get(j));
+			   if (prendax.get(j).talla != null)
+			   	listaprendas.add(prendax.get(j));
 		   }
 	   }
 
