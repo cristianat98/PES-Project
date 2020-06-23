@@ -12,7 +12,7 @@
     }
 
     .column li a{
-        background-color: #000000;
+        background-color: rgba(78, 83, 81, 0.57);
         color:#ffffff;
         padding:10px 15px;
         display:block;
@@ -72,6 +72,7 @@
     .prueba{
         float:right;
     }
+    
 
 </style>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
@@ -134,9 +135,9 @@
     <title>Página Administrador</title>
 </head>
 <body>
-<div style="background: linear-gradient(#58e51b,#e9ece7); width:auto; height:90px"></div>
+<div style="background: linear-gradient(#58e51b,#e9ece7); width:auto; height:90px"><h1 style="text-align: center; width:auto;">VISTA ADMINISTRADOR</h1></div>
 
-<h1 style="text-align: center; width:auto;"> VISTA ADMINISTRADOR</h1>
+
 <div class="prueba">
 <img class="avatar" src="@{MostrarPerfil(1)}" alt="ERROR AL CARGAR LA IMAGEN">
 <div class ="usuario"> <b>Está conectado como: &{client.usuario}</b></div>
@@ -155,18 +156,18 @@
         </div>
     </div>
     <p style="text-align: center">Esta es la vista de Administrador de la Página Web. Solos los usuarios con derechos de administrador pueden acceder a esta página.</p>
-    <h3 style="text-align: center; width:auto;"> ACCIONES DE ADMINISTRADOR</h3>
 </div>
 
 <div class="left" style="width: auto">
     <ul class="column">
-        <h2>PARA USUARIO</h2>
+        <h3 style="width:auto;"> ACCIONES DE ADMINISTRADOR</h3>
+        <h4>PARA USUARIO</h4>
         <a class="jumbotron"></a>
         <li><a href="@{añadirusuario()}">Añadir Usuario</a></li>
         <li><a href="@{modificarusuarioadmin()}">Modificar Usuario</a></li>
         <li><a href="@{verusuario()}">Ver Usuario</a></li>
         <li><a href="@{cargareliminar()}">Eliminar Usuario</a></li>
-        <h2>PARA PRENDAS</h2>
+        <h4>PARA PRENDAS</h4>
         <li><a href="@{añadirprenda()}">Añadir Prenda</a></li>
         <li><a href="@{modificarprenda()}">Modificar Prenda</a></li>
         <li><a href="@{verprenda()}">Ver Prenda</a></li>
@@ -246,7 +247,7 @@
 
     #{field 'nuevocliente.perfil'}
         <p class="${field.errorClass}">
-            <strong>Foto Perfil:</strong><input type="file" name="${field.name}">
+            <strong>Foto Perfil:</strong><input style="margin-left: 20%;" type="file" name="${field.name}">
             <span class="error">${field.error}</span>
         </p>
     #{/field}
@@ -361,7 +362,7 @@
 
     #{field 'usuarioM.perfil'}
         <p class="${field.errorClass}">
-            <strong>Foto Perfil:</strong><input type="file" name="${field.name}">
+            <strong>Foto Perfil:</strong><input style="margin-left: 20%;" type="file" name="${field.name}">
             <span class="error">${field.error}</span>
         </p>
     #{/field}
@@ -487,7 +488,7 @@
 
         #{field 'imagen'}
             <p class="${field.errorClass}">
-                <strong>Foto de Perfil:</strong><input type="file" name="${field.name}"> *
+                <strong>Foto de Perfil:</strong><input style="margin-left: 20%;" type="file" name="${field.name}"> *
                 <span class="error">${field.error}</span>
             </p>
         #{/field}
@@ -563,7 +564,7 @@
 
             #{field 'imagen'}
                 <p class="${field.errorClass}">
-                    <input type="file" name="${field.name}">
+                    <input type="file" style="margin-left: 20%;" name="${field.name}">
                     <span class="error">${field.error}</span>
                 </p>
             #{/field}
