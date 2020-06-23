@@ -74,6 +74,10 @@
         document.getElementById('admin').style.display="none";
     }
 
+    function vercarrito(){
+
+    }
+
 </script>
 <head>
     <meta charset="UTF-8">
@@ -93,14 +97,19 @@
     </div>
 
     <div class="dropdown">
-        <button type="button" class="btn btn-default btn-lg">
+        <button type="button" onclick="alert(&{carrito.size()})" id="carrito" data-toggle="dropdown" class="btn btn-default btn-lg">
             <span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span> Carrito
         </button>
+        <ul class="dropdown-menu" id ="dropdowncarrito" aria-labelledby="carrito">
+            <li><a id="admin" href="@{CambiarVistaAdmin()}">Cambiar Vista a Administrador</a></li>
+            <li><a href="@{ModificarUsuario()}">Modificar datos perfil</a></li>
+            <li><a href="@{EliminarUsuario()}">Borrar perfil</a></li>
+        </ul>
         <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
             Opciones Usuario
             <span class="caret"></span>
         </button>
-        <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+        <ul class="dropdown-menu" id ="opcionesusuario" aria-labelledby="dropdownMenu1">
             <li><a id="admin" href="@{CambiarVistaAdmin()}">Cambiar Vista a Administrador</a></li>
             <li><a href="@{ModificarUsuario()}">Modificar datos perfil</a></li>
             <li><a href="@{EliminarUsuario()}">Borrar perfil</a></li>
@@ -111,7 +120,7 @@
 <body>
 <div class="panel panel-default" >
     <div class="panel-heading">Camisetas</div>
-    #{form @AddCarrito()}
+
     <section class="panel-body">
     #{if camisetas}
         #{list items:camisetas, as:'camiseta'}
@@ -123,24 +132,14 @@
                     </a>
                 </div>
                 <div class="media-body">
-                    <h4 class="media-heading">${camiseta.tipo} DEL ${camiseta.equipo} <br> ${camiseta.precio}€</h4>
+                    <h4 class="media-heading">${camiseta.tipo} DEL ${camiseta.equipo} <br> ${camiseta.precio}€ TALLA: ${camiseta.talla}</h4>
+                    <h6>Cantidad Disponible: ${camiseta.cantidadStock}</h6>
                 </div>
-                #{field 'camiseta.tipo'}
-                #{/field}
-                #{field 'camiseta.equipo'}
-                #{/field}
-                #{field 'camiseta.talla'}
-                #{/field}
-                #{field 'camiseta.precio'}
-                #{/field}
-
-                <button type="submit" class="btn btn-default btn-lg">
-                    <span class="glyphicon glyphicon" aria-hidden="true"></span> Añadir Carrito
-                </button>
+                <a href="@{AddCarrito(camiseta.id)}"><button type="button"  class="btn btn-default btn-lg">Añadir Carrito</button></a>
             </article>
         #{/list}
     #{/if}
-        #{/form}
+
     </section>
 </div>
 <div class="panel panel-default" >
@@ -158,11 +157,10 @@
                 </div>
 
                 <div class="media-body">
-                    <h4 class="media-heading">${pantalon.tipo} DEL ${pantalon.equipo} <br> ${pantalon.precio}€</h4>
+                    <h4 class="media-heading">${pantalon.tipo} DEL ${pantalon.equipo} <br> ${pantalon.precio}€ TALLA: ${pantalon.talla}</h4>
+                    <h6>Cantidad Disponible: ${pantalon.cantidadStock}</h6>
                 </div>
-                <button type="button" class="btn btn-default btn-lg">
-                    <span class="glyphicon glyphicon" aria-hidden="true"></span> Añadir Carrito
-                </button>
+                <a href="@{AddCarrito(pantalon.id)}"><button type="button"  class="btn btn-default btn-lg">Añadir Carrito</button></a>
             </article>
         #{/list}
     #{/if}

@@ -24,14 +24,15 @@ public class Application extends Controller {
 	static int visionadmin = 0;
 	static Prenda referencia;
 	static Cliente visualizar;
+	static List<Prenda> carrito = new ArrayList<>();
 
-	static List<Prenda> OrdenarPrendas(){
+	static List<Prenda> OrdenarPrendas() {
 
 		List<Prenda> prendas = Prenda.findAll();
 
-		for(int i = 0; i<prendas.size();i++){
-			for (int j = i+1; j<prendas.size(); j++){
-				if (prendas.get(i).tipo.equals(prendas.get(j).tipo) && prendas.get(i).equipo.equals(prendas.get(j).equipo) && prendas.get(i).año == prendas.get(j).año){
+		for (int i = 0; i < prendas.size(); i++) {
+			for (int j = i + 1; j < prendas.size(); j++) {
+				if (prendas.get(i).tipo.equals(prendas.get(j).tipo) && prendas.get(i).equipo.equals(prendas.get(j).equipo) && prendas.get(i).año == prendas.get(j).año) {
 					prendas.remove(j);
 					j--;
 				}
@@ -41,7 +42,7 @@ public class Application extends Controller {
 		List<Integer> años = new ArrayList<Integer>();
 		List<String> equipos = new ArrayList<String>();
 
-		for (int i = 0; i<prendas.size();i++){
+		for (int i = 0; i < prendas.size(); i++) {
 			equipos.add(prendas.get(i).equipo);
 			años.add(prendas.get(i).año);
 		}
@@ -49,9 +50,9 @@ public class Application extends Controller {
 		List<Prenda> listaprendas = new ArrayList<Prenda>();
 		Collections.sort(años);
 
-		for(int i = 0;i<años.size();i++){
-			for(int j = 0;j<prendas.size();j++){
-				if (años.get(i) == prendas.get(j).año){
+		for (int i = 0; i < años.size(); i++) {
+			for (int j = 0; j < prendas.size(); j++) {
+				if (años.get(i) == prendas.get(j).año) {
 					listaprendas.add(prendas.get(j));
 					prendas.remove(j);
 					j--;
@@ -63,9 +64,9 @@ public class Application extends Controller {
 		listaprendas = new ArrayList<>();
 		Collections.sort(equipos);
 
-		for(int i = 0;i<equipos.size();i++){
-			for(int j = 0;j<prendas.size();j++){
-				if (equipos.get(i).equals(prendas.get(j).equipo)){
+		for (int i = 0; i < equipos.size(); i++) {
+			for (int j = 0; j < prendas.size(); j++) {
+				if (equipos.get(i).equals(prendas.get(j).equipo)) {
 					listaprendas.add(prendas.get(j));
 					prendas.remove(j);
 					j--;
@@ -80,18 +81,18 @@ public class Application extends Controller {
 	static void addUser() {
 		Cliente user = connected();
 
-		if(user != null) {
+		if (user != null) {
 			renderArgs.put("client", user);
 		}
 	}
 
 	static Cliente connected() {
-		if(renderArgs.get("client") != null) {
+		if (renderArgs.get("client") != null) {
 			return renderArgs.get("client", Cliente.class);
 		}
 
 		String username = session.get("user");
-		if(username != null) {
+		if (username != null) {
 			return Cliente.find("byUsuario", username).first();
 		}
 
@@ -101,29 +102,29 @@ public class Application extends Controller {
 	//INDEX
 	public static void index() {
 
-		if(connected() != null) {
-			List<Prenda> camisetas =Prenda.find("byTipo", "CAMISETA").fetch();
-			for (int i = 0; i < camisetas.size(); i++){
-				if (camisetas.get(i).cantidadStock == 0){
+		if (connected() != null) {
+			List<Prenda> camisetas = Prenda.find("byTipo", "CAMISETA").fetch();
+			for (int i = 0; i < camisetas.size(); i++) {
+				if (camisetas.get(i).cantidadStock == 0) {
 					camisetas.remove(i);
 					i--;
 				}
 			}
 
-			List<Prenda> pantalones =Prenda.find("byTipo", "PANTALON").fetch();
-			for (int i = 0; i < pantalones.size(); i++){
-				if (pantalones.get(i).cantidadStock == 0){
+			List<Prenda> pantalones = Prenda.find("byTipo", "PANTALON").fetch();
+			for (int i = 0; i < pantalones.size(); i++) {
+				if (pantalones.get(i).cantidadStock == 0) {
 					pantalones.remove(i);
 					i--;
 
 				}
 			}
 
-			renderArgs.put("camisetas",camisetas);
-			renderArgs.put("pantalones",pantalones);
+			renderArgs.put("camisetas", camisetas);
+			renderArgs.put("pantalones", pantalones);
+			renderArgs.put("carrito", carrito);
 			render("Application/principal.html");
-		}
-		else {
+		} else {
 			renderTemplate("Application/loginTemplate.html");
 		}
 	}
@@ -133,23 +134,21 @@ public class Application extends Controller {
 
 	//ANDROID
 	public static void registrarAndroid(String user, String password) {
-		Cliente c = Cliente.find("byUsuario",user).first();
-		if(c==null) {
+		Cliente c = Cliente.find("byUsuario", user).first();
+		if (c == null) {
 			String mail = user + "@es";
-			c= new Cliente(user,user, user, password, mail);
+			c = new Cliente(user, user, user, password, mail);
 			c._save();
 			renderText("OK, Cliente se puede registrar, añadido a la BD");
-		}
-		else
+		} else
 			renderText("FAIL, este nombre de usuario ya existe");
 	}
 
-	public static void loginAndroid(String user, String password){
+	public static void loginAndroid(String user, String password) {
 		Cliente c = Cliente.find("byUsuarioAndContraseña", user, password).first();
-		if(c!=null) {
+		if (c != null) {
 			renderText("OK ,este cliente esta en la BD");
-		}
-		else
+		} else
 			renderText("FAIL este cliente no esta en la BD ");
 	}
 
@@ -164,32 +163,27 @@ public class Application extends Controller {
 					String erroradmin = "erroradmin";
 					renderArgs.put("erroradmin", erroradmin);
 					renderTemplate("Application/loginTemplate.html");
-				}
-
-				else{
-					session.put("user",cliente.usuario);
+				} else {
+					session.put("user", cliente.usuario);
 					renderArgs.put("client", c);
 					renderArgs.put("visionadmin", visionadmin);
 					renderArgs.put("client", c);
 					renderTemplate("Application/principalAdmin.html");
 				}
-			}
-
-			else{
-				session.put("user",cliente.usuario);
+			} else {
+				session.put("user", cliente.usuario);
 				renderArgs.put("client", c);
 				index();
 			}
 
-		}
-		else{
+		} else {
 			String error = "error";
 			renderArgs.put("error", error);
 			renderTemplate("Application/loginTemplate.html");
 		}
 	}
 
-	public static void loginTemplate(){
+	public static void loginTemplate() {
 		render();
 	}
 
@@ -205,7 +199,7 @@ public class Application extends Controller {
 		validation.required(nombre);
 		validation.required(apellido1);
 		validation.equals(contraseña, nuevocliente.contraseña).message("Las contraseñas no coinciden");
-		if(validation.hasErrors())
+		if (validation.hasErrors())
 			render("@register");
 
 
@@ -218,9 +212,7 @@ public class Application extends Controller {
 			nuevocliente.create();
 			session.put("user", nuevocliente.usuario);
 			index();
-		}
-
-		else{
+		} else {
 			validation.equals(usuario, "").message("El usuario ya está en uso");
 			render("@register");
 		}
@@ -233,13 +225,12 @@ public class Application extends Controller {
 	public static void recuperarContra(@Valid Cliente cliente, String mail) {
 		validation.required(mail);
 		validation.equals(mail, cliente.mail).message("Los emails no coinciden");
-		if(validation.hasErrors()) {
-			render("@recuperacionContra",cliente, mail);
-		}
-		else {
-			Cliente c= Cliente.find("byMail", cliente.mail).first();
-			if(c!=null) {
-				renderText("La contraeña es:" +c.contraseña);
+		if (validation.hasErrors()) {
+			render("@recuperacionContra", cliente, mail);
+		} else {
+			Cliente c = Cliente.find("byMail", cliente.mail).first();
+			if (c != null) {
+				renderText("La contraeña es:" + c.contraseña);
 			}
 		}
 
@@ -247,7 +238,7 @@ public class Application extends Controller {
 
 
 	//CARGAR PÁGINA
-	public static void MostrarPrenda(Long id){
+	public static void MostrarPrenda(Long id) {
 
 		Prenda prenda = Prenda.findById(id);
 		renderBinary(prenda.imagen.get());
@@ -269,6 +260,65 @@ public class Application extends Controller {
 
 		else
 			renderBinary(c.perfil.get());
+	}
+
+
+	//FUNCIONES CARRITO
+	public static void AddCarrito(Long id) {
+
+		Prenda prenda = Prenda.findById(id);
+		Prenda p = new Prenda(prenda.tipo, prenda.equipo, prenda.año, prenda.talla, 1, prenda.precio, prenda.imagen);
+		boolean encontrado = false;
+		int i = 0;
+		while (i < carrito.size() && !encontrado) {
+			if (carrito.get(i).tipo.equals(p.tipo) && carrito.get(i).equipo.equals(p.equipo) && carrito.get(i).talla.equals(p.talla) && carrito.get(i).año == p.año) {
+				carrito.get(i).cantidadStock++;
+				encontrado = true;
+			}
+			i++;
+		}
+
+		if (!encontrado)
+			carrito.add(p);
+
+		index();
+	}
+
+
+	public static void VerCarrito(){
+
+		Cliente user = connected();
+		//List<Compra> carrito = new List<Compra>();
+
+		renderTemplate("Application/Carrito.html");
+	}
+
+	public static void comprar (String tipo, String equipo, String talla, int cantidad, String usuario, String contraseña){
+
+		if (tipo == null || equipo == null || talla == null || cantidad < 1 || usuario == null || contraseña == null)
+			renderText("No has introducido todos los datos.");
+
+		else {
+			Cliente c = Cliente.find("byUsuarioAndContraseña", usuario, contraseña).first();
+
+			if (c == null)
+				renderText("Ese usuario no existe");
+			else
+			{
+				Prenda p = Prenda.find("byTipoAndEquipoAndTalla", tipo, equipo, talla).first();
+				if (p != null) {
+					if (p.getCantidadStock() >= cantidad) {
+						Date fecha = new Date();
+						p.setCantidadStock(p.getCantidadStock() - cantidad);
+						Compra Compra = new Compra(c, p, fecha);
+						Compra.save();
+						renderText("Has comprado " + cantidad + " " + tipo + " del " + equipo);
+					} else
+						renderText("No tenemos tanto stock en la tienda. Vuelve a realizar el pedido con el número disponible.");
+				} else
+					renderText("No tenemos esa vestimenta disponible actualmente.");
+			}
+		}
 	}
 
 
@@ -1006,53 +1056,4 @@ public class Application extends Controller {
 	   renderArgs.put("visionadmin", visionadmin);
 	   render("Application/principalAdmin.html");
    }
-
-	public static void VerCarrito(){
-
-		Cliente user = connected();
-		//List<Compra> carrito = new List<Compra>();
-
-		renderTemplate("Application/Carrito.html");
-	}
-
-   public static void comprar (String tipo, String equipo, String talla, int cantidad, String usuario, String contraseña){
-
-		if (tipo == null || equipo == null || talla == null || cantidad < 1 || usuario == null || contraseña == null)
-				renderText("No has introducido todos los datos.");
-
-			else {
-			Cliente c = Cliente.find("byUsuarioAndContraseña", usuario, contraseña).first();
-
-			if (c == null)
-				renderText("Ese usuario no existe");
-			else
-				{
-				Prenda p = Prenda.find("byTipoAndEquipoAndTalla", tipo, equipo, talla).first();
-				if (p != null) {
-					if (p.getCantidadStock() >= cantidad) {
-						Date fecha = new Date();
-						p.setCantidadStock(p.getCantidadStock() - cantidad);
-						Compra Compra = new Compra(c, p, fecha);
-						Compra.save();
-						renderText("Has comprado " + cantidad + " " + tipo + " del " + equipo);
-					} else
-						renderText("No tenemos tanto stock en la tienda. Vuelve a realizar el pedido con el número disponible.");
-				} else
-					renderText("No tenemos esa vestimenta disponible actualmente.");
-			}
-		}
-	}
-
-
-	public static void AddCarrito(String tipo, String equipo, String talla, double precio){
-		Prenda prenda = Prenda.find("byTipoAndEquipoAndtallaAndPrecio", tipo, equipo, talla, precio).first();
-		Cliente user = connected();
-		Compra carrito = new Compra();
-		int i =1;
-		carrito.setCarrito(i);
-		carrito.setCliente(user);
-		carrito.setPrenda(prenda);
-		carrito.save();
-		render("Application/principal.html");
-	}
 }
