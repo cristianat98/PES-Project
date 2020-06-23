@@ -296,10 +296,13 @@ public class Application extends Controller {
 		}
 	}
 
-	public static void ModificarDatos2(Cliente clienteM, String contraseña) {
+	public static void ModificarDatos2(Cliente clienteM, String usuario, String nombre, String apellido1, String mail, String contraseña) {
 
-		String username = session.get("user");
-		Cliente c=Cliente.find("byUsuario", username).first();
+		validation.required(usuario);
+		validation.required(nombre);
+		validation.required(apellido1);
+		validation.required(mail);
+		Cliente c = Cliente.find("byUsuario", session.get("user")).first();
 		validation.equals(contraseña, clienteM.contraseña).message("Las contraseñas no coinciden");
 		if(validation.hasErrors()) {
 			int i = 1;
@@ -308,35 +311,27 @@ public class Application extends Controller {
 			render("@ModificarUsuario");
 		}
 
-		Cliente comprobarusuario = null;
-		Cliente comprobarcorreo = null;
-		if (!clienteM.usuario.equals(""))
-			comprobarusuario = Cliente.find("byUsuario", clienteM.usuario).first();
+		Cliente comprobarusuario = Cliente.find("byUsuario", usuario).first();
+		Cliente comprobarcorreo = Cliente.find("byMail", mail).first();
 
-		if (!clienteM.mail.equals(""))
-			comprobarcorreo = Cliente.find("byMail", clienteM.mail).first();
+		if (comprobarcorreo == c)
+			comprobarcorreo = null;
+
+		if (comprobarusuario == c)
+			comprobarusuario = null;
 
 		String error = null;
 		if(comprobarcorreo == null && comprobarusuario == null) {
-			if (!clienteM.usuario.equals("")){
-				c.usuario=clienteM.usuario;
-				session.put("user", c.usuario);
-			}
+
+			c.usuario = usuario;
+			session.put("user", c.usuario);
+			c.mail = mail;
+			c.nombre = nombre;
+			c.apellido1 = apellido1;
+			c.apellido2 = clienteM.apellido2;
 
 			if (!clienteM.contraseña.equals(""))
-				c.contraseña=clienteM.contraseña;
-
-			if (!clienteM.mail.equals(""))
-				c.mail=clienteM.mail;
-
-			if (!clienteM.nombre.equals(""))
-				c.nombre=clienteM.nombre;
-
-			if (!clienteM.apellido1.equals(""))
-				c.apellido1=clienteM.apellido1;
-
-			if (!clienteM.apellido2.equals(""))
-				c.apellido2=clienteM.apellido2;
+				c.contraseña = clienteM.contraseña;
 
 			if (clienteM.perfil != null)
 				c.perfil = clienteM.perfil;
@@ -355,7 +350,6 @@ public class Application extends Controller {
 		renderArgs.put("error", error);
 		renderArgs.put("clienteM", c);
 		render("Application/ModificarUsuario.html");
-
 	}
 
 
@@ -764,6 +758,7 @@ public class Application extends Controller {
 		render("Application/principalAdmin.html");
 	}
 
+
 	//VER PRENDA
 	public static void verprenda(){
 
@@ -852,6 +847,7 @@ public class Application extends Controller {
 	   renderArgs.put("visionadmin", visionadmin);
 	   renderTemplate("Application/principalAdmin.html");
    }
+
 
    //MODIFICAR STOCK
 	public static void modificarstock(){

@@ -38,24 +38,24 @@
 
  #{form @ModificarDatos2(), enctype:'multipart/form-data'}
 
-     #{field 'clienteM.usuario'}
+     #{field 'usuario'}
      <p class="${field.errorClass}">
-         <strong>Username:</strong> <input type="text" name="${field.name}" placeholder="&{clienteM.usuario}" size="16">
+         <strong>Username:</strong> <input type="text" name="${field.name}" value="&{clienteM.usuario}" size="16">*
          <span class="error">${field.error}</span>
      </p>
 
      #{/field}
 
-     #{field 'clienteM.nombre'}
+     #{field 'nombre'}
      <p class="${field.errorClass}">
-         <strong>Nombre:</strong> <input type="text" name="${field.name}" placeholder="&{clienteM.nombre}"size="16">
+         <strong>Nombre:</strong> <input type="text" name="${field.name}" value="&{clienteM.nombre}"size="16">*
          <span class="error">${field.error}</span>
      </p>
      #{/field}
 
-     #{field 'clienteM.apellido1'}
+     #{field 'apellido1'}
      <p class="${field.errorClass}">
-         <strong>Apellido 1:</strong> <input type="text" name="${field.name}" placeholder="&{clienteM.apellido1}" size="16">
+         <strong>Apellido 1:</strong> <input type="text" name="${field.name}" value="&{clienteM.apellido1}" size="16">*
          <span class="error">${field.error}</span>
      </p>
 
@@ -63,7 +63,7 @@
 
      #{field 'clienteM.apellido2'}
      <p class="${field.errorClass}">
-         <strong>Apellido 2:</strong> <input type="text" name="${field.name}"  placeholder="&{clienteM.apellido2}" size="16">
+         <strong>Apellido 2:</strong> <input type="text" name="${field.name}"  value="&{clienteM.apellido2}" size="16">
          <span class="error">${field.error}</span>
      </p>
 
@@ -86,9 +86,9 @@
      </p>
 
      #{/field}
-     #{field 'clienteM.mail'}
+     #{field 'mail'}
      <p class="${field.errorClass}">
-         <strong>Mail:</strong> <input type="email" name="${field.name}" placeholder="&{clienteM.mail}" size="16">
+         <strong>Mail:</strong> <input type="email" name="${field.name}" value="&{clienteM.mail}" size="16">*
          <span class="error">${field.error}</span>
      </p>
 
