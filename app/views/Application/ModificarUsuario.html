@@ -106,6 +106,10 @@
  </p>
 
  #{/form}
+
+    #{if error}
+    <p style="color: #ea0808">${error}</p>
+    #{/if}
 #{/if}
  <a href= "@{Logout()}"><button>Cerrar Sesión</button></a>
  <a href= "@{index()}"><button>Atrás</button></a>

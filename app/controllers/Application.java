@@ -308,7 +308,16 @@ public class Application extends Controller {
 			render("@ModificarUsuario");
 		}
 
-		if(c!=null) {
+		Cliente comprobarusuario = null;
+		Cliente comprobarcorreo = null;
+		if (!clienteM.usuario.equals(""))
+			comprobarusuario = Cliente.find("byUsuario", clienteM.usuario).first();
+
+		if (!clienteM.mail.equals(""))
+			comprobarcorreo = Cliente.find("byMail", clienteM.mail).first();
+
+		String error = null;
+		if(comprobarcorreo == null && comprobarusuario == null) {
 			if (!clienteM.usuario.equals("")){
 				c.usuario=clienteM.usuario;
 				session.put("user", c.usuario);
@@ -335,6 +344,18 @@ public class Application extends Controller {
 			c.save();
 			index();
 		}
+
+		else if (comprobarcorreo != null)
+			error = "Este correo ya está en uso";
+
+		else
+			error = "Este nombre de usuario ya está en uso";
+
+		renderArgs.put("modificar", 1);
+		renderArgs.put("error", error);
+		renderArgs.put("clienteM", c);
+		render("Application/ModificarUsuario.html");
+
 	}
 
 
@@ -352,7 +373,21 @@ public class Application extends Controller {
 			render("@EliminarUsuario");
 		}
 		else {
-			c.delete();
+			if (c.admin == 1){
+				List<Cliente> listaadmin = Cliente.find("byAdmin", 1).fetch();
+				if (listaadmin.size() == 1){
+					String error = "No puede eliminar esta cuenta, es la última con permisos de administrador";
+					renderArgs.put("error", error);
+					render("Application/EliminarUsuario.html");
+				}
+
+				else
+					c.delete();
+			}
+
+			else
+				c.delete();
+
 			session.clear();
 			renderTemplate("Application/loginTemplate.html");
 		}
