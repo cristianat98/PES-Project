@@ -2,5 +2,5 @@
 
 require:
     - play
-    - play -> docviewer
-    - play -> secure 
+    - docviewer
+    - secure

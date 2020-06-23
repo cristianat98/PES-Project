@@ -110,67 +110,27 @@
 </head>
 <body>
 <div class="panel panel-default" >
-    <div class="panel-heading">Camisetas</div>
-    #{form @AddCarrito()}
+    <div class="panel-heading">Carrito</div>
     <section class="panel-body">
-    #{if camisetas}
+        #{if camisetas}
         #{list items:camisetas, as:'camiseta'}
 
-            <article class="media">
-                <div class="media-left media-middle">
-                    <a href="#">
-                        <img class="media-object" src="@{MostrarPrenda(camiseta.id)}" alt="ERROR AL CARGAR LA IMAGEN">
-                    </a>
-                </div>
-                <div class="media-body">
-                    <h4 class="media-heading">${camiseta.tipo} DEL ${camiseta.equipo} <br> ${camiseta.precio}€</h4>
-                </div>
-                #{field 'camiseta.tipo'}
-                #{/field}
-                #{field 'camiseta.equipo'}
-                #{/field}
-                #{field 'camiseta.talla'}
-                #{/field}
-                #{field 'camiseta.precio'}
-                #{/field}
+        <article class="media">
+            <div class="media-left media-middle">
+                <a href="#">
+                    <img class="media-object" src="@{MostrarPrenda(camiseta.id)}" alt="ERROR AL CARGAR LA IMAGEN">
+                </a>
+            </div>
+            <div class="media-body">
+                <h4 class="media-heading">${camiseta.tipo} DEL ${camiseta.equipo} <br> ${camiseta.precio}€</h4>
 
-                <button type="submit" class="btn btn-default btn-lg">
-                    <span class="glyphicon glyphicon" aria-hidden="true"></span> Añadir Carrito
-                </button>
-            </article>
+            <button type="submit" class="btn btn-default btn-lg">
+                <span class="glyphicon glyphicon" aria-hidden="true"></span> Añadir Carrito
+            </button>
+        </article>
         #{/list}
-    #{/if}
-        #{/form}
+        #{/if}
     </section>
 </div>
-<div class="panel panel-default" >
-    <div class="panel-heading">Pantalones</div>
-
-    <section class="panel-body">
-    #{if pantalones}
-        #{list items:pantalones, as:'pantalon'}
-
-            <article class="media">
-                <div class="media-left media-middle">
-                    <a href="#">
-                        <img class="media-object" src="@{MostrarPrenda(pantalon.id)}" alt="ERROR AL CARGAR LA IMAGEN">
-                    </a>
-                </div>
-
-                <div class="media-body">
-                    <h4 class="media-heading">${pantalon.tipo} DEL ${pantalon.equipo} <br> ${pantalon.precio}€</h4>
-                </div>
-                <button type="button" class="btn btn-default btn-lg">
-                    <span class="glyphicon glyphicon" aria-hidden="true"></span> Añadir Carrito
-                </button>
-            </article>
-        #{/list}
-    #{/if}
-
-    </section>
-</div>
-
-
-
 </body>
 </html>

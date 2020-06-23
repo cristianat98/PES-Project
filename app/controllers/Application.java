@@ -871,7 +871,13 @@ public class Application extends Controller {
 	   render("Application/principalAdmin.html");
    }
 
+	public static void VerCarrito(){
 
+		Cliente user = connected();
+		//List<Compra> carrito = new List<Compra>();
+
+		renderTemplate("Application/Carrito.html");
+	}
 
    public static void comprar (String tipo, String equipo, String talla, int cantidad, String usuario, String contraseña){
 
@@ -899,5 +905,18 @@ public class Application extends Controller {
 					renderText("No tenemos esa vestimenta disponible actualmente.");
 			}
 		}
+	}
+
+
+	public static void AddCarrito(String tipo, String equipo, String talla, double precio){
+		Prenda prenda = Prenda.find("byTipoAndEquipoAndtallaAndPrecio", tipo, equipo, talla, precio).first();
+		Cliente user = connected();
+		Compra carrito = new Compra();
+		int i =1;
+		carrito.setCarrito(i);
+		carrito.setCliente(user);
+		carrito.setPrenda(prenda);
+		carrito.save();
+		render("Application/principal.html");
 	}
 }
