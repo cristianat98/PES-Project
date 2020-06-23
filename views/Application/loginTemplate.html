@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <style>
+        .logo {
+            margin-left: 600px;
+            margin-top: 115px;
+            width: 100px;
+            height: 100px;
+        }
+        .panel.panel-default{
+            margin-top: 20px;
+            height: 280px;
+            width: 350px;
+            margin-left: 500px;
+        }
+
+    </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+
+
+
+    <meta charset="UTF-8">
+    <title>Página Login</title>
+</head>
+<img class="logo" src="/public/images/logo.jpg" alt="ERROR AL CARGAR LA IMAGEN">
+<div id="login">
+    <div class="panel panel-default">
+        <div class="panel-heading">Login</div>
+        <div class="panel-body">
+
+            <body background="/public/images/maxresdefault.jpg">
+
+
+            #{form @Login()}
+
+                #{field 'cliente.usuario'}
+                <p class="field">
+                    <label>Usuario:</label>
+                    <input type="text"  size="19" name="${field.name}" />
+                </p>
+                #{/field}
+
+                #{field 'cliente.contraseña'}
+                <p class="field">
+                    <label>Contraseña:</label>
+                    <input type="password"  size="19" name="${field.name}"/>
+                </p>
+                #{/field}
+
+                #{field 'adm'}
+                <p class="field">
+                    <input type="submit"  value = "Login" name="${field.name}"/>
+                    <input type="submit" value="Entrar Como Administrador" name="${field.name}"/>
+                </p>
+                #{/field}
+            <span class="error">${field.error}</span>
+
+            #{/form}
+
+            #{if error}
+            <p style="color: #ea0833">*Los datos introducidos no son correctos</p>
+            #{/if}
+
+            #{if erroradmin}
+            <p style="color: #ea0833">*Esta cuenta no tiene permisos de administrador</p>
+            #{/if}
+            <p>
+                <a href="@{register()}">Registrar Nuevo Cliente</a>
+            </p>
+
+            <p>
+                <a href="@{recuperarContra()}">Olvidaste tu contraseña?</a>
+            </p>
+            </body>
+        </div>
+    </div>
+</div>
