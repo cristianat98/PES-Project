@@ -12,7 +12,7 @@
     }
 
     .column li a{
-        background-color: #000000;
+        background-color: rgba(78, 83, 81, 0.57);
         color:#ffffff;
         padding:10px 15px;
         display:block;
@@ -72,6 +72,7 @@
     .prueba{
         float:right;
     }
+    
 
 </style>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
@@ -87,10 +88,10 @@
     window.onload=function() {
 
         if (&{visionadmin} === 1)
-        document.getElementById('AñadirUsuario').style.display="block";
+             document.getElementById('AñadirUsuario').style.display="block";
 
         else if (&{visionadmin} === 2)
-        document.getElementById('ModificarUsuario').style.display="block";
+            document.getElementById('ModificarUsuario').style.display="block";
 
         else if (&{visionadmin} === 3)
             document.getElementById('VerUsuario').style.display="block";
@@ -109,7 +110,13 @@
 
         else if (&{visionadmin} === 8)
             document.getElementById('ModificarPrenda').style.display="block";
-    	}
+
+        else if (&{visionadmin} === 9)
+            document.getElementById('VerPrenda').style.display="block";
+
+        else if (&{visionadmin} === 10)
+            document.getElementById('ModificarStock').style.display="block";
+    }
 
     	function ComprobarCheckAñadir (){
             if (document.getElementById('crearusuarioadmin').checked)
@@ -128,9 +135,9 @@
     <title>Página Administrador</title>
 </head>
 <body>
-<div style="background: linear-gradient(#58e51b,#e9ece7); width:auto; height:90px"></div>
+<div style="background: linear-gradient(#58e51b,#e9ece7); width:auto; height:90px"><h1 style="text-align: center; width:auto;">VISTA ADMINISTRADOR</h1></div>
 
-<h1 style="text-align: center; width:auto;"> VISTA ADMINISTRADOR</h1>
+
 <div class="prueba">
 <img class="avatar" src="@{MostrarPerfil(1)}" alt="ERROR AL CARGAR LA IMAGEN">
 <div class ="usuario"> <b>Está conectado como: &{client.usuario}</b></div>
@@ -142,28 +149,30 @@
             </button>
             <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu1">
                 <li><a href="@{CambiarVistaNormal()}">Cambiar Vista a Normal</a></li>
-                <li><a href="@{EliminarUsuario()}">Borrar perfil</a></li>
                 <li><a href="@{ModificarUsuario()}">Modificar datos perfil</a></li>
+                <li><a href="@{EliminarUsuario()}">Borrar perfil</a></li>
                 <li><a href="@{Logout()}">Cerrar Sesión</a></li>
             </ul>
         </div>
     </div>
     <p style="text-align: center">Esta es la vista de Administrador de la Página Web. Solos los usuarios con derechos de administrador pueden acceder a esta página.</p>
-    <h3 style="text-align: center; width:auto;"> ACCIONES DE ADMINISTRADOR</h3>
 </div>
 
 <div class="left" style="width: auto">
     <ul class="column">
-        <h2>PARA USUARIO</h2>
+        <h3 style="width:auto;"> ACCIONES DE ADMINISTRADOR</h3>
+        <h4>PARA USUARIO</h4>
         <a class="jumbotron"></a>
         <li><a href="@{añadirusuario()}">Añadir Usuario</a></li>
         <li><a href="@{modificarusuarioadmin()}">Modificar Usuario</a></li>
         <li><a href="@{verusuario()}">Ver Usuario</a></li>
         <li><a href="@{cargareliminar()}">Eliminar Usuario</a></li>
-        <h2>PARA PRENDAS</h2>
+        <h4>PARA PRENDAS</h4>
         <li><a href="@{añadirprenda()}">Añadir Prenda</a></li>
         <li><a href="@{modificarprenda()}">Modificar Prenda</a></li>
+        <li><a href="@{verprenda()}">Ver Prenda</a></li>
         <li><a href="@{goAddStock()}">Añadir Stock</a></li>
+        <li><a href="@{modificarstock()}">Modificar Stock</a></li>
         <li><a href="@{cargarquitarstock()}">Quitar Stock</a></li>
     </ul>
 </div>
@@ -238,7 +247,7 @@
 
     #{field 'nuevocliente.perfil'}
         <p class="${field.errorClass}">
-            <strong>Foto Perfil:</strong><input type="file" name="${field.name}">
+            <strong>Foto Perfil:</strong><input style="margin-left: 20%;" type="file" name="${field.name}">
             <span class="error">${field.error}</span>
         </p>
     #{/field}
@@ -293,21 +302,21 @@
 
         #{field 'usuariofinal'}
             <p class="${field.errorClass}">
-                <strong>Usuario:</strong> <input type="text" name="${field.name}" placeholder="${usuarioM.usuario}" size="16"  >
+                <strong>Usuario:</strong> <input type="text" name="${field.name}" value="${usuarioM.usuario}" size="16"  >*
                 <span class="error">${field.error}</span>
             </p>
         #{/field}
 
-    #{field 'usuarioM.nombre'}
+    #{field 'nombre'}
         <p class="${field.errorClass}">
-            <strong>Nombre:</strong> <input type="text" name="${field.name}" placeholder="${usuarioM.nombre}" size="16">
+            <strong>Nombre:</strong> <input type="text" name="${field.name}" value="${usuarioM.nombre}" size="16">*
             <span class="error">${field.error}</span>
         </p>
     #{/field}
 
-    #{field 'usuarioM.apellido1'}
+    #{field 'apellido1'}
         <p class="${field.errorClass}">
-            <strong>Apellido 1:</strong> <input type="text" name="${field.name}" placeholder="${usuarioM.apellido1}"size="16">
+            <strong>Apellido 1:</strong> <input type="text" name="${field.name}" value="${usuarioM.apellido1}"size="16">*
             <span class="error">${field.error}</span>
         </p>
 
@@ -315,7 +324,7 @@
 
     #{field 'usuarioM.apellido2'}
         <p class="${field.errorClass}">
-            <strong>Apellido 2:</strong> <input type="text" name="${field.name}" placeholder="${usuarioM.apellido2}" size="16">
+            <strong>Apellido 2:</strong> <input type="text" name="${field.name}" value="${usuarioM.apellido2}" size="16">
             <span class="error">${field.error}</span>
         </p>
 
@@ -323,28 +332,21 @@
 
         #{field 'usuarioM.contraseña'}
             <p class="${field.errorClass}">
-                <strong>Contraseña:</strong> <input type="text" name="${field.name}" placeholder="${usuarioM.contraseña}"size="16" >
+                <strong>Contraseña:</strong> <input type="password" name="${field.name}" size="16" >
                 <span class="error">${field.error}</span>
             </p>
         #{/field}
 
     #{field 'contraseña'}
         <p class="${field.errorClass}">
-            <strong>Verificar Contraseña:</strong> <input type="text" name="${field.name}" placeholder="${usuarioM.contraseña}"size="16" >
+            <strong>Verificar Contraseña:</strong> <input type="password" name="${field.name}" size="16" >
             <span class="error">${field.error}</span>
         </p>
     #{/field}
 
-    #{field 'mailinicial'}
-        <p class="${field.errorClass}">
-            <input style="display: none" name="${field.name}" value="${usuarioM.mail}" size="16"  >
-            <span class="error">${field.error}</span>
-        </p>
-    #{/field}
-
-        #{field 'mailfinal'}
+        #{field 'mail'}
             <p class="${field.errorClass}">
-                <strong>Mail:</strong> <input type="email" name="${field.name}" placeholder="${usuarioM.mail}" size="16" >
+                <strong>Mail:</strong> <input type="email" name="${field.name}" value="${usuarioM.mail}" size="16" >*
                 <span class="error">${field.error}</span>
             </p>
         #{/field}
@@ -360,7 +362,7 @@
 
     #{field 'usuarioM.perfil'}
         <p class="${field.errorClass}">
-            <strong>Foto Perfil:</strong><input type="file" name="${field.name}">
+            <strong>Foto Perfil:</strong><input style="margin-left: 20%;" type="file" name="${field.name}">
             <span class="error">${field.error}</span>
         </p>
     #{/field}
@@ -404,7 +406,7 @@
 
     <h3>Estos son los datos del usuario ${usuarioM.usuario}:</h3>
 
-    <p>- Nombre de Usuario: ${usuarioM.usuario}</p>
+    <p>- NOMBRE DE USUARIO: ${usuarioM.usuario}</p>
     <p>- NOMBRE DE LA CUENTA: ${usuarioM.nombre}</p>
     <p>- PRIMER APELLIDO: ${usuarioM.apellido1}</p>
     <p>- SEGUNDO APELLIDO: ${usuarioM.apellido2}</p>
@@ -472,7 +474,7 @@
 
         #{field 'precio'}
             <p class="${field.errorClass}">
-                <strong>Precio:</strong> <input type="number" step="0.01" name="${field.name}" size="16" > *
+                <strong>Precio:</strong> <input type="number" step="0.01" name="${field.name}" size="16" > € *
                 <span class="error">${field.error}</span>
             </p>
         #{/field}
@@ -486,7 +488,7 @@
 
         #{field 'imagen'}
             <p class="${field.errorClass}">
-                <input type="file" name="${field.name}"> *
+                <strong>Foto de Perfil:</strong><input style="margin-left: 20%;" type="file" name="${field.name}"> *
                 <span class="error">${field.error}</span>
             </p>
         #{/field}
@@ -528,6 +530,7 @@
     #{if prendaModificar}
 
         #{form @modificarprendaadmin(), enctype:'multipart/form-data'}
+
             #{field 'tipo'}
                 <p class="${field.errorClass}">
                     <label for="TiposPrenda"> Tipo de Prenda (Prenda actual: &{prendaModificar.tipo}:</label>
@@ -540,28 +543,28 @@
 
             #{field 'equipo'}
                 <p class="${field.errorClass}">
-                    <strong>Equipo:</strong> <input type="text" name="${field.name}" placeholder="&{prendaModificar.equipo}" size="16" >
+                    <strong>Equipo:</strong> <input type="text" name="${field.name}" value="&{prendaModificar.equipo}" size="16" >*
                     <span class="error">${field.error}</span>
                 </p>
             #{/field}
 
             #{field 'precio'}
                 <p class="${field.errorClass}">
-                    <strong>Precio:</strong> <input type="number" step="0.01" name="${field.name}" placeholder="&{prendaModificar.precio}" size="16" >
+                    <strong>Precio:</strong> <input type="number" step="0.01" name="${field.name}" value="&{prendaModificar.precio}" size="16" > € *
                     <span class="error">${field.error}</span>
                 </p>
             #{/field}
 
             #{field 'año'}
                 <p class="${field.errorClass}">
-                    <strong>Año:</strong> <input type="number" name="${field.name}" placeholder="&{prendaModificar.año}" size="16" >
+                    <strong>Año:</strong> <input type="number" name="${field.name}" value="&{prendaModificar.año}" size="16" >*
                     <span class="error">${field.error}</span>
                 </p>
             #{/field}
 
             #{field 'imagen'}
                 <p class="${field.errorClass}">
-                    <input type="file" name="${field.name}">
+                    <input type="file" style="margin-left: 20%;" name="${field.name}">
                     <span class="error">${field.error}</span>
                 </p>
             #{/field}
@@ -578,6 +581,73 @@
 
 #{if error}
     <p style="color: #ea0808">${error}</p>
+#{/if}
+
+</div>
+
+<div style="text-align: center; display: none" id = "VerPrenda" class="column">
+
+#{form @cargarprenda()}
+    <p>
+        <strong>Selecciona la prenda que quieres ver:</strong>
+    </p>
+
+    <p>
+        <label for="Equipo"> Equipos:</label>
+        <select id="idprenda" name="idprenda">
+        #{list items:listaprendas, as:'prenda'}
+            <option value="${prenda.id}" >${prenda.equipo} ${prenda.año} ${prenda.tipo}</option>
+        #{/list}
+        </select>
+    </p>
+
+    <p class="buttons">
+        <input type="submit" value="Cargar Datos" />
+    </p>
+#{/form}
+
+#{if prendamostrar}
+
+    <h3>Estos son los datos de la prenda:</h3>
+
+    <p>- TIPO DE PRENDA: ${prendamostrar.tipo}</p>
+    <p>- NOMBRE DEL EQUIPO: ${prendamostrar.equipo}</p>
+    <p>- AÑO: ${prendamostrar.año}</p>
+    <p>- PRECIO: ${prendamostrar.precio} €</p>
+    <p>- IMAGEN: <img class="avatar1" src="@{MostrarPrenda(prendamostrar.id)}" alt="NO TIENE NINGUNA IMAGEN DISPONIBLE">
+
+#{if prendamostrar.talla}
+
+    <p>- TALLA: ${prendamostrar.talla}</p>
+    <p>- CANTIDAD DISPONIBLE: ${prendamostrar.cantidadStock}</p>
+    <p>- CANTIDAD VENDIDA: ${prendamostrar.cantidadVendida}</p>
+
+#{/if}
+
+#{else}
+
+    <p>NO HAY STOCK DISPONIBLE DE ESTE EQUIPO</p>
+
+#{/else}
+
+#{/if}
+
+#{if prendas}
+
+    <h3>Estos son los datos de la prenda:</h3>
+
+    <p>- TIPO DE PRENDA: ${prendas[0].tipo}</p>
+    <p>- NOMBRE DEL EQUIPO: ${prendas[0].equipo}</p>
+    <p>- AÑO: ${prendas[0].año}</p>
+    <p>- PRECIO: ${prendas[0].precio}</p>
+    <p>- IMAGEN: <img class="avatar1" src="@{MostrarPrenda(prendas[0].id)}" alt="NO TIENE UNA IMAGEN DISPONIBLE">
+
+    #{list items:prendas, as:'prenda'}
+        <p>- TALLA: ${prenda.talla}</p>
+        <p>- CANTIDAD DISPONIBLE: ${prenda.cantidadStock}</p>
+        <p>- CANTIDAD VENDIDA: ${prenda.cantidadVendida}</p>
+    #{/list}
+
 #{/if}
 
 </div>
@@ -622,6 +692,55 @@
 #{if error}
     <p style="color: #ea0808">${error}</p>
 #{/if}
+
+</div>
+
+<div style="text-align: center; display: none" id = "ModificarStock" class="column">
+    #{form @cargarequipo()}
+        <p>
+            <strong>Selecciona el equipo que quieres modificar:</strong>
+        </p>
+
+        <p>
+            <label for="NombrePrenda"> Equipos:</label>
+            <select id="idprenda" name="idprenda">
+                #{list items:listaprendas, as:'prenda'}
+                    <option value="${prenda.id}" >${prenda.equipo} ${prenda.año} ${prenda.tipo} ${prenda.talla}</option>
+                #{/list}
+            </select>
+        </p>
+
+        <p class="buttons">
+            <input type="submit" value="Cargar Prenda" />
+        </p>
+    #{/form}
+
+    #{if quitarprenda}
+        <h4>TALLA ACTUAL: &{quitarprenda.talla}</h4>
+        #{form @modificarstockadmin()}
+
+            #{field 'talla'}
+                <p class="${field.errorClass}">
+                    <strong>Introduce la nueva talla:</strong> <input type="text" name="${field.name}" size="16" > *
+                    <span class="error">${field.error}</span>
+                </p>
+            #{/field}
+
+            <p class="${field.errorClass}">
+                <input type="submit" value="Modificar Stock"/>
+            </p>
+
+
+        #{/form}
+
+        #{if mensaje}
+            <p style="color: #08ea0c">${mensaje}</p>
+        #{/if}
+
+        #{if error}
+            <p style="color: #ea0808">${error}</p>
+        #{/if}
+    #{/if}
 
 </div>
 

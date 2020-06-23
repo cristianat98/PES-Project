@@ -1,6 +1,7 @@
 
 package controllers;
 
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import jdk.nashorn.internal.runtime.regexp.joni.ast.CClassNode;
 import org.hibernate.annotations.Check;
 import play.data.validation.Validation;
@@ -296,10 +297,13 @@ public class Application extends Controller {
 		}
 	}
 
-	public static void ModificarDatos2(Cliente clienteM, String contraseña) {
+	public static void ModificarDatos2(Cliente clienteM, String usuario, String nombre, String apellido1, String mail, String contraseña) {
 
-		String username = session.get("user");
-		Cliente c=Cliente.find("byUsuario", username).first();
+		validation.required(usuario);
+		validation.required(nombre);
+		validation.required(apellido1);
+		validation.required(mail);
+		Cliente c = Cliente.find("byUsuario", session.get("user")).first();
 		validation.equals(contraseña, clienteM.contraseña).message("Las contraseñas no coinciden");
 		if(validation.hasErrors()) {
 			int i = 1;
@@ -308,26 +312,27 @@ public class Application extends Controller {
 			render("@ModificarUsuario");
 		}
 
-		if(c!=null) {
-			if (!clienteM.usuario.equals("")){
-				c.usuario=clienteM.usuario;
-				session.put("user", c.usuario);
-			}
+		Cliente comprobarusuario = Cliente.find("byUsuario", usuario).first();
+		Cliente comprobarcorreo = Cliente.find("byMail", mail).first();
+
+		if (comprobarcorreo == c)
+			comprobarcorreo = null;
+
+		if (comprobarusuario == c)
+			comprobarusuario = null;
+
+		String error = null;
+		if(comprobarcorreo == null && comprobarusuario == null) {
+
+			c.usuario = usuario;
+			session.put("user", c.usuario);
+			c.mail = mail;
+			c.nombre = nombre;
+			c.apellido1 = apellido1;
+			c.apellido2 = clienteM.apellido2;
 
 			if (!clienteM.contraseña.equals(""))
-				c.contraseña=clienteM.contraseña;
-
-			if (!clienteM.mail.equals(""))
-				c.mail=clienteM.mail;
-
-			if (!clienteM.nombre.equals(""))
-				c.nombre=clienteM.nombre;
-
-			if (!clienteM.apellido1.equals(""))
-				c.apellido1=clienteM.apellido1;
-
-			if (!clienteM.apellido2.equals(""))
-				c.apellido2=clienteM.apellido2;
+				c.contraseña = clienteM.contraseña;
 
 			if (clienteM.perfil != null)
 				c.perfil = clienteM.perfil;
@@ -335,6 +340,17 @@ public class Application extends Controller {
 			c.save();
 			index();
 		}
+
+		else if (comprobarcorreo != null)
+			error = "Este correo ya está en uso";
+
+		else
+			error = "Este nombre de usuario ya está en uso";
+
+		renderArgs.put("modificar", 1);
+		renderArgs.put("error", error);
+		renderArgs.put("clienteM", c);
+		render("Application/ModificarUsuario.html");
 	}
 
 
@@ -352,7 +368,21 @@ public class Application extends Controller {
 			render("@EliminarUsuario");
 		}
 		else {
-			c.delete();
+			if (c.admin == 1){
+				List<Cliente> listaadmin = Cliente.find("byAdmin", 1).fetch();
+				if (listaadmin.size() == 1){
+					String error = "No puede eliminar esta cuenta, es la última con permisos de administrador";
+					renderArgs.put("error", error);
+					render("Application/EliminarUsuario.html");
+				}
+
+				else
+					c.delete();
+			}
+
+			else
+				c.delete();
+
 			session.clear();
 			renderTemplate("Application/loginTemplate.html");
 		}
@@ -469,52 +499,52 @@ public class Application extends Controller {
 		renderTemplate ("Application/principalAdmin.html");
 	}
 
-	public static void ModificarU(Cliente usuarioM, String usuarioinicial, String usuariofinal, String mailinicial, String mailfinal, int admin){
+	public static void ModificarU(Cliente usuarioM, String usuarioinicial, String usuariofinal, String nombre, String apellido1, String mail, int admin){
 
-		Cliente comprobarusuario = null;
-		Cliente comprobarcorreo = null;
-		if (!usuarioinicial.equals(usuariofinal))
-			comprobarusuario = Cliente.find("byUsuario", usuariofinal).first();
+		Cliente c = Cliente.find("byUsuario", usuarioinicial).first();
+		validation.required(usuariofinal);
+		validation.required(nombre);
+		validation.required(apellido1);
+		validation.required(mail);
+		if (validation.hasErrors()){
+			renderArgs.put("visionadmin", visionadmin);
+			renderArgs.put("usuarioM", c);
+			render("Application/principalAdmin.html");
+		}
 
-		if (!mailinicial.equals(mailfinal))
-			comprobarcorreo = Cliente.find("byMail", mailfinal).first();
+		Cliente comprobarusuario = Cliente.find("byUsuario", usuariofinal).first();
+		Cliente comprobarcorreo = Cliente.find("byMail", mail).first();
 
+		if (c == comprobarcorreo)
+			comprobarcorreo = null;
+
+		if (c == comprobarusuario)
+			comprobarusuario = null;
 
 		if (comprobarusuario == null && comprobarcorreo == null) {
 
-			Cliente c = Cliente.find("byUsuario", usuarioinicial).first();
 			if (c != null) {
-				if (!usuariofinal.equals("")) {
-					if (usuarioinicial.equals(session.get("user")))
-						session.put("user", usuariofinal);
 
-					c.usuario = usuariofinal;
-				}
+				if (usuarioinicial.equals(session.get("user")))
+					session.put("user", usuariofinal);
+
+				c.usuario = usuariofinal;
+				c.mail = mail;
+				c.nombre = nombre;
+				c.apellido1 = apellido1;
+				c.apellido2 = usuarioM.apellido2;
+				if (c.admin == 0)
+					c.admin = admin;
 
 				if (!usuarioM.contraseña.equals(""))
 					c.contraseña = usuarioM.contraseña;
 
-				if (!mailfinal.equals(""))
-					c.mail = mailfinal;
-
-				if (!usuarioM.nombre.equals(""))
-					c.nombre = usuarioM.nombre;
-
-				if (!usuarioM.apellido1.equals(""))
-					c.apellido1 = usuarioM.apellido1;
-
-				if (!usuarioM.apellido2.equals(""))
-					c.apellido2 = usuarioM.apellido2;
-
 				if (usuarioM.perfil != null)
 					c.perfil = usuarioM.perfil;
-
-				c.admin = admin;
 
 				c.save();
 				List<Cliente> lclientes = Cliente.findAll();
 				renderArgs.put("listaclientes", lclientes);
-				renderArgs.put("usuarioM", c);
 				renderArgs.put("visionadmin", visionadmin);
 				String mensaje = "Usuario modificado correctamente";
 				renderArgs.put("mensaje", mensaje);
@@ -525,7 +555,6 @@ public class Application extends Controller {
 			List<Cliente> lclientes = Cliente.findAll();
 			renderArgs.put("listaclientes", lclientes);
 			renderArgs.put("visionadmin", visionadmin);
-			Cliente c = Cliente.find("byUsuario", usuarioinicial).first();
 			renderArgs.put("usuarioM", c);
 			String error;
 
@@ -600,7 +629,7 @@ public class Application extends Controller {
 	}
 
 
-	//AÑADIR EQUIPO
+	//AÑADIR PRENDA
 	public static void añadirprenda(){
 		if (visionadmin != 7)
 			visionadmin = 7;
@@ -678,23 +707,25 @@ public class Application extends Controller {
 
 	public static void modificarprendaadmin(String tipo, String equipo, double precio, int año, Blob imagen){
 
+		validation.required(equipo);
 		Prenda prenda = Prenda.findById(referencia.id);
+		if (validation.hasErrors()){
+			renderArgs.put("visionadmin", visionadmin);
+			renderArgs.put("prendaModificar", prenda);
+			List<Prenda> prendas = OrdenarPrendas();
+			renderArgs.put("prendas", prendas);
+			render("Application/principalAdmin.html");
+		}
+
 		List<Prenda> prendasiguales = Prenda.find("byTipoAndEquipoAndAño", prenda.tipo, prenda.equipo, prenda.año).fetch();
+		equipo = equipo.toUpperCase();
 
-		if (!equipo.equals(""))
-			equipo = equipo.toUpperCase();
-
-		else
-			equipo = prenda.equipo;
-
-		if (precio>0)
-			precio = precio;
+		if (precio>0);
 
 		else
 			precio = prenda.precio;
 
-		if (año > 0)
-			año = año;
+		if (año > 0);
 
 		else
 			año = prenda.año;
@@ -703,7 +734,7 @@ public class Application extends Controller {
 			imagen = prenda.imagen;
 
 		Prenda comprobar = Prenda.find("byTipoAndEquipoAndAño", tipo, equipo, año).first();
-		if (comprobar == null){
+		if (comprobar == null || comprobar == prenda){
 			for (int i = 0;i<prendasiguales.size();i++){
 				Prenda p = prendasiguales.get(i);
 				p.tipo = tipo;
@@ -713,6 +744,7 @@ public class Application extends Controller {
 				p.imagen = imagen;
 				p.save();
 			}
+
 			String mensaje = "Prenda modificada correctamente";
 			renderArgs.put("mensaje", mensaje);
 		}
@@ -725,6 +757,39 @@ public class Application extends Controller {
 
 		List<Prenda> prendas = OrdenarPrendas();
 		renderArgs.put("prendas", prendas);
+		renderArgs.put("visionadmin", visionadmin);
+		render("Application/principalAdmin.html");
+	}
+
+
+	//VER PRENDA
+	public static void verprenda(){
+
+		if (visionadmin != 9)
+			visionadmin = 9;
+
+		else
+			visionadmin = 0;
+
+		List<Prenda> listaprendas = OrdenarPrendas();
+		renderArgs.put("listaprendas", listaprendas);
+		renderArgs.put("visionadmin", visionadmin);
+		render("Application/principalAdmin.html");
+	}
+
+	public static void cargarprenda(Long idprenda){
+
+		Prenda p = Prenda.findById(idprenda);
+		List<Prenda> prendas = Prenda.find("byTipoAndEquipoAndAño", p.tipo, p.equipo, p.año).fetch();
+
+		if (prendas.size() ==1)
+			renderArgs.put("prendamostrar", p);
+
+		else
+			renderArgs.put("prendas", prendas);
+
+		List<Prenda> listaprendas = OrdenarPrendas();
+		renderArgs.put("listaprendas", listaprendas);
 		renderArgs.put("visionadmin", visionadmin);
 		render("Application/principalAdmin.html");
 	}
@@ -787,6 +852,74 @@ public class Application extends Controller {
    }
 
 
+   //MODIFICAR STOCK
+	public static void modificarstock(){
+
+		if (visionadmin != 10)
+			visionadmin = 10;
+
+		else
+			visionadmin = 0;
+
+		List<Prenda> listaprenda = OrdenarPrendas();
+		List<Prenda> listaprendas = new ArrayList<>();
+
+		for (int i = 0; i<listaprenda.size();i++){
+			Prenda p = listaprenda.get(i);
+			List<Prenda> prendax = Prenda.find("byTipoAndEquipoAndAño", p.tipo, p.equipo, p.año).fetch();
+			for (int j = 0;j<prendax.size();j++){
+				if (prendax.get(j).talla != null)
+					listaprendas.add(prendax.get(j));
+			}
+		}
+
+		renderArgs.put("listaprendas", listaprendas);
+		renderArgs.put("visionadmin", visionadmin);
+		render("Application/principalAdmin.html");
+	}
+
+	public static void modificarstockadmin(String talla){
+
+		validation.required(talla);
+		if (validation.hasErrors()){
+			renderArgs.put("visionadmin", visionadmin);
+			render("Application/principalAdmin.html");
+		}
+
+		talla = talla.toUpperCase();
+		Prenda p = Prenda.findById(referencia.id);
+		Prenda comprobar = Prenda.find("byTipoAndEquipoAndAñoAndTalla", p.tipo, p.equipo, p.año, talla).first();
+
+		if (comprobar != null){
+			String error = "Esta prenda ya existe";
+			renderArgs.put("error", error);
+		}
+
+		else{
+			p.talla = talla;
+			p.save();
+			String mensaje = "Prenda modificada correctamente";
+			renderArgs.put("mensaje", mensaje);
+		}
+
+		List<Prenda> listaprenda = OrdenarPrendas();
+		List<Prenda> listaprendas = new ArrayList<>();
+
+		for (int i = 0; i < listaprenda.size(); i++) {
+			Prenda prenda = listaprenda.get(i);
+			List<Prenda> prendax = Prenda.find("byTipoAndEquipoAndAño", prenda.tipo, prenda.equipo, prenda.año).fetch();
+			for (int j = 0; j < prendax.size(); j++) {
+				if (prendax.get(j).talla != null)
+					listaprendas.add(prendax.get(j));
+			}
+		}
+		renderArgs.put("listaprendas", listaprendas);
+		renderArgs.put("quitarprenda", p);
+		renderArgs.put("visionadmin", visionadmin);
+		render("Application/principalAdmin.html");
+	}
+
+
    //QUITAR STOCK
    public static void cargarquitarstock(){
 
@@ -803,7 +936,8 @@ public class Application extends Controller {
 			Prenda p = listaprenda.get(i);
 			List<Prenda> prendax = Prenda.find("byTipoAndEquipoAndAño", p.tipo, p.equipo, p.año).fetch();
 			for (int j = 0;j<prendax.size();j++){
-				listaprendas.add(prendax.get(j));
+				if (prendax.get(j).talla != null)
+					listaprendas.add(prendax.get(j));
 			}
 		}
 
@@ -821,6 +955,7 @@ public class Application extends Controller {
 		   Prenda p = listaprenda.get(i);
 		   List<Prenda> prendax = Prenda.find("byTipoAndEquipoAndAño", p.tipo, p.equipo, p.año).fetch();
 		   for (int j = 0; j < prendax.size(); j++) {
+		   	if (prendax.get(j).talla != null)
 			   listaprendas.add(prendax.get(j));
 		   }
 	   }
@@ -861,7 +996,8 @@ public class Application extends Controller {
 		   Prenda prenda = listaprenda.get(i);
 		   List<Prenda> prendax = Prenda.find("byTipoAndEquipoAndAño", prenda.tipo, prenda.equipo, prenda.año).fetch();
 		   for (int j = 0; j < prendax.size(); j++) {
-			   listaprendas.add(prendax.get(j));
+			   if (prendax.get(j).talla != null)
+			   	listaprendas.add(prendax.get(j));
 		   }
 	   }
 

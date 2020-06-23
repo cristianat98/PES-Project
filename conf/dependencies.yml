@@ -2,5 +2,11 @@
 
 require:
     - play
+<<<<<<< HEAD
     - docviewer
     - secure
+=======
+    - play -> docviewer
+    - play -> secure 
+    - play -> crud
+>>>>>>> 3dbc4dc00b21340413ce85f96669b458dc2076e9
