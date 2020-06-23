@@ -148,8 +148,8 @@
             </button>
             <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenu1">
                 <li><a href="@{CambiarVistaNormal()}">Cambiar Vista a Normal</a></li>
-                <li><a href="@{EliminarUsuario()}">Borrar perfil</a></li>
                 <li><a href="@{ModificarUsuario()}">Modificar datos perfil</a></li>
+                <li><a href="@{EliminarUsuario()}">Borrar perfil</a></li>
                 <li><a href="@{Logout()}">Cerrar Sesión</a></li>
             </ul>
         </div>
@@ -301,21 +301,21 @@
 
         #{field 'usuariofinal'}
             <p class="${field.errorClass}">
-                <strong>Usuario:</strong> <input type="text" name="${field.name}" placeholder="${usuarioM.usuario}" size="16"  >
+                <strong>Usuario:</strong> <input type="text" name="${field.name}" value="${usuarioM.usuario}" size="16"  >*
                 <span class="error">${field.error}</span>
             </p>
         #{/field}
 
-    #{field 'usuarioM.nombre'}
+    #{field 'nombre'}
         <p class="${field.errorClass}">
-            <strong>Nombre:</strong> <input type="text" name="${field.name}" placeholder="${usuarioM.nombre}" size="16">
+            <strong>Nombre:</strong> <input type="text" name="${field.name}" value="${usuarioM.nombre}" size="16">*
             <span class="error">${field.error}</span>
         </p>
     #{/field}
 
-    #{field 'usuarioM.apellido1'}
+    #{field 'apellido1'}
         <p class="${field.errorClass}">
-            <strong>Apellido 1:</strong> <input type="text" name="${field.name}" placeholder="${usuarioM.apellido1}"size="16">
+            <strong>Apellido 1:</strong> <input type="text" name="${field.name}" value="${usuarioM.apellido1}"size="16">*
             <span class="error">${field.error}</span>
         </p>
 
@@ -323,7 +323,7 @@
 
     #{field 'usuarioM.apellido2'}
         <p class="${field.errorClass}">
-            <strong>Apellido 2:</strong> <input type="text" name="${field.name}" placeholder="${usuarioM.apellido2}" size="16">
+            <strong>Apellido 2:</strong> <input type="text" name="${field.name}" value="${usuarioM.apellido2}" size="16">
             <span class="error">${field.error}</span>
         </p>
 
@@ -331,28 +331,21 @@
 
         #{field 'usuarioM.contraseña'}
             <p class="${field.errorClass}">
-                <strong>Contraseña:</strong> <input type="text" name="${field.name}" placeholder="${usuarioM.contraseña}"size="16" >
+                <strong>Contraseña:</strong> <input type="password" name="${field.name}" size="16" >
                 <span class="error">${field.error}</span>
             </p>
         #{/field}
 
     #{field 'contraseña'}
         <p class="${field.errorClass}">
-            <strong>Verificar Contraseña:</strong> <input type="text" name="${field.name}" placeholder="${usuarioM.contraseña}"size="16" >
+            <strong>Verificar Contraseña:</strong> <input type="password" name="${field.name}" size="16" >
             <span class="error">${field.error}</span>
         </p>
     #{/field}
 
-    #{field 'mailinicial'}
-        <p class="${field.errorClass}">
-            <input style="display: none" name="${field.name}" value="${usuarioM.mail}" size="16"  >
-            <span class="error">${field.error}</span>
-        </p>
-    #{/field}
-
-        #{field 'mailfinal'}
+        #{field 'mail'}
             <p class="${field.errorClass}">
-                <strong>Mail:</strong> <input type="email" name="${field.name}" placeholder="${usuarioM.mail}" size="16" >
+                <strong>Mail:</strong> <input type="email" name="${field.name}" value="${usuarioM.mail}" size="16" >*
                 <span class="error">${field.error}</span>
             </p>
         #{/field}

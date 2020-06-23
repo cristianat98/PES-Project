@@ -498,47 +498,48 @@ public class Application extends Controller {
 		renderTemplate ("Application/principalAdmin.html");
 	}
 
-	public static void ModificarU(Cliente usuarioM, String usuarioinicial, String usuariofinal, String mailinicial, String mailfinal, int admin){
+	public static void ModificarU(Cliente usuarioM, String usuarioinicial, String usuariofinal, String nombre, String apellido1, String mail, int admin){
 
-		Cliente comprobarusuario = null;
-		Cliente comprobarcorreo = null;
-		if (!usuarioinicial.equals(usuariofinal))
-			comprobarusuario = Cliente.find("byUsuario", usuariofinal).first();
+		Cliente c = Cliente.find("byUsuario", usuarioinicial).first();
+		validation.required(usuariofinal);
+		validation.required(nombre);
+		validation.required(apellido1);
+		validation.required(mail);
+		if (validation.hasErrors()){
+			renderArgs.put("visionadmin", visionadmin);
+			renderArgs.put("usuarioM", c);
+			render("Application/principalAdmin.html");
+		}
 
-		if (!mailinicial.equals(mailfinal))
-			comprobarcorreo = Cliente.find("byMail", mailfinal).first();
+		Cliente comprobarusuario = Cliente.find("byUsuario", usuariofinal).first();
+		Cliente comprobarcorreo = Cliente.find("byMail", mail).first();
 
+		if (c == comprobarcorreo)
+			comprobarcorreo = null;
+
+		if (c == comprobarusuario)
+			comprobarusuario = null;
 
 		if (comprobarusuario == null && comprobarcorreo == null) {
 
-			Cliente c = Cliente.find("byUsuario", usuarioinicial).first();
 			if (c != null) {
-				if (!usuariofinal.equals("")) {
-					if (usuarioinicial.equals(session.get("user")))
-						session.put("user", usuariofinal);
 
-					c.usuario = usuariofinal;
-				}
+				if (usuarioinicial.equals(session.get("user")))
+					session.put("user", usuariofinal);
+
+				c.usuario = usuariofinal;
+				c.mail = mail;
+				c.nombre = nombre;
+				c.apellido1 = apellido1;
+				c.apellido2 = usuarioM.apellido2;
+				if (c.admin == 0)
+					c.admin = admin;
 
 				if (!usuarioM.contraseña.equals(""))
 					c.contraseña = usuarioM.contraseña;
 
-				if (!mailfinal.equals(""))
-					c.mail = mailfinal;
-
-				if (!usuarioM.nombre.equals(""))
-					c.nombre = usuarioM.nombre;
-
-				if (!usuarioM.apellido1.equals(""))
-					c.apellido1 = usuarioM.apellido1;
-
-				if (!usuarioM.apellido2.equals(""))
-					c.apellido2 = usuarioM.apellido2;
-
 				if (usuarioM.perfil != null)
 					c.perfil = usuarioM.perfil;
-
-				c.admin = admin;
 
 				c.save();
 				List<Cliente> lclientes = Cliente.findAll();
@@ -554,7 +555,6 @@ public class Application extends Controller {
 			List<Cliente> lclientes = Cliente.findAll();
 			renderArgs.put("listaclientes", lclientes);
 			renderArgs.put("visionadmin", visionadmin);
-			Cliente c = Cliente.find("byUsuario", usuarioinicial).first();
 			renderArgs.put("usuarioM", c);
 			String error;
 
