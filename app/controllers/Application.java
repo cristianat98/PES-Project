@@ -1,6 +1,7 @@
 
 package controllers;
 
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import jdk.nashorn.internal.runtime.regexp.joni.ast.CClassNode;
 import org.hibernate.annotations.Check;
 import play.data.validation.Validation;
@@ -544,7 +545,6 @@ public class Application extends Controller {
 				c.save();
 				List<Cliente> lclientes = Cliente.findAll();
 				renderArgs.put("listaclientes", lclientes);
-				renderArgs.put("usuarioM", c);
 				renderArgs.put("visionadmin", visionadmin);
 				String mensaje = "Usuario modificado correctamente";
 				renderArgs.put("mensaje", mensaje);
@@ -707,23 +707,25 @@ public class Application extends Controller {
 
 	public static void modificarprendaadmin(String tipo, String equipo, double precio, int año, Blob imagen){
 
+		validation.required(equipo);
 		Prenda prenda = Prenda.findById(referencia.id);
+		if (validation.hasErrors()){
+			renderArgs.put("visionadmin", visionadmin);
+			renderArgs.put("prendaModificar", prenda);
+			List<Prenda> prendas = OrdenarPrendas();
+			renderArgs.put("prendas", prendas);
+			render("Application/principalAdmin.html");
+		}
+
 		List<Prenda> prendasiguales = Prenda.find("byTipoAndEquipoAndAño", prenda.tipo, prenda.equipo, prenda.año).fetch();
+		equipo = equipo.toUpperCase();
 
-		if (!equipo.equals(""))
-			equipo = equipo.toUpperCase();
-
-		else
-			equipo = prenda.equipo;
-
-		if (precio>0)
-			precio = precio;
+		if (precio>0);
 
 		else
 			precio = prenda.precio;
 
-		if (año > 0)
-			año = año;
+		if (año > 0);
 
 		else
 			año = prenda.año;
@@ -732,7 +734,7 @@ public class Application extends Controller {
 			imagen = prenda.imagen;
 
 		Prenda comprobar = Prenda.find("byTipoAndEquipoAndAño", tipo, equipo, año).first();
-		if (comprobar == null){
+		if (comprobar == null || comprobar == prenda){
 			for (int i = 0;i<prendasiguales.size();i++){
 				Prenda p = prendasiguales.get(i);
 				p.tipo = tipo;
@@ -742,6 +744,7 @@ public class Application extends Controller {
 				p.imagen = imagen;
 				p.save();
 			}
+
 			String mensaje = "Prenda modificada correctamente";
 			renderArgs.put("mensaje", mensaje);
 		}
