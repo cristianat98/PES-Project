@@ -201,7 +201,8 @@ public class Application extends Controller {
 			renderArgs.put("pantalonaños", pantalonaños);
 			render("Application/principal.html");
 		} else
-			renderTemplate("Application/loginTemplate.html");
+			render("Application/loginTemplate.html");
+
 	}
 
 
@@ -237,7 +238,7 @@ public class Application extends Controller {
 				if (c.admin == 0) {
 					String erroradmin = "erroradmin";
 					renderArgs.put("erroradmin", erroradmin);
-					renderTemplate("Application/loginTemplate.html");
+					render("Application/loginTemplate.html");
 				} else {
 					session.put("user", cliente.usuario);
 					renderArgs.put("client", c);
@@ -254,7 +255,7 @@ public class Application extends Controller {
 		} else {
 			String error = "error";
 			renderArgs.put("error", error);
-			renderTemplate("Application/loginTemplate.html");
+			render("Application/loginTemplate.html");
 		}
 	}
 
@@ -304,16 +305,16 @@ public class Application extends Controller {
 
 	public static void recuperarContra(@Valid Cliente cliente, String mail) {
 		validation.required(mail);
-		validation.equals(mail, cliente.mail).message("Los emails no coinciden");
+		validation.equals(mail, cliente.mail).message("El email no es correcto");
 		if (validation.hasErrors()) {
 			render("@recuperacionContra", cliente, mail);
 		} else {
 			Cliente c = Cliente.find("byMail", cliente.mail).first();
-			if (c != null) {
-				renderText("La contraeña es:" + c.contraseña);
+			if (c != null){
+				renderArgs.put("contraseña", c.contraseña);
+				render("Application/loginTemplate.html");
 			}
 		}
-
 	}
 
 
@@ -414,7 +415,7 @@ public class Application extends Controller {
 		}
 	}
 
-	public static void ModificarDatos2(Cliente clienteM, String usuario, String nombre, String apellido1, String mail, String contraseña) {
+	public static void ModificarDatos2(Cliente clienteM, String usuario, String nombre, String apellido1, String mail, String contraseña, int perfil) {
 
 		validation.required(usuario);
 		validation.required(nombre);
@@ -453,6 +454,9 @@ public class Application extends Controller {
 
 			if (clienteM.perfil != null)
 				c.perfil = clienteM.perfil;
+
+			if (perfil == 1)
+				c.perfil = null;
 
 			c.save();
 			index();
@@ -516,7 +520,7 @@ public class Application extends Controller {
 			}
 
 			session.clear();
-			renderTemplate("Application/loginTemplate.html");
+			render("Application/loginTemplate.html");
 		}
 	}
 
@@ -526,7 +530,7 @@ public class Application extends Controller {
 		session.clear();
 		visionadmin = 0;
 		//renderArgs.put("client",null);
-		renderTemplate("Application/loginTemplate.html");
+		render("Application/loginTemplate.html");
 	}
 
 
@@ -631,7 +635,7 @@ public class Application extends Controller {
 		renderTemplate ("Application/principalAdmin.html");
 	}
 
-	public static void ModificarU(Cliente usuarioM, String usuarioinicial, String usuariofinal, String nombre, String apellido1, String mail, int admin){
+	public static void ModificarU(Cliente usuarioM, String usuarioinicial, String usuariofinal, String nombre, String apellido1, String mail, int admin, int perfil){
 
 		Cliente c = Cliente.find("byUsuario", usuarioinicial).first();
 		validation.required(usuariofinal);
@@ -673,6 +677,9 @@ public class Application extends Controller {
 
 				if (usuarioM.perfil != null)
 					c.perfil = usuarioM.perfil;
+
+				if (perfil == 1)
+					c.perfil = null;
 
 				c.save();
 				List<Cliente> lclientes = Cliente.findAll();

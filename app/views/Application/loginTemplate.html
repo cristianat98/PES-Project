@@ -15,7 +15,7 @@
         }
         .panel.panel-default{
             margin-top: 20px;
-            height: 350px;
+            height: 400px;
             width: 350px;
             margin-left: 500px;
         }
@@ -30,9 +30,6 @@
 
     <!-- Latest compiled and minified JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-
-
-
 
     <meta charset="UTF-8">
     <title>Página Login</title>
@@ -89,5 +86,8 @@
             </body>
         </div>
         <img class="logo" src="/public/images/logo.png" alt="ERROR AL CARGAR LA IMAGEN">
+        #{if contraseña}
+            <p style="margin-left: 10%; margin-top: 5%"> Su contraseña es: &{contraseña}</p>
+        #{/if}
     </div>
 </div>
