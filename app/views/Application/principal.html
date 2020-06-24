@@ -10,7 +10,7 @@
 
     .dropdown{
         position: relative;
-        left: 1050px;
+        left: 900px;
         width: 300px;
     }
 
@@ -30,6 +30,7 @@
     }
 
     .panel.panel-default{
+        color:#ffffff;
         height: 280px;
         width: 1200px;
         margin-left: 50px;
@@ -38,21 +39,41 @@
     }
 
     .barra{
-        width: 500px;
+        margin-left: 50px;
+        width: 1300px;
     }
+
 
     .avatar{
         width: 75px;
         height: 75px;
         border-radius: 50%;
-        margin-left: 1215px;
+        margin-left: 900px;
+
+    }
+    .pagina{
+        background-image: radial-gradient(circle, #ffffff, #e5e5e5, #cbcbcb, #b2b2b2, #9a9a9a);
+        margin-left: 50px;
+        width: 1300px;
+        margin-top:20px;
+        padding-bottom: 10px;
     }
 
     .usuario {
         width: 300px;
         height: auto;
         border-radius: 50%;
-        margin-left: 1100px;
+        margin-left: 900px;
+    }
+
+    .logo {
+        margin-left: 115px;
+        margin-top: 115px;
+        width: 180px;
+        height: 180px;
+    }
+    .letra{
+        color: white;
     }
 
 </style>
@@ -74,18 +95,12 @@
         document.getElementById('admin').style.display="none";
     }
 
-    function vercarrito(){
-
-    }
-
 </script>
 <head>
     <meta charset="UTF-8">
     <title>Proyecto - PES</title>
-    <script type="text/javascript" src="https://gc.kis.v2.scr.kaspersky-labs.com/FD126C42-EBFA-4E12-B309-BB3FDD723AC1/main.js?attr=6exx3wJW7qKClsE3VXTDyCWMFMNMfApU_V3zpFLCSubRI63YLNbsJJlisE3rVZCbo_n13tpMqcz2-eQJNaZtDW1LM1SmOJZr8sBWYJPslpo9jcws64B56m-nMZuCmgQx0Byoh9jKQnfQZV8VkCPUMg" charset="UTF-8"></script>
-    <h1>Tienda Online!</h1>
-    <div class="barra">
-
+    <div class="barra" style="background-image: url('public/images/fondoAzul.jpg');" >
+        <img class="logo" src="/public/images/logo.jpg" alt="ERROR AL CARGAR LA IMAGEN">
         <a class="jumbotron">
         </a><!--
         <a href="http://localhost:9000/">Inicio</a>
@@ -93,62 +108,56 @@
         <a href="http://localhost:9000/application/principal">Pantalones</a>
         -->
         <img class="avatar" src="@{MostrarPerfil(1)}" alt="ERROR AL CARGAR LA IMAGEN">
-        <div class ="usuario"> <b>Está conectado como: &{client.usuario}</b></div>
+        <div class ="usuario"> <b class="letra">Está conectado como: &{client.usuario}</b></div>
+        <div class="dropdown">
+            <button type="button" onclick="vercarrito()" id="carrito" data-toggle="dropdown" class="btn btn-default btn-lg">
+                <span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span> Carrito
+            </button>
+            <ul class="dropdown-menu" id ="dropdowncarrito" aria-labelledby="carrito">
+                <li><a id="admin" href="@{CambiarVistaAdmin()}">Cambiar Vista a Administrador</a></li>
+                <li><a href="@{ModificarUsuario()}">Modificar datos perfil</a></li>
+                <li><a href="@{EliminarUsuario()}">Borrar perfil</a></li>
+                <li><a href="@{Logout()}">Cerrar Sesión</a></li>
+            </ul>
+            <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                Opciones Usuario
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                <li><a id="admin" href="@{CambiarVistaAdmin()}">Cambiar Vista a Administrador</a></li>
+                <li><a href="@{ModificarUsuario()}">Modificar datos perfil</a></li>
+                <li><a href="@{EliminarUsuario()}">Borrar perfil</a></li>
+
+            </ul>
+        </div>
     </div>
 
-    <div class="dropdown">
-        <button type="button" onclick="alert(&{carrito.size()})" id="carrito" data-toggle="dropdown" class="btn btn-default btn-lg">
-            <span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span> Carrito
-        </button>
-        <ul class="dropdown-menu" id ="dropdowncarrito" aria-labelledby="carrito">
-            <li><a id="admin" href="@{CambiarVistaAdmin()}">Cambiar Vista a Administrador</a></li>
-            <li><a href="@{ModificarUsuario()}">Modificar datos perfil</a></li>
-            <li><a href="@{EliminarUsuario()}">Borrar perfil</a></li>
-        </ul>
-        <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-            Opciones Usuario
-            <span class="caret"></span>
-        </button>
-        <ul class="dropdown-menu" id ="opcionesusuario" aria-labelledby="dropdownMenu1">
-            <li><a id="admin" href="@{CambiarVistaAdmin()}">Cambiar Vista a Administrador</a></li>
-            <li><a href="@{ModificarUsuario()}">Modificar datos perfil</a></li>
-            <li><a href="@{EliminarUsuario()}">Borrar perfil</a></li>
-            <li><a href="@{Logout()}">Cerrar Sesión</a></li>
-        </ul>
-    </div>
 </head>
-<body>
+<div class="pagina">
+<body style="background-image: url('public/images/cesped.jpg');">
 <div class="panel panel-default" >
     <div class="panel-heading">Camisetas</div>
-
     <section class="panel-body">
-    #{if camisetas}
-        #{list items:camisetas, as:'camiseta'}
-
-            <article class="media">
-                <div class="media-left media-middle">
-                    <a href="#">
-                        <img class="media-object" src="@{MostrarPrenda(camiseta.id)}" alt="NO TIENE UNA IMAGEN DISPONIBLE">
-                    </a>
-                </div>
-                <div class="media-body">
-                    <h4 class="media-heading">${camiseta.tipo} DEL ${camiseta.equipo} <br> ${camiseta.precio}€ TALLA: ${camiseta.talla}</h4>
-                    <h6>Cantidad Disponible: ${camiseta.cantidadStock}</h6>
-                </div>
-                <a href="@{AddCarrito(camiseta.id)}"><button type="button"  class="btn btn-default btn-lg">Añadir Carrito</button></a>
-            </article>
-        #{/list}
-    #{/if}
-
+            #{list items:camisetas, as:'camiseta'}
+                <article class="media">
+                    <div class="media-left media-middle">
+                        <a href="#">
+                            <img class="media-object" src="@{MostrarPrenda(camiseta.id)}" alt="NO TIENE UNA IMAGEN DISPONIBLE">
+                        </a>
+                    </div>
+                    <div class="media-body">
+                        <h4 class="media-heading">${camiseta.tipo} DEL ${camiseta.equipo} <br> ${camiseta.precio}€ TALLA: ${camiseta.talla}</h4>
+                        <h6>Cantidad Disponible: ${camiseta.cantidadStock}</h6>
+                    </div>
+                    <a href="@{AddCarrito(camiseta.id)}"><button type="button"  class="btn btn-default btn-lg">Añadir Carrito</button></a>
+                </article>
+            #{/list}
     </section>
 </div>
 <div class="panel panel-default" >
     <div class="panel-heading">Pantalones</div>
-
     <section class="panel-body">
-    #{if pantalones}
         #{list items:pantalones, as:'pantalon'}
-
             <article class="media">
                 <div class="media-left media-middle">
                     <a href="#">
@@ -163,12 +172,11 @@
                 <a href="@{AddCarrito(pantalon.id)}"><button type="button"  class="btn btn-default btn-lg">Añadir Carrito</button></a>
             </article>
         #{/list}
-    #{/if}
-
     </section>
 </div>
 
 
 
 </body>
+</div>
 </html>
