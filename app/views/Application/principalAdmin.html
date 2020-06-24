@@ -144,7 +144,7 @@
 
 
 <div class="prueba">
-<img class="avatar" src="@{MostrarPerfil(1)}" alt="ERROR AL CARGAR LA IMAGEN">
+<img class="avatar" src="@{MostrarPerfil(client.id)}" alt="ERROR AL CARGAR LA IMAGEN">
 <div class ="usuario"> <b>Está conectado como: &{client.usuario}</b></div>
     <div class="cart pull-right">
         <div class="dropdown">
@@ -419,7 +419,7 @@
     <p>- MAIL: ${usuarioM.mail}</p>
     <p>- Si hay un 0, quiere decir que no es Admin, si hay un 1 quiere decir que sí es admin
     <p>- USUARIO ADMIN: ${usuarioM.admin}</p>
-    <p>- FOTO DE PERFIL: <img class="avatar1" src="@{MostrarPerfil(0)}" alt="ERROR AL CARGAR LA IMAGEN">
+    <p>- FOTO DE PERFIL: <img class="avatar1" src="@{MostrarPerfil(usuarioM.id)}" alt="ERROR AL CARGAR LA IMAGEN">
 
 #{/if}
 

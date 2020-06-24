@@ -107,18 +107,29 @@
         <a href="http://localhost:9000/application/principal">Productos</a>
         <a href="http://localhost:9000/application/principal">Pantalones</a>
         -->
-        <img class="avatar" src="@{MostrarPerfil(1)}" alt="ERROR AL CARGAR LA IMAGEN">
+        <img class="avatar" src="@{MostrarPerfil(client.id)}" alt="ERROR AL CARGAR LA IMAGEN">
         <div class ="usuario"> <b class="letra">Está conectado como: &{client.usuario}</b></div>
-        <div class="dropdown">
-            <button type="button" onclick="vercarrito()" id="carrito" data-toggle="dropdown" class="btn btn-default btn-lg">
+        <div class="dropdown" id ="left">
+            <button type="button" id="carrito" data-toggle="dropdown" class="btn btn-default btn-lg">
                 <span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span> Carrito
             </button>
             <ul class="dropdown-menu" id ="dropdowncarrito" aria-labelledby="carrito">
-                <li><a id="admin" href="@{CambiarVistaAdmin()}">Cambiar Vista a Administrador</a></li>
-                <li><a href="@{ModificarUsuario()}">Modificar datos perfil</a></li>
-                <li><a href="@{EliminarUsuario()}">Borrar perfil</a></li>
-                <li><a href="@{Logout()}">Cerrar Sesión</a></li>
+            #{list items:carrito, as:'prenda'}
+                <article class="media">
+                    <div class="media-left media-middle">
+                        <img class="media-object" src="@{MostrarPrenda1(prenda.tipo, prenda.equipo, prenda.año)}" alt="NO TIENE UNA IMAGEN DISPONIBLE">
+                    </div>
+                    <div class="media-body">
+                        <h4 class="media-heading">${prenda.tipo} DEL ${prenda.equipo} <br> ${prenda.precio}€ TALLA: ${prenda.talla}</h4>
+                        <h6>Cantidad Disponible: ${prenda.cantidadStock}</h6>
+                    </div>
+                </article>
+            #{/list}
+                <li><a href="@{comprar()}">Comprar</a></li>
             </ul>
+        </div>
+
+        <div class ="dropdown" id="right">
             <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                 Opciones Usuario
                 <span class="caret"></span>
@@ -127,7 +138,7 @@
                 <li><a id="admin" href="@{CambiarVistaAdmin()}">Cambiar Vista a Administrador</a></li>
                 <li><a href="@{ModificarUsuario()}">Modificar datos perfil</a></li>
                 <li><a href="@{EliminarUsuario()}">Borrar perfil</a></li>
-
+                <li><a href="@{Logout()}">Cerrar Sesión</a></li>
             </ul>
         </div>
     </div>
@@ -141,9 +152,7 @@
             #{list items:camisetas, as:'camiseta'}
                 <article class="media">
                     <div class="media-left media-middle">
-                        <a href="#">
-                            <img class="media-object" src="@{MostrarPrenda(camiseta.id)}" alt="NO TIENE UNA IMAGEN DISPONIBLE">
-                        </a>
+                        <img class="media-object" src="@{MostrarPrenda(camiseta.id)}" alt="NO TIENE UNA IMAGEN DISPONIBLE">
                     </div>
                     <div class="media-body">
                         <h4 class="media-heading">${camiseta.tipo} DEL ${camiseta.equipo} <br> ${camiseta.precio}€ TALLA: ${camiseta.talla}</h4>
@@ -160,9 +169,7 @@
         #{list items:pantalones, as:'pantalon'}
             <article class="media">
                 <div class="media-left media-middle">
-                    <a href="#">
-                        <img class="media-object" src="@{MostrarPrenda(pantalon.id)}" alt="NO TIENE UNA IMAGEN DISPONIBLE">
-                    </a>
+                    <img class="media-object" src="@{MostrarPrenda(pantalon.id)}" alt="NO TIENE UNA IMAGEN DISPONIBLE">
                 </div>
 
                 <div class="media-body">

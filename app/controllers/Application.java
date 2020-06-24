@@ -244,16 +244,9 @@ public class Application extends Controller {
 		renderBinary(prenda.imagen.get());
 	}
 
-	public static void MostrarPerfil(int num) {
+	public static void MostrarPerfil(Long id) {
 
-		Cliente c;
-
-		if (num == 1)
-			c = Cliente.find("byUsuario", session.get("user")).first();
-
-		else
-			c = visualizar;
-
+		Cliente c = Cliente.findById(id);
 		c.perfil.toString();
 		if (c.perfil.get() == null)
 			renderBinary(new File("C:/Users/cristian/Desktop/play-1.5.3/Proyecto-PES/public/images/avatar.jpg"));
@@ -284,16 +277,18 @@ public class Application extends Controller {
 		index();
 	}
 
+	public static void MostrarPrenda1 (String tipo, String equipo, int año){
 
-	public static void VerCarrito(){
-
-		Cliente user = connected();
-		//List<Compra> carrito = new List<Compra>();
-
-		renderTemplate("Application/Carrito.html");
+		Prenda p = Prenda.find("byTipoAndEquipoAndAño", tipo, equipo, año).first();
+		renderBinary(p.imagen.get());
 	}
 
-	public static void comprar (String tipo, String equipo, String talla, int cantidad, String usuario, String contraseña){
+	public static void comprar(){
+		carrito.clear();
+		index();
+	}
+
+	/*public static void comprar (String tipo, String equipo, String talla, int cantidad, String usuario, String contraseña){
 
 		if (tipo == null || equipo == null || talla == null || cantidad < 1 || usuario == null || contraseña == null)
 			renderText("No has introducido todos los datos.");
@@ -319,7 +314,7 @@ public class Application extends Controller {
 					renderText("No tenemos esa vestimenta disponible actualmente.");
 			}
 		}
-	}
+	}*/
 
 
 	//ACCIONES USUARIO
