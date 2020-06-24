@@ -4,6 +4,11 @@
 
     <style>
 
+.fondo{
+    background-size: cover;
+    background-image: url("/public/images/register.png");
+}
+
 .panel.panel-default{
     margin-top: 100px;
     height: 400px;
@@ -34,7 +39,7 @@
         <div class="panel-heading">Registrar usuario</div>
         <div class="panel-body">
 
-<body>
+<body class="fondo">
 
 #{form @registrarCliente(), enctype:'multipart/form-data'}
 #{field 'usuario'}
