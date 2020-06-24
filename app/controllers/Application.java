@@ -277,7 +277,7 @@ public class Application extends Controller {
 		index();
 	}
 
-	public static void MostrarPrenda1 (String tipo, String equipo, int año){
+	public static void MostrarPrendaCarrito (String tipo, String equipo, int año){
 
 		Prenda p = Prenda.find("byTipoAndEquipoAndAño", tipo, equipo, año).first();
 		renderBinary(p.imagen.get());

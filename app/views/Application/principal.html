@@ -115,9 +115,9 @@
             </button>
             <ul class="dropdown-menu" id ="dropdowncarrito" aria-labelledby="carrito">
             #{list items:carrito, as:'prenda'}
-                <article class="media">
+                <article class="media" style="width: auto">
                     <div class="media-left media-middle">
-                        <img class="media-object" src="@{MostrarPrenda1(prenda.tipo, prenda.equipo, prenda.año)}" alt="NO TIENE UNA IMAGEN DISPONIBLE">
+                        <img class="media-object" src="@{MostrarPrendaCarrito(prenda.tipo, prenda.equipo, prenda.año)}" alt="NO TIENE UNA IMAGEN DISPONIBLE">
                     </div>
                     <div class="media-body">
                         <h4 class="media-heading">${prenda.tipo} DEL ${prenda.equipo} <br> ${prenda.precio}€ TALLA: ${prenda.talla}</h4>
