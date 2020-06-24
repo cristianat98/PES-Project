@@ -2,7 +2,15 @@
 <html lang="en">
 <style>
 
+    .tienda{
+        width: 700px;
+        margin-top: 150px;
+    }
+    .cesped{
 
+    background-size: cover;
+    background-image: url('public/images/cesped.jpg');
+}
     .media-heading{
         color: black;
     }
@@ -60,6 +68,7 @@
         width: 1300px;
         margin-top:20px;
         padding-bottom: 10px;
+
     }
 
     .usuario {
@@ -71,7 +80,7 @@
 
     .logo {
         margin-left: 115px;
-        margin-top: 115px;
+        margin-top: 75px;
         width: 180px;
         height: 180px;
     }
@@ -102,14 +111,15 @@
 <head>
     <meta charset="UTF-8">
     <title>Proyecto - PES</title>
-    <div class="barra" style="background-image: url('public/images/fondoAzul.jpg');" >
-        <img class="logo" src="/public/images/logo.jpg" alt="ERROR AL CARGAR LA IMAGEN">
+    <div class="barra" style="background-image: url('public/images/transparencia.png');" >
+        <img class="logo" src="/public/images/logo.png" alt="ERROR AL CARGAR LA IMAGEN">
         <a class="jumbotron">
         </a><!--
         <a href="http://localhost:9000/">Inicio</a>
         <a href="http://localhost:9000/application/principal">Productos</a>
         <a href="http://localhost:9000/application/principal">Pantalones</a>
         -->
+        <img class="tienda" src="/public/images/palabra.png" alt="ERROR AL CARGAR LA IMAGEN">
         <img class="avatar" src="@{MostrarPerfil(client.id)}" alt="ERROR AL CARGAR LA IMAGEN">
         <div class ="usuario"> <b class="letra">Está conectado como: &{client.usuario}</b></div>
         <div class="dropdown" id ="left">
@@ -148,7 +158,7 @@
 
 </head>
 <div class="pagina">
-<body style="background-image: url('public/images/cesped.jpg');">
+<body class="cesped" >
 <div class="panel panel-default" >
     <div class="panel-heading">Camisetas</div>
     <section class="panel-body">
