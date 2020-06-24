@@ -131,7 +131,11 @@
         function ComprobarCheckModificar (){
         if (document.getElementById('modificarusuarioadmin').checked)
             document.getElementById('modificarusuarioadmin').value = 1;
+        if (document.getElementById('modificarperfil').checked)
+            document.getElementById('modificarperfil').value = 1;
         }
+
+
 
 </script>
 
@@ -364,6 +368,13 @@
         </p>
     #{/field}
 #{/if}
+
+    #{field 'perfil'}
+        <p class="${field.errorClass}">
+            <strong>Quitar Foto Perfil:</strong><input type="checkbox" id ="modificarperfil" name="${field.name}" value="0">
+            <span class="error">${field.error}</span>
+        </p>
+    #{/field}
 
     #{field 'usuarioM.perfil'}
         <p class="${field.errorClass}">

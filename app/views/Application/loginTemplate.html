@@ -5,16 +5,22 @@
 
         .fondo{
             background-size: cover;
-            background-image: url("/public/images/maxresdefault.jpg");
+            background-image: url("/public/images/login.jpg");
         }
+
         .logo {
             margin-left: 120px;
             width: 100px;
             height: 100px;
         }
         .panel.panel-default{
+<<<<<<< HEAD
             margin-top: 150px;
             height: 350px;
+=======
+            margin-top: 20px;
+            height: 400px;
+>>>>>>> 65a3761bb63aa1c0c330855756592ee9e1418cc4
             width: 350px;
             margin-left: 500px;
         }
@@ -29,9 +35,6 @@
 
     <!-- Latest compiled and minified JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-
-
-
 
     <meta charset="UTF-8">
     <title>Página Login</title>
@@ -88,5 +91,8 @@
             </body>
         </div>
         <img class="logo" src="/public/images/logo.png" alt="ERROR AL CARGAR LA IMAGEN">
+        #{if contraseña}
+            <p style="margin-left: 10%; margin-top: 5%"> Su contraseña es: &{contraseña}</p>
+        #{/if}
     </div>
 </div>

@@ -43,6 +43,12 @@
             if (&{modificar} == 1)
                 document.getElementById('ModificarDatos').style.display="none";
         }
+
+        function ComprobarCheckPerfil (){
+            if (document.getElementById('modificarperfil').checked)
+                document.getElementById('modificarperfil').value = 1;
+        }
+
     </script>
 </head>
 <img class="logo" src="/public/images/logo.png" alt="ERROR AL CARGAR LA IMAGEN">
@@ -142,6 +148,13 @@
 
      #{/field}
 
+     #{field 'perfil'}
+         <p class="${field.errorClass}">
+             <strong>Quitar Foto Perfil:</strong><input type="checkbox" id ="modificarperfil" name="${field.name}" value="0">
+             <span class="error">${field.error}</span>
+         </p>
+     #{/field}
+
      #{field 'clienteM.perfil'}
      <p class="${field.errorClass}">
          <strong>Foto Perfil:</strong><input type="file" name="${field.name}">
@@ -150,7 +163,7 @@
      #{/field}
 
  <p class="buttons">
-     <input type="submit" value="Modificar datos">
+     <input type="submit" onclick="ComprobarCheckPerfil()" value="Modificar datos">
  </p>
 
  #{/form}
