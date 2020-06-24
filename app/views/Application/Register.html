@@ -3,13 +3,22 @@
 <head>
 
     <style>
-
-.panel.panel-default{
-    margin-top: 100px;
-    height: 400px;
-    width: 350px;
-    margin-left: 500px;
-    }
+        .fondo{
+            background-size: cover;
+            background-image: url("/public/images/sevilla.jpg");
+        }
+        .logo {
+            margin-top: 75px;
+            margin-left: 600px;
+            width: 150px;
+            height: 150px;
+            margin-bottom: 10px;
+        }
+        .panel.panel-default{
+            height: 400px;
+            width: 350px;
+            margin-left: 500px;
+        }
 
 </style>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
@@ -30,12 +39,12 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 </head>
-    <div class="panel panel-default">
-        <div class="panel-heading">Registrar usuario</div>
-        <div class="panel-body">
 
-<body>
-
+<img class="logo" src="/public/images/logo.png" alt="ERROR AL CARGAR LA IMAGEN">
+<body class="fondo">
+<div class="panel panel-default">
+    <div class="panel-heading">Registrar usuario</div>
+    <div class="panel-body">
 #{form @registrarCliente(), enctype:'multipart/form-data'}
 #{field 'usuario'}
 <p class="${field.errorClass}">
@@ -106,10 +115,11 @@
 
 
 #{/form}
+    </div>
+</div>
 </body>
 
-        </div>
-    </div>
+
 </html>
 
 

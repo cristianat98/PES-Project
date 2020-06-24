@@ -1,11 +1,45 @@
 <!DOCTYPE html>
 <html lang="en">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<style>
+    .panel.panel-default{
+        height: 200px;
+        width: 350px;
+        margin-left: 500px;
+    }
+    .logo {
+        margin-top: 75px;
+        margin-left: 600px;
+        width: 150px;
+        height: 150px;
+        margin-bottom: 10px;
+    }
+
+    .fondo{
+        background-size: cover;
+        background-image: url("/public/images/manchester.jpg");
+    }
+
+
+</style>
 <head>
     <meta charset="UTF-8">
 </head>
 
-<body> 
- <h3>Introduzca su contraseña para proceder a eliminar su cuenta:</h3>
+<body class="fondo">
+<img class="logo" src="/public/images/logo.png" alt="ERROR AL CARGAR LA IMAGEN">
+<div class="panel panel-default" >
+    <div class="panel-heading">    Introduzca contraseña para eliminar su cuenta</div>
+    <section class="panel-body">
  
 #{form @eliminarusuariocontraseña()}
 #{field 'contraseña'}
@@ -27,7 +61,8 @@
 
  <a href= "@{Logout()}"><button>Cerrar Sesión</button></a>
  <a href= "@{index()}"><button>Atrás</button></a>
-
+    </section>
+</div>
 </body>
 </html>
 
