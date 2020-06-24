@@ -32,7 +32,7 @@ public class Application extends Controller {
 
 
 	//FUNCIONES LARGAS
-	static List<Prenda> OrdenarPrendas() {
+	static List<Prenda> OrdenarPrendas(int a) {
 
 		List<Prenda> prendas = Prenda.findAll();
 
@@ -78,6 +78,20 @@ public class Application extends Controller {
 					j--;
 				}
 			}
+		}
+
+		if (a == 1){
+			List<Prenda> listaprenda = new ArrayList<>();
+
+			for (int i = 0; i < listaprendas.size(); i++) {
+				Prenda prenda = listaprendas.get(i);
+				List<Prenda> prendax = Prenda.find("byTipoAndEquipoAndAño", prenda.tipo, prenda.equipo, prenda.año).fetch();
+				for (int j = 0; j < prendax.size(); j++) {
+					if (prendax.get(j).talla != null)
+						listaprenda.add(prendax.get(j));
+				}
+			}
+			listaprendas = listaprenda;
 		}
 
 		return listaprendas;
@@ -143,7 +157,7 @@ public class Application extends Controller {
 	public static void index() {
 
 		if (connected() != null) {
-			List<Prenda> todas = OrdenarPrendas();
+			List<Prenda> todas = OrdenarPrendas(0);
 			List<Prenda> camisetas = new ArrayList<>();
 			for (int i = 0; i < todas.size(); i++) {
 				if (todas.get(i).cantidadStock != 0 && todas.get(i).tipo.equals("CAMISETA"))
@@ -394,6 +408,7 @@ public class Application extends Controller {
 
 	//MODIFICAR PERFIL
 	public static void ModificarUsuario() {
+		renderArgs.put("mensaje", "Introduzca la contraseña para poder modificar sus datos:");
 		renderArgs.put("modificar", 0);
 		render();
 	}
@@ -404,12 +419,14 @@ public class Application extends Controller {
 		String username = session.get("user");
 		Cliente usuario=Cliente.find("byUsuario", username).first();
 		validation.equals(contraseña, usuario.contraseña).message("La contraseña es incorrecta, no puede modificar datos");
+		renderArgs.put("mensaje", "Introduzca la contraseña para poder modificar sus datos:");
 		renderArgs.put("modificar", i);
 		if(validation.hasErrors()) {
 			render("@ModificarUsuario");
 		}
 		else{
 			renderArgs.put("modificar", 1);
+			renderArgs.put("mensaje", "Sus datos personales son:");
 			renderArgs.put("clienteM", usuario);   //Variable en HTML , Variable en java//
 			renderTemplate("Application/ModificarUsuario.html");
 		}
@@ -841,7 +858,7 @@ public class Application extends Controller {
 		else
 			visionadmin=0;
 
-		List<Prenda> prendas = OrdenarPrendas();
+		List<Prenda> prendas = OrdenarPrendas(0);
 		renderArgs.put("prendas", prendas);
 		renderArgs.put("visionadmin",visionadmin);
 		renderTemplate("Application/principalAdmin.html");
@@ -850,7 +867,7 @@ public class Application extends Controller {
 	public static void cargardatosprenda(Long idprenda){
 
 		Prenda PrendaM = Prenda.findById(idprenda);
-		List<Prenda> prendas = OrdenarPrendas();
+		List<Prenda> prendas = OrdenarPrendas(0);
 		referencia = PrendaM;
 		renderArgs.put("prendas", prendas);
 		renderArgs.put("prendaModificar", PrendaM);
@@ -865,7 +882,7 @@ public class Application extends Controller {
 		if (validation.hasErrors()){
 			renderArgs.put("visionadmin", visionadmin);
 			renderArgs.put("prendaModificar", prenda);
-			List<Prenda> prendas = OrdenarPrendas();
+			List<Prenda> prendas = OrdenarPrendas(0);
 			renderArgs.put("prendas", prendas);
 			render("Application/principalAdmin.html");
 		}
@@ -908,7 +925,7 @@ public class Application extends Controller {
 			renderArgs.put("prendaModificar", prenda);
 		}
 
-		List<Prenda> prendas = OrdenarPrendas();
+		List<Prenda> prendas = OrdenarPrendas(0);
 		renderArgs.put("prendas", prendas);
 		renderArgs.put("visionadmin", visionadmin);
 		render("Application/principalAdmin.html");
@@ -924,7 +941,7 @@ public class Application extends Controller {
 		else
 			visionadmin = 0;
 
-		List<Prenda> listaprendas = OrdenarPrendas();
+		List<Prenda> listaprendas = OrdenarPrendas(0);
 		renderArgs.put("listaprendas", listaprendas);
 		renderArgs.put("visionadmin", visionadmin);
 		render("Application/principalAdmin.html");
@@ -941,7 +958,7 @@ public class Application extends Controller {
 		else
 			renderArgs.put("prendas", prendas);
 
-		List<Prenda> listaprendas = OrdenarPrendas();
+		List<Prenda> listaprendas = OrdenarPrendas(0);
 		renderArgs.put("listaprendas", listaprendas);
 		renderArgs.put("visionadmin", visionadmin);
 		render("Application/principalAdmin.html");
@@ -957,7 +974,7 @@ public class Application extends Controller {
 			visionadmin=0;
 
 
-	   List<Prenda> prendas = OrdenarPrendas();
+	   List<Prenda> prendas = OrdenarPrendas(0);
 		renderArgs.put("prendas", prendas);
 		renderArgs.put("visionadmin",visionadmin);
 		renderTemplate("Application/principalAdmin.html");
@@ -998,7 +1015,7 @@ public class Application extends Controller {
 			renderArgs.put("error", error);
 		}
 
-	   List<Prenda> prendas = OrdenarPrendas();
+	   List<Prenda> prendas = OrdenarPrendas(0);
 	   renderArgs.put("prendas", prendas);
 	   renderArgs.put("visionadmin", visionadmin);
 	   renderTemplate("Application/principalAdmin.html");
@@ -1014,58 +1031,63 @@ public class Application extends Controller {
 		else
 			visionadmin = 0;
 
-		List<Prenda> listaprenda = OrdenarPrendas();
-		List<Prenda> listaprendas = new ArrayList<>();
-
-		for (int i = 0; i<listaprenda.size();i++){
-			Prenda p = listaprenda.get(i);
-			List<Prenda> prendax = Prenda.find("byTipoAndEquipoAndAño", p.tipo, p.equipo, p.año).fetch();
-			for (int j = 0;j<prendax.size();j++){
-				if (prendax.get(j).talla != null)
-					listaprendas.add(prendax.get(j));
-			}
-		}
+		List<Prenda> listaprendas = OrdenarPrendas(1);
 
 		renderArgs.put("listaprendas", listaprendas);
 		renderArgs.put("visionadmin", visionadmin);
 		render("Application/principalAdmin.html");
 	}
 
-	public static void modificarstockadmin(String talla){
+	public static void modificarstockadmin(String talla, int cantidad){
 
 		validation.required(talla);
+		Prenda p = Prenda.findById(referencia.id);
+		List<Prenda> listaprendas = new ArrayList<>();
 		if (validation.hasErrors()){
 			renderArgs.put("visionadmin", visionadmin);
+			listaprendas = OrdenarPrendas(1);
+			renderArgs.put("listaprendas", listaprendas);
+			renderArgs.put("quitarprenda", p);
 			render("Application/principalAdmin.html");
 		}
 
-		talla = talla.toUpperCase();
-		Prenda p = Prenda.findById(referencia.id);
-		Prenda comprobar = Prenda.find("byTipoAndEquipoAndAñoAndTalla", p.tipo, p.equipo, p.año, talla).first();
+		Prenda comprobar;
+		if (cantidad > 0) {
+			talla = talla.toUpperCase();
+			comprobar = Prenda.find("byTipoAndEquipoAndAñoAndTalla", p.tipo, p.equipo, p.año, talla).first();
 
-		if (comprobar != null){
-			String error = "Esta prenda ya existe";
-			renderArgs.put("error", error);
-		}
+			if (cantidad > p.cantidadStock)
+				cantidad = p.cantidadStock;
 
-		else{
-			p.talla = talla;
-			p.save();
+			if (comprobar != null) {
+				comprobar.cantidadStock = comprobar.cantidadStock + cantidad;
+				p.cantidadStock = p.cantidadStock - cantidad;
+				comprobar.save();
+				p.save();
+			}
+			else {
+				if (cantidad == p.cantidadStock){
+					p.talla = talla;
+					p.save();
+				}
+
+				else{
+					Prenda nueva = new Prenda(p.tipo, p.equipo, p.año, talla, cantidad, p.precio, p.imagen);
+					nueva.create();
+					p.cantidadStock = p.cantidadStock - cantidad;
+					p.save();
+				}
+			}
 			String mensaje = "Prenda modificada correctamente";
 			renderArgs.put("mensaje", mensaje);
 		}
 
-		List<Prenda> listaprenda = OrdenarPrendas();
-		List<Prenda> listaprendas = new ArrayList<>();
-
-		for (int i = 0; i < listaprenda.size(); i++) {
-			Prenda prenda = listaprenda.get(i);
-			List<Prenda> prendax = Prenda.find("byTipoAndEquipoAndAño", prenda.tipo, prenda.equipo, prenda.año).fetch();
-			for (int j = 0; j < prendax.size(); j++) {
-				if (prendax.get(j).talla != null)
-					listaprendas.add(prendax.get(j));
-			}
+		else{
+			String error = "Has introducido una cantidad errónea";
+			renderArgs.put("error", error);
 		}
+
+		listaprendas = OrdenarPrendas(1);
 		renderArgs.put("listaprendas", listaprendas);
 		renderArgs.put("quitarprenda", p);
 		renderArgs.put("visionadmin", visionadmin);
@@ -1082,17 +1104,7 @@ public class Application extends Controller {
 		else
 			visionadmin = 0;
 
-		List<Prenda> listaprenda = OrdenarPrendas();
-		List<Prenda> listaprendas = new ArrayList<>();
-
-		for (int i = 0; i<listaprenda.size();i++){
-			Prenda p = listaprenda.get(i);
-			List<Prenda> prendax = Prenda.find("byTipoAndEquipoAndAño", p.tipo, p.equipo, p.año).fetch();
-			for (int j = 0;j<prendax.size();j++){
-				if (prendax.get(j).talla != null)
-					listaprendas.add(prendax.get(j));
-			}
-		}
+		List<Prenda> listaprendas = OrdenarPrendas(1);
 
 		renderArgs.put("listaprendas", listaprendas);
 		renderArgs.put("visionadmin", visionadmin);
@@ -1101,18 +1113,7 @@ public class Application extends Controller {
    
    public static void cargarequipo(Long idprenda) {
 
-	   List<Prenda> listaprenda = OrdenarPrendas();
-	   List<Prenda> listaprendas = new ArrayList<>();
-
-	   for (int i = 0; i < listaprenda.size(); i++) {
-		   Prenda p = listaprenda.get(i);
-		   List<Prenda> prendax = Prenda.find("byTipoAndEquipoAndAño", p.tipo, p.equipo, p.año).fetch();
-		   for (int j = 0; j < prendax.size(); j++) {
-		   	if (prendax.get(j).talla != null)
-			   listaprendas.add(prendax.get(j));
-		   }
-	   }
-
+	   List<Prenda> listaprendas = OrdenarPrendas(1);
 	   Prenda p = Prenda.findById(idprenda);
 	   referencia = p;
 	   renderArgs.put("listaprendas", listaprendas);
@@ -1142,18 +1143,7 @@ public class Application extends Controller {
 		   renderArgs.put("mensaje", mensaje);
 	   }
 
-	   List<Prenda> listaprenda = OrdenarPrendas();
-	   List<Prenda> listaprendas = new ArrayList<>();
-
-	   for (int i = 0; i < listaprenda.size(); i++) {
-		   Prenda prenda = listaprenda.get(i);
-		   List<Prenda> prendax = Prenda.find("byTipoAndEquipoAndAño", prenda.tipo, prenda.equipo, prenda.año).fetch();
-		   for (int j = 0; j < prendax.size(); j++) {
-			   if (prendax.get(j).talla != null)
-			   	listaprendas.add(prendax.get(j));
-		   }
-	   }
-
+	   List<Prenda> listaprendas = OrdenarPrendas(1);
 	   renderArgs.put("listaprendas", listaprendas);
 	   renderArgs.put("quitarprenda", p);
 	   renderArgs.put("visionadmin", visionadmin);

@@ -742,6 +742,14 @@
                 </p>
             #{/field}
 
+            <h4>CANTIDAD ACTUAL: &{quitarprenda.cantidadStock}</h4>
+            #{field 'cantidad'}
+                <p class="${field.errorClass}">
+                    <strong>Introduce la cantidad que quieres cambiar:</strong> <input type="text" name="${field.name}" value="&{quitarprenda.cantidadStock}" size="16" > *
+                    <span class="error">${field.error}</span>
+                </p>
+            #{/field}
+
             <p class="${field.errorClass}">
                 <input type="submit" value="Modificar Stock"/>
             </p>

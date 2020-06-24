@@ -13,7 +13,7 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 <style>
     .panel.panel-default{
-        height: 200px;
+        height: 250px;
         width: 350px;
         margin-left: 500px;
     }
@@ -29,7 +29,6 @@
         background-size: cover;
         background-image: url("/public/images/barcelona.jpg");
     }
-
 
 </style>
 
@@ -52,8 +51,9 @@
     </script>
 </head>
 <img class="logo" src="/public/images/logo.png" alt="ERROR AL CARGAR LA IMAGEN">
-<body class="fondo" ><div class="panel panel-default" >
-    <div class="panel-heading">    Introduzca contraseña para modificar sus datos:</div>
+<body class="fondo" >
+<div class="panel panel-default">
+    <div class="panel-heading">  ${mensaje}</div>
     <section class="panel-body">
 <div id ="ModificarDatos">
 
@@ -75,7 +75,7 @@
 #{if clienteM}
         <style>
             .panel.panel-default{
-                height: 500px;
+                height: 550px;
                 width: 350px;
                 margin-left: 500px;
             }
@@ -87,8 +87,6 @@
                 margin-bottom: 10px;
             }
         </style>
-
- <h3>Sus datos personales son:</h3>
 
  #{form @ModificarDatos2(), enctype:'multipart/form-data'}
 
