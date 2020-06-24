@@ -7,13 +7,17 @@
         margin-top: 150px;
     }
     .cesped{
-
     background-size: cover;
     background-image: url('public/images/cesped.jpg');
 }
     .media-heading{
         color: black;
     }
+
+    .media-object{
+        color: black;
+    }
+
     img{
         width: 100px;
         height: 100px;
@@ -114,11 +118,7 @@
     <div class="barra" style="background-image: url('public/images/transparencia.png');" >
         <img class="logo" src="/public/images/logo.png" alt="ERROR AL CARGAR LA IMAGEN">
         <a class="jumbotron">
-        </a><!--
-        <a href="http://localhost:9000/">Inicio</a>
-        <a href="http://localhost:9000/application/principal">Productos</a>
-        <a href="http://localhost:9000/application/principal">Pantalones</a>
-        -->
+        </a>
         <img class="tienda" src="/public/images/palabra.png" alt="ERROR AL CARGAR LA IMAGEN">
         <img class="avatar" src="@{MostrarPerfil(client.id)}" alt="ERROR AL CARGAR LA IMAGEN">
         <div class ="usuario"> <b class="letra">Está conectado como: &{client.usuario}</b></div>
@@ -134,7 +134,7 @@
                     </div>
                     <div class="media-body">
                         <h4 class="media-heading">${prenda.tipo} DEL ${prenda.equipo} <br> ${prenda.precio}€ TALLA: ${prenda.talla}</h4>
-                        <h6>Cantidad Disponible: ${prenda.cantidadStock}</h6>
+                        <h6> Cantidad Disponible: ${prenda.cantidadStock}</h6>
                     </div>
                 </article>
             #{/list}
@@ -169,7 +169,7 @@
                     </div>
                     <div class="media-body">
                         <h4 class="media-heading">${camiseta.tipo} DEL ${camiseta.equipo} <br> ${camiseta.precio}€ TALLA: ${camiseta.talla}</h4>
-                        <h6>Cantidad Disponible: ${camiseta.cantidadStock}</h6>
+                        <h6 class="media-heading"> Cantidad Disponible: ${camiseta.cantidadStock}</h6>
                     </div>
                     <a href="@{AddCarrito(camiseta.id)}"><button type="button"  class="btn btn-default btn-lg">Añadir Carrito</button></a>
                 </article>
@@ -187,7 +187,7 @@
 
                 <div class="media-body">
                     <h4 class="media-heading">${pantalon.tipo} DEL ${pantalon.equipo} <br> ${pantalon.precio}€ TALLA: ${pantalon.talla}</h4>
-                    <h6>Cantidad Disponible: ${pantalon.cantidadStock}</h6>
+                    <h6 class="media-heading">Cantidad Disponible: ${pantalon.cantidadStock}</h6>
                 </div>
                 <a href="@{AddCarrito(pantalon.id)}"><button type="button"  class="btn btn-default btn-lg">Añadir Carrito</button></a>
             </article>

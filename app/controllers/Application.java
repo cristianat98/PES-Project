@@ -403,12 +403,27 @@ public class Application extends Controller {
 					render("Application/EliminarUsuario.html");
 				}
 
-				else
+				else{
+					List<Compra> compras = Compra.find("byCliente", connected()).fetch();
+					for (int i = 0; i<compras.size(); i++){
+						compras.get(i).delete();
+						compras.remove(i);
+						i--;
+					}
 					c.delete();
+				}
+
 			}
 
-			else
+			else{
+				List<Compra> compras = Compra.find("byCliente", connected()).fetch();
+				for (int i = 0; i<compras.size(); i++){
+					compras.get(i).delete();
+					compras.remove(i);
+					i--;
+				}
 				c.delete();
+			}
 
 			session.clear();
 			renderTemplate("Application/loginTemplate.html");
@@ -644,6 +659,20 @@ public class Application extends Controller {
 		}
 
 		else{
+
+			List<Compra> compras = Compra.find("byCliente", eliminar).fetch();
+			for (int i = 0; i<compras.size(); i++){
+				compras.get(i).delete();
+				compras.remove(i);
+				i--;
+			}
+
+			if (eliminar == connected()){
+				eliminar.delete();
+				session.clear();
+				render("Application/loginTemplate.html");
+			}
+
 			eliminar.delete();
 			String mensaje = "Usuario eliminado correctamente";
 			renderArgs.put("mensaje", mensaje);
