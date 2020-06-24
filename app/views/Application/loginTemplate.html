@@ -2,6 +2,11 @@
 <html lang="en">
 <head>
     <style>
+
+        .fondo{
+            background-size: cover;
+            background-image: url("/public/images/maxresdefault.jpg");
+        }
         .logo {
             margin-left: 120px;
             width: 100px;
@@ -37,7 +42,7 @@
         <div class="panel-body">
 
 
-            <body background="/public/images/maxresdefault.jpg">
+            <body class="fondo">
 
 
             #{form @Login()}
@@ -82,6 +87,6 @@
             </p>
             </body>
         </div>
-        <img class="logo" src="/public/images/logo.jpg" alt="ERROR AL CARGAR LA IMAGEN">
+        <img class="logo" src="/public/images/logo.png" alt="ERROR AL CARGAR LA IMAGEN">
     </div>
 </div>
