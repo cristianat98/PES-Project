@@ -45,7 +45,7 @@
     }
 
     .panel.panel-default{
-        color:#ffffff;
+        color: #000000;
         height: 280px;
         width: 1200px;
         margin-left: 50px;
@@ -160,7 +160,40 @@
 <div class="pagina">
 <body class="cesped" >
 <div class="panel panel-default" >
-    <div class="panel-heading">Camisetas</div>
+    <div class="panel-heading">Camisetas
+    #{form @Filtrar()}
+        #{field 'tipoform'}
+            <p class="${field.errorClass}">
+                <input style="display: none" name="${field.name}" value="Camiseta" size="16"  >
+                <span class="error">${field.error}</span>
+            </p>
+        #{/field}
+        <label style="margin-left: 50px;">FILTRAR:</label>
+        <label style="margin-left: 50px;" for="CamisetaEquipos"> Equipos:</label>
+        <select id="equipoform" name="equipoform">
+            <option value="" >---</option>
+        #{list items:camisetaequipos, as:'equipo'}
+            <option value="${equipo}" >${equipo}</option>
+        #{/list}
+        </select>
+        <label style="margin-left: 50px;" for="CamisetaTallas"> Tallas:</label>
+        <select id="CamisetaTallas" name="tallaform">
+            <option value="" >---</option>
+        #{list items:camisetatallas, as:'talla'}
+            <option value="${talla}" >${talla}</option>
+        #{/list}
+        </select>
+        <label style="margin-left: 50px;" for="CamisetaAño"> Años:</label>
+        <select id="CamisetaAños" name="añoform">
+            <option value="0" >---</option>
+        #{list items:camisetaaños, as:'año'}
+            <option value="${año}" >${año}</option>
+        #{/list}
+        </select>
+
+        <input style="margin-left: 50px;" type="submit"  value="Filtrar" />
+        #{/form}
+    </div>
     <section class="panel-body">
             #{list items:camisetas, as:'camiseta'}
                 <article class="media">
@@ -168,7 +201,7 @@
                         <img class="media-object" src="@{MostrarPrenda(camiseta.id)}" alt="NO TIENE UNA IMAGEN DISPONIBLE">
                     </div>
                     <div class="media-body">
-                        <h4 class="media-heading">${camiseta.tipo} DEL ${camiseta.equipo} <br> ${camiseta.precio}€ TALLA: ${camiseta.talla}</h4>
+                        <h4 class="media-heading">${camiseta.tipo} DEL ${camiseta.equipo} <br> ${camiseta.precio}€ TALLA: ${camiseta.talla} AÑO: ${camiseta.año}</h4>
                         <h6 class="media-heading"> Cantidad Disponible: ${camiseta.cantidadStock}</h6>
                     </div>
                     <a href="@{AddCarrito(camiseta.id)}"><button type="button"  class="btn btn-default btn-lg">Añadir Carrito</button></a>
@@ -177,7 +210,42 @@
     </section>
 </div>
 <div class="panel panel-default" >
-    <div class="panel-heading">Pantalones</div>
+    <div class="panel-heading">Pantalones
+
+    #{form @Filtrar()}
+        #{field 'tipoform'}
+            <p class="${field.errorClass}">
+                <input style="display: none" name="${field.name}" value="Pantalon" size="16"  >
+                <span class="error">${field.error}</span>
+            </p>
+        #{/field}
+        <label style="margin-left: 50px;">FILTRAR:</label>
+        <label style="margin-left: 50px;" for="PantalonEquipos"> Equipos:</label>
+        <select id="PantalonEquipos" name="equipoform">
+            <option value="" >---</option>
+            #{list items:pantalonequipos, as:'equipo'}
+                <option value="${equipo}" >${equipo}</option>
+            #{/list}
+        </select>
+        <label style="margin-left: 50px;" for="PantalonTallas"> Tallas:</label>
+        <select id="PantalonTallas" name="tallaform">
+            <option value="" >---</option>
+            #{list items:pantalontallas, as:'talla'}
+                <option value="${talla}" >${talla}</option>
+            #{/list}
+        </select>
+        <label style="margin-left: 50px;" for="PantalonAño"> Años:</label>
+        <select id="PantalonAños" name="añoform">
+            <option value="0" >---</option>
+            #{list items:pantalonaños, as:'año'}
+                <option value="${año}" >${año}</option>
+            #{/list}
+        </select>
+
+        <input style="margin-left: 50px;" type="submit"  value="Filtrar" />
+    #{/form}
+
+    </div>
     <section class="panel-body">
         #{list items:pantalones, as:'pantalon'}
             <article class="media">
@@ -186,7 +254,7 @@
                 </div>
 
                 <div class="media-body">
-                    <h4 class="media-heading">${pantalon.tipo} DEL ${pantalon.equipo} <br> ${pantalon.precio}€ TALLA: ${pantalon.talla}</h4>
+                    <h4 class="media-heading">${pantalon.tipo} DEL ${pantalon.equipo} <br> ${pantalon.precio}€ TALLA: ${pantalon.talla} AÑO: ${pantalon.año}</h4>
                     <h6 class="media-heading">Cantidad Disponible: ${pantalon.cantidadStock}</h6>
                 </div>
                 <a href="@{AddCarrito(pantalon.id)}"><button type="button"  class="btn btn-default btn-lg">Añadir Carrito</button></a>

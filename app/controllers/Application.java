@@ -25,7 +25,13 @@ public class Application extends Controller {
 	static Prenda referencia;
 	static Cliente visualizar;
 	static List<Prenda> carrito = new ArrayList<>();
+	static String equipo = "";
+	static String tipo = "";
+	static String talla = "";
+	static int año = 0;
 
+
+	//FUNCIONES LARGAS
 	static List<Prenda> OrdenarPrendas() {
 
 		List<Prenda> prendas = Prenda.findAll();
@@ -77,6 +83,40 @@ public class Application extends Controller {
 		return listaprendas;
 	}
 
+	static List<Prenda> FiltrarPrendas(List<Prenda> prendas){
+
+		if (!equipo.equals("")){
+			for (int i = 0;i<prendas.size(); i++){
+				if (!equipo.equals(prendas.get(i).equipo)){
+					prendas.remove(i);
+					i--;
+				}
+			}
+			equipo = "";
+		}
+
+		if (!talla.equals("")){
+			for (int i = 0;i<prendas.size(); i++){
+				if (!talla.equals(prendas.get(i).talla)){
+					prendas.remove(i);
+					i--;
+				}
+			}
+			talla = "";
+		}
+
+		if (año != 0){
+			for (int i = 0;i<prendas.size(); i++){
+				if (año != prendas.get(i).año){
+					prendas.remove(i);
+					i--;
+				}
+			}
+			año = 0;
+		}
+		return prendas;
+	}
+
 	@Before
 	static void addUser() {
 		Cliente user = connected();
@@ -103,30 +143,65 @@ public class Application extends Controller {
 	public static void index() {
 
 		if (connected() != null) {
-			List<Prenda> camisetas = Prenda.find("byTipo", "CAMISETA").fetch();
-			for (int i = 0; i < camisetas.size(); i++) {
-				if (camisetas.get(i).cantidadStock == 0) {
-					camisetas.remove(i);
-					i--;
-				}
+			List<Prenda> todas = OrdenarPrendas();
+			List<Prenda> camisetas = new ArrayList<>();
+			for (int i = 0; i < todas.size(); i++) {
+				if (todas.get(i).cantidadStock != 0 && todas.get(i).tipo.equals("CAMISETA"))
+					camisetas.add(todas.get(i));
 			}
 
-			List<Prenda> pantalones = Prenda.find("byTipo", "PANTALON").fetch();
-			for (int i = 0; i < pantalones.size(); i++) {
-				if (pantalones.get(i).cantidadStock == 0) {
-					pantalones.remove(i);
-					i--;
+			List<String> camisetaequipos = new ArrayList<>();
+			List<String> camisetatallas = new ArrayList<>();
+			List<Integer> camisetaaños = new ArrayList<>();
 
-				}
+			for (int i = 0; i < camisetas.size(); i++) {
+				if (!camisetaequipos.contains(camisetas.get(i).equipo))
+					camisetaequipos.add(camisetas.get(i).equipo);
+				if (!camisetatallas.contains(camisetas.get(i).talla))
+					camisetatallas.add(camisetas.get(i).talla);
+				if (!camisetaaños.contains(camisetas.get(i).año))
+					camisetaaños.add(camisetas.get(i).año);
+			}
+
+			List<Prenda> pantalones = new ArrayList<>();
+			for (int i = 0; i < todas.size(); i++) {
+				if (todas.get(i).cantidadStock != 0 && todas.get(i).tipo.equals("PANTALON"))
+					pantalones.add(todas.get(i));
+			}
+
+			List<String> pantalonequipos = new ArrayList<>();
+			List<String> pantalontallas = new ArrayList<>();
+			List<Integer> pantalonaños = new ArrayList<>();
+
+			for (int i = 0; i < pantalones.size(); i++) {
+				if (!pantalonequipos.contains(pantalones.get(i).equipo))
+					pantalonequipos.add(pantalones.get(i).equipo);
+				if (!pantalontallas.contains(pantalones.get(i).talla))
+					pantalontallas.add(pantalones.get(i).talla);
+				if (!pantalonaños.contains(pantalones.get(i).año))
+					pantalonaños.add(pantalones.get(i).año);
+			}
+
+			if (tipo.equals("Camiseta")) {
+				tipo = "";
+				camisetas = FiltrarPrendas(camisetas);
+			} else if (tipo.equals("Pantalon")) {
+				tipo = "";
+				pantalones = FiltrarPrendas(pantalones);
 			}
 
 			renderArgs.put("camisetas", camisetas);
 			renderArgs.put("pantalones", pantalones);
 			renderArgs.put("carrito", carrito);
+			renderArgs.put("camisetaequipos", camisetaequipos);
+			renderArgs.put("camisetatallas", camisetatallas);
+			renderArgs.put("camisetaaños", camisetaaños);
+			renderArgs.put("pantalonequipos", pantalonequipos);
+			renderArgs.put("pantalontallas", pantalontallas);
+			renderArgs.put("pantalonaños", pantalonaños);
 			render("Application/principal.html");
-		} else {
+		} else
 			renderTemplate("Application/loginTemplate.html");
-		}
 	}
 
 
@@ -203,8 +278,9 @@ public class Application extends Controller {
 			render("@register");
 
 
-		Cliente c = Cliente.find("byUsuario", usuario).first();
-		if (c == null) {
+		Cliente comprobarusuario = Cliente.find("byUsuario", usuario).first();
+		Cliente comprobarcorreo = Cliente.find("byMail", mail).first();
+		if (comprobarcorreo == null && comprobarusuario == null) {
 			nuevocliente.usuario = usuario;
 			nuevocliente.mail = mail;
 			nuevocliente.nombre = nombre;
@@ -212,10 +288,14 @@ public class Application extends Controller {
 			nuevocliente.create();
 			session.put("user", nuevocliente.usuario);
 			index();
-		} else {
-			validation.equals(usuario, "").message("El usuario ya está en uso");
-			render("@register");
 		}
+		else if (comprobarusuario != null)
+			validation.equals(usuario, "").message("El usuario ya está en uso");
+
+		else
+			validation.equals(mail, "").message("El correo ya está en uso");
+
+		render("@register");
 	}
 
 	public static void recuperacionContra() {
@@ -253,6 +333,16 @@ public class Application extends Controller {
 
 		else
 			renderBinary(c.perfil.get());
+	}
+
+	public static void Filtrar(String tipoform, String equipoform, String tallaform, int añoform){
+
+		tipo = tipoform;
+		equipo = equipoform;
+		talla = tallaform;
+		año = añoform;
+
+		index();
 	}
 
 
