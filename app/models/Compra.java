@@ -18,15 +18,16 @@ public class Compra extends Model{
 	public Prenda prenda;
 
 	public Date fecha;
-	public int carrito; //si carrito = 1 se trata de carrito , ci carrito =0 es una compra definitiva
+	int cantidad;
 
 	public Compra() {
 	}
 	
-	public Compra(Cliente cliente, Prenda prenda, Date fecha) {
+	public Compra(Cliente cliente, Prenda prenda, int cantidad) {
 		this.cliente = cliente;
 		this.prenda= prenda;
-		this.fecha = fecha;
+		this.cantidad = cantidad;
+		this.fecha = new Date();
 	}
 
 	public Cliente getCliente() {
@@ -41,10 +42,6 @@ public class Compra extends Model{
 		return fecha;
 	}
 
-	public int getCarrito() {
-		return carrito;
-	}
-
 	public void setCliente(Cliente cliente) {
 		this.cliente = cliente;
 	}
@@ -55,9 +52,5 @@ public class Compra extends Model{
 
 	public void setFecha(Date fecha) {
 		this.fecha = fecha;
-	}
-
-	public void setCarrito(int carrito) {
-		this.carrito = carrito;
 	}
 }

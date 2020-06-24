@@ -284,37 +284,19 @@ public class Application extends Controller {
 	}
 
 	public static void comprar(){
+
+		for(int i = 0;i<carrito.size();i++){
+			Prenda p = Prenda.find("byTipoAndEquipoAndTallaAndAño", carrito.get(i).tipo, carrito.get(i).equipo, carrito.get(i).talla, carrito.get(i).año).first();
+			Compra compra = new Compra(connected(), p, carrito.get(i).cantidadStock);
+			compra.create();
+			p.cantidadStock = p.cantidadStock - carrito.get(i).cantidadStock;
+			p.cantidadVendida = p.cantidadVendida + carrito.get(i).cantidadStock;
+			p.save();
+		}
+
 		carrito.clear();
 		index();
 	}
-
-	/*public static void comprar (String tipo, String equipo, String talla, int cantidad, String usuario, String contraseña){
-
-		if (tipo == null || equipo == null || talla == null || cantidad < 1 || usuario == null || contraseña == null)
-			renderText("No has introducido todos los datos.");
-
-		else {
-			Cliente c = Cliente.find("byUsuarioAndContraseña", usuario, contraseña).first();
-
-			if (c == null)
-				renderText("Ese usuario no existe");
-			else
-			{
-				Prenda p = Prenda.find("byTipoAndEquipoAndTalla", tipo, equipo, talla).first();
-				if (p != null) {
-					if (p.getCantidadStock() >= cantidad) {
-						Date fecha = new Date();
-						p.setCantidadStock(p.getCantidadStock() - cantidad);
-						Compra Compra = new Compra(c, p, fecha);
-						Compra.save();
-						renderText("Has comprado " + cantidad + " " + tipo + " del " + equipo);
-					} else
-						renderText("No tenemos tanto stock en la tienda. Vuelve a realizar el pedido con el número disponible.");
-				} else
-					renderText("No tenemos esa vestimenta disponible actualmente.");
-			}
-		}
-	}*/
 
 
 	//ACCIONES USUARIO
