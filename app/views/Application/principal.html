@@ -134,11 +134,14 @@
                     </div>
                     <div class="media-body">
                         <h4 class="media-heading">${prenda.tipo} DEL ${prenda.equipo} <br> ${prenda.precio}€ TALLA: ${prenda.talla}</h4>
-                        <h6> Cantidad Disponible: ${prenda.cantidadStock}</h6>
+                        <h6> Cantidad A Comprar: ${prenda.cantidadStock}</h6>
+                        <a href="@{QuitarCarrito(prenda.tipo, prenda.equipo, prenda.talla, prenda.año, 1)}"><button type="button" style="height: auto; width: auto" >Quitar</button></a>
+                        <a href="@{QuitarCarrito(prenda.tipo, prenda.equipo, prenda.talla, prenda.año, prenda.cantidadStock)}"><button type="button" style="height: auto; width: auto" >Quitar Todo</button></a>
                     </div>
                 </article>
             #{/list}
-                <li><a href="@{comprar()}">Comprar</a></li>
+                <h4> PRECIO TOTAL: &{preciototal} €</h4>
+                <li><a href="@{comprar()}" style="margin-left: 20% ">COMPRAR</a></li>
             </ul>
         </div>
 

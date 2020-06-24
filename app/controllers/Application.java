@@ -204,9 +204,16 @@ public class Application extends Controller {
 				pantalones = FiltrarPrendas(pantalones);
 			}
 
+			double precio = 0;
+
+			for (int i = 0;i<carrito.size();i++){
+				precio = precio + carrito.get(i).precio*carrito.get(i).cantidadStock;
+			}
+
 			renderArgs.put("camisetas", camisetas);
 			renderArgs.put("pantalones", pantalones);
 			renderArgs.put("carrito", carrito);
+			renderArgs.put("preciototal", precio);
 			renderArgs.put("camisetaequipos", camisetaequipos);
 			renderArgs.put("camisetatallas", camisetatallas);
 			renderArgs.put("camisetaaños", camisetaaños);
@@ -379,6 +386,22 @@ public class Application extends Controller {
 		if (!encontrado)
 			carrito.add(p);
 
+		index();
+	}
+
+	public static void QuitarCarrito(String tipo, String equipo, String talla, int año, int cantidad){
+
+		int i = 0;
+		boolean encontrado = false;
+		while (i< carrito.size() && !encontrado){
+			if (carrito.get(i).tipo.equals(tipo) && carrito.get(i).equipo.equals(equipo) && carrito.get(i).talla.equals(talla) && carrito.get(i).año == año){
+				encontrado = true;
+				carrito.get(i).cantidadStock = carrito.get(i).cantidadStock - cantidad;
+				if (carrito.get(i).cantidadStock == 0)
+					carrito.remove(i);
+			}
+			i++;
+		}
 		index();
 	}
 
