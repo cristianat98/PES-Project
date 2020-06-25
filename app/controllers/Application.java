@@ -157,7 +157,7 @@ public class Application extends Controller {
 	public static void index() {
 
 		if (connected() != null) {
-			List<Prenda> todas = OrdenarPrendas(0);
+			List<Prenda> todas = OrdenarPrendas(1);
 			List<Prenda> camisetas = new ArrayList<>();
 			for (int i = 0; i < todas.size(); i++) {
 				if (todas.get(i).cantidadStock != 0 && todas.get(i).tipo.equals("CAMISETA"))

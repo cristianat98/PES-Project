@@ -629,7 +629,7 @@
     <p>- TIPO DE PRENDA: ${prendamostrar.tipo}</p>
     <p>- NOMBRE DEL EQUIPO: ${prendamostrar.equipo}</p>
     <p>- AÑO: ${prendamostrar.año}</p>
-    <p>- PRECIO: ${prendamostrar.precio} €</p>
+    <p>- PRECIO: ${prendamostrar.precio}</p>
     <p>- IMAGEN: <img class="avatar1" src="@{MostrarPrenda(prendamostrar.id)}" alt="NO TIENE NINGUNA IMAGEN DISPONIBLE">
 
 #{if prendamostrar.talla}
@@ -641,9 +641,7 @@
 #{/if}
 
 #{else}
-
     <p>NO HAY STOCK DISPONIBLE DE ESTE EQUIPO</p>
-
 #{/else}
 
 #{/if}
